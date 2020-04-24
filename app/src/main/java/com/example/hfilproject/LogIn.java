@@ -62,6 +62,7 @@ public class LogIn extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
+        submitProfile = findViewById(R.id.submit_profile);
         sharedPrefs = getSharedPreferences("app", MODE_PRIVATE);
         editor = sharedPrefs.edit();
 
@@ -208,6 +209,9 @@ public class LogIn extends AppCompatActivity {
 
 
     private void submitPfl() {
+        Intent intent = new Intent(LogIn.this,BottomNavActivity.class);
+        startActivity(intent);
+        finish();
 
     }
 
