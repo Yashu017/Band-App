@@ -4,33 +4,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:background="#ffffff">
+    tools:context=".MainActivity">
 
 
-    <ImageView
-        android:layout_width="401dp"
-        android:id="@+id/img"
-        android:layout_height="236dp"
-        android:background="@drawable/tlk"
-        android:fitsSystemWindows="true"
-        android:layout_marginTop="90dp"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="A Product by HFIL"
-        android:id="@+id/txt"
-        android:textStyle="bold"
-        android:textSize="30dp"
-        android:layout_below="@+id/img"
-        android:layout_centerHorizontal="true"/>
+    <androidx.viewpager.widget.ViewPager
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/Pager"
+        android:layout_centerInParent="true"
+        android:overScrollMode="never"
+        android:clipToPadding="false"
+        android:foregroundGravity="center">
+
+
+
+    </androidx.viewpager.widget.ViewPager>
+
+
+
 
 
     <Button
         android:layout_width="330dp"
-        android:layout_height="66dp"
+        android:layout_height="56dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="49dp"
+        android:layout_marginBottom="99dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/buttob"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:text="Scan Bluetooth"
+        android:id="@+id/btnScan"/>
+
+
+    <Button
+        android:layout_width="330dp"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="29dp"
         android:layout_centerHorizontal="true"
         android:background="@drawable/buttob"
         android:textSize="20sp"
@@ -46,6 +57,8 @@
         android:layout_marginBottom="40dp"
         android:theme="@style/AppTheme"
         android:visibility="gone" />
+
+
 
 
 </RelativeLayout>

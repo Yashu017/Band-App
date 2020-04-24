@@ -5,4 +5,13 @@
     <color name="colorAccent">#D81B60</color>
     <color name="tool">#30aaff</color>
     <color name="white">#ffffff</color>
+
+    <color name="color1">#9C27B0</color>
+    <color name="color2">#1E88E5</color>
+    <color name="color3">#304FFE</color>
+    <color name="color4">#AA00FF</color>
+
+
+
+
 </resources>
