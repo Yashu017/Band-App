@@ -49,7 +49,7 @@ public class BLE_Activity extends AppCompatActivity {
     ListAdapter adapterLeScanResult;
 
     private Handler mHandler;
-    private static final long SCAN_PERIOD = 10000;
+    private static final long SCAN_PERIOD = 20000;
 
 
 
@@ -238,21 +238,21 @@ public class BLE_Activity extends AppCompatActivity {
                 }
             }, SCAN_PERIOD);
 
-           // mBluetoothLeScanner.startScan(scanCallback);
+            mBluetoothLeScanner.startScan(scanCallback);
 
 
             //scan specified devices only with ScanFilter
-            ScanFilter scanFilter =
-                    new ScanFilter.Builder()
-                            .setServiceUuid(BluetoothLeService.ParcelUuid_GENUINO101_ledService)
-                            .build();
-            List<ScanFilter> scanFilters = new ArrayList<ScanFilter>();
-            scanFilters.add(scanFilter);
-
-            ScanSettings scanSettings =
-                    new ScanSettings.Builder().build();
-
-            mBluetoothLeScanner.startScan(scanFilters, scanSettings, scanCallback);
+//            ScanFilter scanFilter =
+//                    new ScanFilter.Builder()
+//                            .setServiceUuid(BluetoothLeService.ParcelUuid_GENUINO101_ledService)
+//                            .build();
+//            List<ScanFilter> scanFilters = new ArrayList<ScanFilter>();
+//            scanFilters.add(scanFilter);
+//
+//            ScanSettings scanSettings =
+//                    new ScanSettings.Builder().build();
+//
+//            mBluetoothLeScanner.startScan(scanFilters, scanSettings, scanCallback);
 
             mScanning = true;
             btnScan.setEnabled(false);

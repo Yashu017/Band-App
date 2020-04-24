@@ -8,23 +8,22 @@
     android:orientation="vertical">
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
+
 
     <TextView
         android:id="@+id/textDeviceName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20dp"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:text="N/A"/>
     <TextView
         android:id="@+id/textDeviceAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:text="N/A"/>
     <TextView
         android:id="@+id/textState"
         android:layout_width="match_parent"

@@ -12,20 +12,35 @@
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
+
         <activity android:name=".BLE.ControllerActivity"></activity>
         <activity android:name=".BLE.BLE_Activity" />
         <activity android:name=".LogIn" />
+
+        <activity android:name=".BottomNavActivity">
+
+
+        </activity>
+
+
         <activity android:name=".MainActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+
 
         <service
             android:name=".BLE.BluetoothLeService"
             android:enabled="true" />
+
+
+
+
     </application>
     <uses-feature
         android:name="android.hardware.bluetooth_le"
