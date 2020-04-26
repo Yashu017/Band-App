@@ -38,15 +38,15 @@ public class FourthFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_fourth, container, false);
-        /*
+
         recyclerView = (RecyclerView) rootView.findViewById(R.id.bandRecycler);
         BandDetailAdapter bandDetailAdapter = new BandDetailAdapter(getContext(), bandDetails);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        recyclerView.setNestedScrollingEnabled(false);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+
         recyclerView.setAdapter(bandDetailAdapter);
 
 
-         */
+
         return rootView;
     }
 
@@ -54,10 +54,10 @@ public class FourthFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         bandDetails = new ArrayList<>();
-        bandDetails.add(new BandDetail("First Description Is Here", R.drawable.cold));
-        bandDetails.add(new BandDetail("Second Description Is Here", R.drawable.cold));
-        bandDetails.add(new BandDetail("Third Description Is Here", R.drawable.cold));
-        bandDetails.add(new BandDetail("Fourth Description Is Here", R.drawable.cold));
+        bandDetails.add(new BandDetail("CWatch is an AI enabled IoT based wearable device which supports BLE version for monitoring body temperature and geolocation of user. ", R.drawable.wristband));
+        bandDetails.add(new BandDetail("CWatch band Bluetooth is capable of connecting with the mobile device within range of 20 metres.", R.drawable.bluetoothrange));
+        bandDetails.add(new BandDetail("CWatch band is water resistant and can handle rain,sweat and doing the dishes.", R.drawable.waterresistance));
+
 
     }
 

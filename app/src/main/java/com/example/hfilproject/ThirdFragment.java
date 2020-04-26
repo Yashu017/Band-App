@@ -53,13 +53,13 @@ public class ThirdFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tempLogs = new ArrayList<>();
-        tempLogs.add(new TempLog("36 \u00B0C", "98 \u00B0F", "Normal", "Today,", "12:00 PM"));
-        tempLogs.add(new TempLog("37 \u00B0C", "98.6 \u00B0F", "Normal", "Today,", "1:00 PM"));
-        tempLogs.add(new TempLog("38 \u00B0C", "100.4 \u00B0F", "Normal", "Today,", "2:00 PM"));
-        tempLogs.add(new TempLog("36 \u00B0C", "98 \u00B0F", "Normal", "Today,", "3:00 PM"));
-        tempLogs.add(new TempLog("37 \u00B0C", "98.6 \u00B0F", "Normal", "Today,", "4:00 PM"));
-        tempLogs.add(new TempLog("36 \u00B0C", "98 \u00B0F", "Normal", "Today,", "5:00 PM"));
-        tempLogs.add(new TempLog("38 \u00B0C", "100.4 \u00B0F", "Normal", "Today,", "6:00 PM"));
+        tempLogs.add(new TempLog("36.0 \u00B0C", "98.0 \u00B0F", "Normal", "Today,", "12:00 PM"));
+        tempLogs.add(new TempLog("37.0 \u00B0C", "98.6 \u00B0F", "Normal", "Today,", "1:00 PM"));
+        tempLogs.add(new TempLog("38.0 \u00B0C", "100.4 \u00B0F", "Normal", "Today,", "2:00 PM"));
+        tempLogs.add(new TempLog("36.0 \u00B0C", "98.0 \u00B0F", "Normal", "Today,", "3:00 PM"));
+        tempLogs.add(new TempLog("37.0 \u00B0C", "98.6 \u00B0F", "Normal", "Today,", "4:00 PM"));
+        tempLogs.add(new TempLog("36.0 \u00B0C", "98.0 \u00B0F", "Normal", "Today,", "5:00 PM"));
+        tempLogs.add(new TempLog("38.0 \u00B0C", "100.4 \u00B0F", "Normal", "Today,", "6:00 PM"));
 
     }
 
