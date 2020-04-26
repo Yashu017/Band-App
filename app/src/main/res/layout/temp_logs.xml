@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+   >
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:elevation="20dp"
+        app:cardCornerRadius="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#605196">
+
+            <ImageView
+                android:id="@+id/thermometer"
+                android:layout_width="40dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/cold" />
+
+            <RelativeLayout
+                android:id="@+id/TempLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@id/thermometer">
+
+                <TextView
+                    android:id="@+id/tempC"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="020.0 C"
+                    android:textColor="#fff"
+                    android:textSize="20sp" />
+
+                <View
+                    android:id="@+id/space"
+                    android:layout_width="70dp"
+                    android:layout_height="2dp"
+                    android:layout_below="@id/tempC"
+                    android:background="#fff" />
+
+                <TextView
+                    android:id="@+id/tempF"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/space"
+                    android:text="030.0 F"
+                    android:textColor="#fff"
+                    android:textSize="20sp" />
+
+
+            </RelativeLayout>
+
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@id/TempLayout"
+                android:text="Status"
+                android:textColor="#fff"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/status"
+                android:layout_marginLeft="20dp"
+
+                android:layout_toRightOf="@id/TempLayout"
+                android:text="Today,"
+                android:textColor="#fff"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/status"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@id/day"
+                android:text="12:00 PM"
+                android:textColor="#fff"
+                android:textSize="17sp" />
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
