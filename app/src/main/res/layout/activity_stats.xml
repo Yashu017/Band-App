@@ -1,33 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-
-    tools:context=".ThirdFragment">
-
-    <!-- TODO: Update blank fragment layout -->
+    android:orientation="vertical">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="50dp">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
+
 
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/BarChart"
                 android:layout_width="300dp"
                 android:layout_height="300dp"
-                android:layout_gravity="center"
-                android:layout_marginBottom="10dp"
-                android:padding="10dp" />
 
-            <include layout="@layout/temp_log_recycler" />
-        </LinearLayout>
+                android:layout_centerHorizontal="true" />
+
+        </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>

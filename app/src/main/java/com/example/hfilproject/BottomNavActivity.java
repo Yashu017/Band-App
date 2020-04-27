@@ -1,15 +1,19 @@
 package com.example.hfilproject;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class BottomNavActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
+public class BottomNavActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, ThirdFragment.OnFragmentInteractionListener, FourthFragment.OnFragmentInteractionListener {
     BottomNavigationView bottomNavigationView;
 
     @Override
@@ -18,8 +22,15 @@ public class BottomNavActivity extends AppCompatActivity implements BottomNaviga
         setContentView(R.layout.activity_bottom_nav);
         bottomNavigationView = findViewById(R.id.bottomNavigation);
 
+
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.item1);
+
+        ActionBar actionBar = getSupportActionBar();
+        getSupportActionBar().show();
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#673AB7")));
+
+
     }
 
     FirstFragment firstFragment = new FirstFragment();
@@ -46,6 +57,11 @@ public class BottomNavActivity extends AppCompatActivity implements BottomNaviga
                 //   getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).addToBackStack(null).replace(R.id.fragment_container, firstFragment).commit();
                 return true;
         }
+
+    }
+
+    @Override
+    public void onClicked() {
 
     }
 }

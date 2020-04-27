@@ -9,11 +9,11 @@
         android:icon="@drawable/ic_widgets_black_24dp"
         android:title="Logs"/>
     <item
-        android:title="Notifications"
+        android:title="Logs"
         android:icon="@drawable/ic_notifications_active_black_24dp"
         android:id="@+id/item3"/>
     <item
-        android:title="Contacts"
+        android:title="Info"
         android:id="@+id/item4"
         android:icon="@drawable/ic_contacts_black_24dp"/>
 </menu>
