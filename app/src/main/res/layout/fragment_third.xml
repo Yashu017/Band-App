@@ -3,15 +3,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ThirdFragment"
-
     android:orientation="vertical"
-    android:paddingBottom="65dp">
+
+    tools:context=".ThirdFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp">
 
-   <include
-       layout="@layout/temp_log_recycler"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/BarChart"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:padding="10dp" />
+
+            <include layout="@layout/temp_log_recycler" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>

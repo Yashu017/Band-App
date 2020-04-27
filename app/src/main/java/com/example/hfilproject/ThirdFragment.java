@@ -14,6 +14,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +35,9 @@ public class ThirdFragment extends Fragment {
     private List<TempLog> tempLogs;
     View rootView;
     private OnFragmentInteractionListener listener;
-
+    BarChart barChart;
+    ArrayList<BarEntry> barEntryArrayList;
+    ArrayList<String> dates;
 
     public ThirdFragment() {
         // Required empty public constructor
@@ -43,11 +52,41 @@ public class ThirdFragment extends Fragment {
         TempAdapter tempAdapter = new TempAdapter(getContext(), tempLogs);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(tempAdapter);
+        barChart = (BarChart) rootView.findViewById(R.id.BarChart);
+        ArrayList<BarEntry> barEntryArrayList = new ArrayList<>();
+        barEntryArrayList.add(new BarEntry(98f, 0));
+        barEntryArrayList.add(new BarEntry(99f, 1));
+        barEntryArrayList.add(new BarEntry(100.2f, 2));
+        barEntryArrayList.add(new BarEntry(101f, 3));
+        barEntryArrayList.add(new BarEntry(102f, 4));
+        barEntryArrayList.add(new BarEntry(103f, 5));
+        barEntryArrayList.add(new BarEntry(103f, 5));
+        ArrayList<String> dates = new ArrayList<>();
+        dates.add("20 April");
+        dates.add("21 April");
+        dates.add("22 April");
+        dates.add("23 April");
+        dates.add("24 April");
+        dates.add("25 April");
+        dates.add("26 April");
 
-
-
+        BarDataSet barDataSet = new BarDataSet(barEntryArrayList, "Temp Recorded");
+        barDataSet.setColor(R.color.md_deep_purple_500);
+        BarData barData = new BarData(dates, barDataSet);
+        barChart.setData(barData);
+        barChart.setDescription("");
+        barChart.animateY(2000);
+        barChart.setDrawGridBackground(false);
+        barChart.getXAxis().setDrawGridLines(false);
+        barChart.getAxisLeft().setDrawGridLines(false);
+        barChart.getAxisRight().setDrawGridLines(false);
+        YAxis rightYAxis = barChart.getAxisRight();
+        rightYAxis.setEnabled(false);
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         return rootView;
     }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
