@@ -6,10 +6,18 @@
     tools:context=".SecondFragment"
     >
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="hello second fragment" />
+        android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/openMAp"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+       android:layout_centerInParent="true"
+        android:text="map" />
+
+    </RelativeLayout>
+
 
 </FrameLayout>

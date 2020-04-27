@@ -51,5 +51,8 @@
 
     <string name="log" formatted="false">%1$tR:%1$tS.%1$tL</string>
 
+    <string name="baseUrl">http://api-c19.ap-south-1.elasticbeanstalk.com/
+</string>
+
 
 </resources>

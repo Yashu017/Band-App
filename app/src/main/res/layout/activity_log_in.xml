@@ -68,36 +68,7 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/fui_ic_phone_white_24dp"
-                    android:background="@color/md_grey_700"/>
-
-                <TextView
-                    android:id="@+id/email_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="50dp"
-                    android:layout_marginTop="10dp"
-                    android:hint="Mobile Number"
-                    android:textColorHint="@color/md_grey_700" />
-
-                <EditText
-                    android:id="@+id/mobileL"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/email_label"
-                    android:layout_marginStart="45dp"
-                    android:inputType="none"
-                    android:textColor="@color/md_black_1000" />
-
-            </RelativeLayout>
 
 
             <RelativeLayout
@@ -131,6 +102,75 @@
 
             </RelativeLayout>
 
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Type of Quarantine you are in"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="10dp"/>
+
+
+
+            <LinearLayout
+                android:id="@+id/hq"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Home Quarantine/Self Isolation" />
+
+
+
+                    <RadioButton
+                        android:id="@+id/hq_yes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="22dp"
+                        android:text="Yes"
+                        android:textColor="@color/md_grey_700" />
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Isolation centres /Govt. Quarantine" />
+
+
+
+                    <RadioButton
+                        android:id="@+id/ic_yes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="Yes"
+                        android:textColor="@color/md_grey_700" />
+
+
+
+            </LinearLayout>
+
+
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -160,107 +200,38 @@
                     android:textColor="@color/md_black_1000" />
 
             </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/typeQuarantinr"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="50dp"
-                    android:layout_marginTop="15dp"
-                    android:hint="Type of Quarantine you are in: "
-                    android:textColorHint="@color/md_grey_700" />
-            </RelativeLayout>
 
 
+<!--            <RelativeLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="15dp">-->
 
+<!--                <ImageView-->
+<!--                    android:layout_width="25dp"-->
+<!--                    android:layout_height="25dp"-->
+<!--                    android:layout_centerVertical="true"-->
+<!--                    android:src="@drawable/ic_numeric_24px" />-->
 
+<!--                <TextView-->
+<!--                    android:id="@+id/start"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="50dp"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:hint="Start Date"-->
+<!--                    android:textColorHint="@color/md_grey_700" />-->
 
-            <LinearLayout
-                android:id="@+id/iwl"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="12dp"
-                android:orientation="horizontal">
+<!--                <EditText-->
+<!--                    android:id="@+id/startDate"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_below="@id/start"-->
+<!--                    android:layout_marginStart="45dp"-->
+<!--                    android:singleLine="true"-->
+<!--                    android:textColor="@color/md_black_1000" />-->
 
-
-
-                <RadioGroup
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="Isolation Ward"
-                        android:layout_marginRight="22dp"/>
-
-                    <RadioButton
-                        android:id="@+id/iw_l"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:text="Yes"
-                        android:textColor="@color/md_grey_700" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="Home Quarantine"
-                        android:layout_marginRight="22dp"/>
-
-                    <RadioButton
-                        android:id="@+id/hq_l"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:text="Yes"
-                        android:textColor="@color/md_grey_700" />
-
-
-
-
-                </RadioGroup>
-
-
-
-
-            </LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp">
-
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_numeric_24px" />
-
-                <TextView
-                    android:id="@+id/start"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="50dp"
-                    android:layout_marginTop="10dp"
-                    android:hint="Start Date"
-                    android:textColorHint="@color/md_grey_700" />
-
-                <EditText
-                    android:id="@+id/startDate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/start"
-                    android:layout_marginStart="45dp"
-                    android:singleLine="true"
-                    android:textColor="@color/md_black_1000" />
-
-            </RelativeLayout>
+<!--            </RelativeLayout>-->
 
 <!--            <RelativeLayout-->
 <!--                android:layout_width="match_parent"-->
@@ -292,6 +263,38 @@
 
 <!--            </RelativeLayout>-->
 
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            >
+
+                            <ImageView
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_centerVertical="true"
+                                android:src="@drawable/fui_ic_phone_white_24dp"
+                                android:background="@color/md_grey_700"/>
+
+                            <TextView
+                                android:id="@+id/email_label"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="50dp"
+                                android:layout_marginTop="10dp"
+                                android:hint="Mobile Number"
+                                android:textColorHint="@color/md_grey_700" />
+
+                            <EditText
+                                android:id="@+id/mobileL"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@id/email_label"
+                                android:layout_marginStart="45dp"
+                                android:inputType="none"
+                                android:textColor="@color/md_black_1000" />
+
+                        </RelativeLayout>
+
 
 
 
@@ -301,9 +304,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="14dp"
                 android:layout_marginEnd="24dp"
-                android:layout_marginBottom="36dp"
+
                 android:background="@drawable/buttob"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:text="Submit"
