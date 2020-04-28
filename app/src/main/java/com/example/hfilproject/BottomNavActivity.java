@@ -14,7 +14,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class BottomNavActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, ThirdFragment.OnFragmentInteractionListener, FourthFragment.OnFragmentInteractionListener
-, FifthFragment.OnFragmentInteractionListener {
+{
     BottomNavigationView bottomNavigationView;
 
     @Override
@@ -27,9 +27,8 @@ public class BottomNavActivity extends AppCompatActivity implements BottomNaviga
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.item1);
 
-        ActionBar actionBar = getSupportActionBar();
-        getSupportActionBar().show();
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#673AB7")));
+       ActionBar actionBar = getSupportActionBar();
+       getSupportActionBar().hide();
 
 
     }
@@ -38,7 +37,6 @@ public class BottomNavActivity extends AppCompatActivity implements BottomNaviga
     SecondFragment secondFragment = new SecondFragment();
     ThirdFragment thirdFragment = new ThirdFragment();
     FourthFragment fourthFragment = new FourthFragment();
-    FifthFragment fifthFragment = new FifthFragment();
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -56,8 +54,7 @@ public class BottomNavActivity extends AppCompatActivity implements BottomNaviga
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.fragment_container, fourthFragment).commit();
                 return true;
             case R.id.item5:
-                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in,R.anim.fade_out).replace(R.id.fragment_container,fifthFragment).commit();
-                return true;
+
             default:
                 //   getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).addToBackStack(null).replace(R.id.fragment_container, firstFragment).commit();
                 return true;
