@@ -1,7 +1,10 @@
 package com.example.hfilproject.BLE;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -32,6 +35,8 @@ import com.example.hfilproject.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+
 public class BLE_Activity extends AppCompatActivity {
 
 
@@ -41,7 +46,7 @@ public class BLE_Activity extends AppCompatActivity {
     private boolean mScanning;
 
     private static final int RQS_ENABLE_BLUETOOTH = 1;
-
+    private static final int PERMISSIONS_REQUEST_ID = 99;
     Button btnScan;
     ListView listViewLE;
 
@@ -79,6 +84,7 @@ public class BLE_Activity extends AppCompatActivity {
             return;
         }
 
+
         btnScan = (Button)findViewById(R.id.scan);
         btnScan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,6 +104,26 @@ public class BLE_Activity extends AppCompatActivity {
 
     }
 
+    private void requestLocationPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, ACCESS_COARSE_LOCATION)) {
+            new android.app.AlertDialog.Builder(this).setTitle("PERMISSION NEEDED").setMessage("Permission needed to test").setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ActivityCompat.requestPermissions(BLE_Activity.this, new String[]{ACCESS_COARSE_LOCATION}, PERMISSIONS_REQUEST_ID);
+
+                }
+            })
+                    .setNegativeButton("Cancelled", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .create().show();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{ACCESS_COARSE_LOCATION}, PERMISSIONS_REQUEST_ID);
+        }
+    }
     AdapterView.OnItemClickListener scanResultOnItemClickListener =
             new AdapterView.OnItemClickListener(){
 
@@ -171,7 +197,11 @@ public class BLE_Activity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        if (ContextCompat.checkSelfPermission(BLE_Activity.this,ACCESS_COARSE_LOCATION)== PackageManager.PERMISSION_GRANTED){
+            Toast.makeText(BLE_Activity.this,"You have already granted permission",Toast.LENGTH_SHORT).show();
+        }else {
+            requestLocationPermission();
+        }
         if (!mBluetoothAdapter.isEnabled()) {
             if (!mBluetoothAdapter.isEnabled()) {
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -294,6 +324,20 @@ public class BLE_Activity extends AppCompatActivity {
             }
         }
     };
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == PERMISSIONS_REQUEST_ID) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
 }
 
 

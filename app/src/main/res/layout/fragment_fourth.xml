@@ -27,7 +27,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:elevation="20dp"
                 app:cardCornerRadius="5dp">
 
                 <RelativeLayout
@@ -50,18 +49,17 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/aboutButton"
                         android:layout_margin="5dp"
-                        android:background="#605196"
+                       android:background="#f5f5f5"
                         android:elevation="10dp"
                         app:cardCornerRadius="5dp">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="#605196"
                             android:padding="5dp"
                             android:text="High five innovation labs is an IoT based startup experienced in solving day to day problems.
 This  cost effective product comes up with a solution to stop the spread of Corona virus.The product has some unique features in compare with the available products in market. "
-                            android:textColor="#fff"
+
                             android:textSize="17sp" />
                     </androidx.cardview.widget.CardView>
 
@@ -91,33 +89,31 @@ This  cost effective product comes up with a solution to stop the spread of Coro
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="15dp"
-                android:background="#605196"
-                android:elevation="10dp"
+
                 app:cardCornerRadius="5dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+android:background="#f5f5f5"
+                    android:elevation="14dp">
 
                     <TextView
                         android:id="@+id/HowTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="#605196"
                         android:paddingLeft="5dp"
                         android:text="How To Use?"
-                        android:textColor="#fff"
+
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/HowTitle"
-                        android:background="#605196"
                         android:paddingLeft="5dp"
                         android:paddingBottom="5dp"
-                        android:text="View instructions to set up the wearable device "
-                        android:textColor="#fff" />
+                        android:text="View instructions to set up the wearable device " />
 
                     <ImageView
                         android:layout_width="40dp"
@@ -137,33 +133,29 @@ This  cost effective product comes up with a solution to stop the spread of Coro
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="15dp"
-                android:background="#605196"
-                android:elevation="10dp"
                 app:cardCornerRadius="5dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:background="#f5f5f5"
+                    android:elevation="14dp">
 
                     <TextView
                         android:id="@+id/ReportTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="#605196"
                         android:paddingLeft="5dp"
                         android:text="Report an Issue"
-                        android:textColor="#fff"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/ReportTitle"
-                        android:background="#605196"
                         android:paddingLeft="5dp"
                         android:paddingBottom="5dp"
-                        android:text="Tell us what's wrong!"
-                        android:textColor="#fff" />
+                        android:text="Tell us what's wrong!" />
 
                     <ImageView
                         android:layout_width="40dp"
@@ -184,35 +176,31 @@ This  cost effective product comes up with a solution to stop the spread of Coro
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginBottom="10dp"
-                android:background="#605196"
-                android:elevation="10dp"
                 android:paddingBottom="5dp"
                 app:cardCornerRadius="5dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="#f5f5f5"
+                    android:elevation="14dp"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/FaqTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="#605196"
                         android:paddingLeft="5dp"
                         android:text="Frequently Asked Questions"
-                        android:textColor="#fff"
                         android:textSize="17sp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/FaqTitle"
-                        android:background="#605196"
                         android:paddingLeft="5dp"
                         android:paddingBottom="5dp"
-                        android:text="Know more about the product"
-                        android:textColor="#fff" />
+                        android:text="Know more about the product" />
 
                     <ImageView
                         android:layout_width="40dp"
@@ -243,28 +231,23 @@ This  cost effective product comes up with a solution to stop the spread of Coro
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="15dp"
-
-                android:background="#605196"
-                android:elevation="10dp"
                 android:paddingBottom="5dp"
                 app:cardCornerRadius="5dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#605196"
+                    android:background="#f5f5f5"
+                    android:elevation="14dp"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/TnCTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="#605196"
-                        android:paddingLeft="5dp"
                         android:paddingTop="3dp"
                         android:paddingBottom="5dp"
                         android:text="Terms and Conditions"
-                        android:textColor="#fff"
                         android:textSize="17sp" />
 
 
@@ -272,7 +255,6 @@ This  cost effective product comes up with a solution to stop the spread of Coro
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_alignParentRight="true"
-
                         android:src="@drawable/ic_arrow_forward_black_24dp" />
                 </RelativeLayout>
 
@@ -287,27 +269,23 @@ This  cost effective product comes up with a solution to stop the spread of Coro
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginBottom="10dp"
-                android:background="#605196"
-                android:elevation="10dp"
-
                 app:cardCornerRadius="5dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#605196"
+                    android:background="#f5f5f5"
+                    android:elevation="14dp"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/PrivacyTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="#605196"
                         android:paddingLeft="5dp"
                         android:paddingTop="3dp"
                         android:paddingBottom="5dp"
                         android:text="Privacy Policy"
-                        android:textColor="#fff"
                         android:textSize="17sp" />
 
 
@@ -315,7 +293,6 @@ This  cost effective product comes up with a solution to stop the spread of Coro
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_alignParentRight="true"
-
                         android:src="@drawable/ic_arrow_forward_black_24dp" />
                 </RelativeLayout>
 
