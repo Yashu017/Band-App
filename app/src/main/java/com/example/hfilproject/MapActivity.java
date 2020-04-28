@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
-
 import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
@@ -66,6 +65,8 @@ public class MapActivity extends AppCompatActivity
     private TextView textLat, textLong;
 
     private MapFragment mapFragment;
+
+    public double forNextLat,forNextLong;
 
     private static final String NOTIFICATION_MSG = "NOTIFICATION MSG";
 
@@ -283,6 +284,10 @@ public class MapActivity extends AppCompatActivity
         textLong.setText("Long: " + location.getLongitude());
 
         markerLocation(new LatLng(location.getLatitude(), location.getLongitude()));
+
+
+
+
     }
 
     private void writeLastLocation() {

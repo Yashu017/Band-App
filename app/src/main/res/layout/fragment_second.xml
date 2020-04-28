@@ -3,21 +3,160 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SecondFragment"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".SecondFragment">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        android:layout_marginBottom="80dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/openMAp"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-       android:layout_centerInParent="true"
-        android:text="map" />
+        <RelativeLayout
+            android:id="@+id/relMAp"
+            android:layout_width="297dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="25dp"
+            android:layout_centerHorizontal="true"
+            android:background="#ffffff">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/openMAp"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:clickable="true"
+                android:src="@drawable/mapt" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Geofence"
+                android:layout_below="@id/openMAp"
+                android:layout_centerHorizontal="true"
+                android:textSize="25sp"
+                android:textStyle="bold"/>
+
+
+
+        </RelativeLayout>
+
+
+
+        <RelativeLayout
+            android:id="@+id/layoutAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/white_rectangle_backgrounf"
+            android:gravity="center"
+            android:padding="15dp"
+           android:layout_below="@+id/relMAp"
+            >
+
+
+
+
+
+
+
+
+            <TextView
+                android:id="@+id/addressHead"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/addressA"
+                android:layout_toRightOf="@+id/adr"
+                android:text="Current Location:"
+                android:layout_marginTop="5dp"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/originalAddressFrag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/addressHead"
+                android:layout_toRightOf="@+id/adr"
+                android:text="N/A"
+                android:layout_marginTop="5dp"
+                android:textSize="20sp" />
+
+
+
+
+
+        </RelativeLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_margin="25dp"
+            android:background="@drawable/latest_update"
+            android:padding="20dp"
+            android:layout_below="@+id/layoutAddress"
+
+            >
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/latestUpd"
+                android:background="@drawable/white_rectangle_backgrounf"
+                android:paddingStart="8dp"
+                android:paddingTop="2dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="2dp"
+                android:text="Important"
+                android:textColor="#000000"
+                android:textSize="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_info_black_24dp"
+                android:tint="#ffffff"
+                app:layout_constraintBottom_toBottomOf="@id/latestUpd"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/latestUpd"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:ellipsize="end"
+                android:text="Please click on the image above to open map, which will show
+your location and your geofence location. \n You can check your location here ,which is updated after regular
+intervals. \n
+Stay at Home,Stay Safe."
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@id/latestUpd"
+                android:textColor="#ffffff"/>
+
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </RelativeLayout>
+
+        </ScrollView>
 
 
 </FrameLayout>
