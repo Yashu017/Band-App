@@ -7,10 +7,10 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:hardwareAccelerated="false"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
-
-        android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
-
+android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".MapActivity">
@@ -19,14 +19,20 @@
                 android:name="com.google.android.gms.version"
                 android:value="@integer/google_play_services_version" />
         </activity>
-        <activity android:name=".BLE.ControllerActivity" />
-        <activity android:name=".BLE.BLE_Activity" />
-        <activity android:name=".LogIn" >
-
+        <activity android:name=".BLE.ControllerActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+        </activity>
+        <activity android:name=".BLE.BLE_Activity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+        </activity>
+        <activity android:name=".LogIn"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
 
         </activity>
 
-        <activity android:name=".BottomNavActivity">
+        <activity android:name=".BottomNavActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,7 +42,9 @@
 
 
         </activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+
 
 
         </activity>
@@ -51,7 +59,7 @@
 
 
 
-        <service android:name=".GeofenceTransitionService"/>
+        <service android:name=".GeofenceTransitionService" />
 
 
         <service

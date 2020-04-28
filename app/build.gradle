@@ -11,6 +11,12 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        compileOptions{
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
+
+
     }
     buildTypes {
         release {
@@ -51,11 +57,6 @@ dependencies {
     implementation 'com.android.volley:volley:1.1.1'
     implementation 'no.nordicsemi.android:dfu:1.10.0'
     implementation 'no.nordicsemi.android:ble-common:2.2.0-alpha06'
-
-
-
-
-
     implementation('org.simpleframework:simple-xml:2.7.1') {
         exclude group: 'stax', module: 'stax-api'
         exclude group: 'xpp3', module: 'xpp3'
