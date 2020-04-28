@@ -83,6 +83,7 @@ public class MapActivity extends AppCompatActivity
         textLat = (TextView) findViewById(R.id.lat);
         textLong = (TextView) findViewById(R.id.lon);
 
+
         // initialize GoogleMaps
         initGMaps();
 

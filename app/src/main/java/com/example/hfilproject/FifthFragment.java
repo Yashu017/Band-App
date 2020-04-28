@@ -3,16 +3,16 @@ package com.example.hfilproject;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,14 +21,14 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FourthFragment extends Fragment {
+public class FifthFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private List<BandDetail> bandDetails;
-    private OnFragmentInteractionListener listener;
+    private List<Notification> notifications;
     View rootView;
+    private OnFragmentInteractionListener listener;
 
-    public FourthFragment() {
+    public FifthFragment() {
         // Required empty public constructor
     }
 
@@ -37,27 +37,23 @@ public class FourthFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        rootView = inflater.inflate(R.layout.fragment_fourth, container, false);
+        rootView = inflater.inflate(R.layout.fragment_fifth, container, false);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.notificationRecycler);
+        NotificationAdapter adapter = new NotificationAdapter(getContext(), notifications);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
 
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.bandRecycler);
-        BandDetailAdapter bandDetailAdapter = new BandDetailAdapter(getContext(), bandDetails);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-
-        recyclerView.setAdapter(bandDetailAdapter);
-
-
-
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
         return rootView;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        bandDetails = new ArrayList<>();
-        bandDetails.add(new BandDetail("CWatch is an AI enabled IoT based wearable device which supports BLE version for monitoring body temperature and geolocation of user. ", R.drawable.cold));
-        bandDetails.add(new BandDetail("CWatch band Bluetooth is capable of connecting with the mobile device within range of 20 metres.", R.drawable.cold));
-        bandDetails.add(new BandDetail("CWatch band is water resistant and can handle rain,sweat and doing the dishes.", R.drawable.cold));
-
+        notifications = new ArrayList<>();
+        notifications.add(new Notification("Warning", "11:00 AM", "This device is not connected with C Watch. Please connect again."));
+        notifications.add(new Notification("Warning", "1:00 PM", "You have breached geo-fencing.Please stay in your quarantine place."));
+        notifications.add(new Notification("Warning", "3:00 PM", "This device is not connected with C Watch. Please connect again."));
 
     }
 
@@ -81,4 +77,3 @@ public class FourthFragment extends Fragment {
         void onClicked();
     }
 }
-

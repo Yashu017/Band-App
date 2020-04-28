@@ -13,7 +13,8 @@
 android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".MapActivity">
+        <activity android:name=".MapActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
 
             <meta-data
                 android:name="com.google.android.gms.version"
@@ -31,7 +32,7 @@ android:supportsRtl="true"
         </activity>
 
         <activity android:name=".BottomNavActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
