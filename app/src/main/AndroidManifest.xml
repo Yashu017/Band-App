@@ -39,12 +39,11 @@
             android:enabled="true" />
 
 
-
-
     </application>
     <uses-feature
         android:name="android.hardware.bluetooth_le"
         android:required="true" />
+
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <uses-permission android:name="android.permission.INTERNET" />
