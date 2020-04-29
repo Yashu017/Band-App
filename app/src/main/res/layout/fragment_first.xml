@@ -1,211 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".FirstFragment"
-    >
+    tools:context=".FirstFragment">
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/layoutHeader"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/header_home"
-    android:padding="15dp"
-    app:layout_constraintTop_toTopOf="parent">
 
-<TextView
-    android:id="@+id/hello"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="15dp"
-    android:layout_marginStart="15dp"
-    android:text="Hello"
-    android:textSize="25dp"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    android:textColor="#ffffff"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/userName"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="15dp"
-        android:text="User"
-        android:textSize="25dp"
-        android:textStyle="bold"
-        android:textColor="#ffffff"
-        app:layout_constraintStart_toEndOf="@+id/hello"
-        app:layout_constraintTop_toTopOf="parent"/>\
-
-    <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:id="@+id/notificationBell"
-        android:layout_marginEnd="15dp"
-        android:src="@drawable/ic_notifications_active_white_24dp"
-        android:tint="#ffffff"
-        app:layout_constraintBottom_toBottomOf="@+id/hello"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/hello"
-/>
-</androidx.constraintlayout.widget.ConstraintLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:overScrollMode="never"
-        android:scrollbars="none"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layoutHeader"
-        android:layout_marginBottom="80dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/header_home"
+            android:padding="5dp"
+            app:layout_constraintTop_toTopOf="parent">
 
-            >
-
-            <RelativeLayout
-                android:id="@+id/layoutTemp"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/hello"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="25dp"
-                android:background="@drawable/white_rectangle_backgrounf"
-                android:gravity="center"
-                android:padding="15dp"
-                app:layout_constraintDimensionRatio="H, 1:1"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:text="Hello"
+                android:textColor="#ffffff"
+                android:textSize="25dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:clickable="true">
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/tp"
-                    android:layout_width="117dp"
-                    android:layout_height="129dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:padding="8dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/temphome" />
-
-                <TextView
-                    android:id="@+id/tempT"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/tp"
-                    android:text="Temperature"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/typeTemp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tempT"
-                    android:layout_toRightOf="@+id/tp"
-                    android:text="Recent Temperature:"
-                    android:layout_marginTop="5dp"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:id="@+id/tempOriginal"
-                    android:layout_width="82dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/typeTemp"
-                    android:layout_marginLeft="51dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_toRightOf="@+id/tp"
-                    android:text="000"
-                    android:textSize="40sp"
-                    android:textStyle="bold"/>
-                <TextView
-                    android:id="@+id/degree"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/typeTemp"
-                    android:layout_toRightOf="@+id/tempOriginal"
-                    android:text="o"
-                    android:layout_marginTop="5dp"
-                    android:textSize="20sp" />
-
-            </RelativeLayout>
-
-
-
-            <RelativeLayout
-                android:id="@+id/layoutAddress"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="25dp"
-                android:background="@drawable/white_rectangle_backgrounf"
-                android:gravity="center"
-                android:padding="15dp"
-                app:layout_constraintDimensionRatio="H, 1:1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/layoutTemp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="15dp"
+                android:text="User"
+                android:textColor="#ffffff"
+                android:textSize="25dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/hello"
+                app:layout_constraintTop_toTopOf="parent" />\
+
+            <ImageButton
+                android:id="@+id/notificationBell"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="15dp"
                 android:clickable="true"
-                >
+                android:src="@drawable/ic_notifications_active_white_24dp"
+                android:tint="#ffffff"
+                app:layout_constraintBottom_toBottomOf="@+id/hello"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/hello" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <ImageView
-                    android:id="@+id/adr"
-                    android:layout_width="117dp"
-                    android:layout_height="129dp"
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="80dp"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutHeader">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/kj">
+
+
+                <RelativeLayout
+                    android:id="@+id/layoutTemp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="25dp"
                     android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:padding="8dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/locationhome" />
+                    android:background="@drawable/white_rectangle_backgrounf"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:padding="15dp"
+                    app:layout_constraintDimensionRatio="H, 1:1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/addressA"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/adr"
-                    android:text="Location"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
+                    <ImageView
+                        android:id="@+id/tp"
+                        android:layout_width="117dp"
+                        android:layout_height="129dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:padding="8dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/temphome" />
 
-                <TextView
-                    android:id="@+id/addressHead"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/addressA"
-                    android:layout_toRightOf="@+id/adr"
-                    android:text="Current Location:"
-                    android:layout_marginTop="5dp"
-                    android:textSize="20sp" />
+                    <TextView
+                        android:id="@+id/tempT"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/tp"
+                        android:text="Temperature"
+                        android:textSize="25sp"
+                        android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/originalAddress"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/addressHead"
-                    android:layout_toRightOf="@+id/adr"
-                    android:text="N/A"
-                    android:layout_marginTop="5dp"
-                    android:textSize="20sp" />
+                    <TextView
+                        android:id="@+id/typeTemp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tempT"
+                        android:layout_marginTop="5dp"
+                        android:layout_toRightOf="@+id/tp"
+                        android:text="Recent Temperature:"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/tempOriginal"
+                        android:layout_width="82dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/typeTemp"
+                        android:layout_marginLeft="51dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_toRightOf="@+id/tp"
+                        android:text="000"
+                        android:textSize="40sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/degree"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/typeTemp"
+                        android:layout_marginTop="5dp"
+                        android:layout_toRightOf="@+id/tempOriginal"
+                        android:text="o"
+                        android:textSize="20sp" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+            android:id="@+id/layoutAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="25dp"
+            android:background="@drawable/white_rectangle_backgrounf"
+            android:clickable="true"
+            android:gravity="center"
+            android:padding="15dp"
+            app:layout_constraintDimensionRatio="H, 1:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutTemp">
+
+            <ImageView
+                android:id="@+id/adr"
+                android:layout_width="117dp"
+                android:layout_height="129dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:padding="8dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/locationhome" />
+
+            <TextView
+                android:id="@+id/addressA"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/adr"
+                android:text="Location"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/addressHead"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/addressA"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/adr"
+                android:text="Current Location:"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/originalAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/addressHead"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/adr"
+                android:text="N/A"
+                android:textSize="20sp" />
 
 
-
-
-
-            </RelativeLayout>
+        </RelativeLayout>
 
 
 
@@ -266,70 +265,66 @@
                     android:layout_marginTop="5dp"
                     android:textSize="20sp" />
 
-
-
-
-
             </RelativeLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
                 android:layout_marginTop="25dp"
                 android:layout_margin="25dp"
                 android:background="@drawable/latest_update"
                 android:padding="20dp"
                 app:layout_constraintEnd_toEndOf="@id/bluetooth"
                 app:layout_constraintStart_toStartOf="@id/layoutAddress"
-                app:layout_constraintTop_toBottomOf="@id/bluetooth"
-
-                >
+                app:layout_constraintTop_toBottomOf="@id/bluetooth">
 
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/latestUpd"
-                    android:background="@drawable/white_rectangle_backgrounf"
-                    android:paddingStart="8dp"
-                    android:paddingTop="2dp"
-                    android:paddingEnd="8dp"
-                    android:paddingBottom="2dp"
-                    android:text="Latest Update"
-                    android:textColor="#000000"
-                    android:textSize="16dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/ic_info_black_24dp"
-                    android:tint="#ffffff"
-                    app:layout_constraintBottom_toBottomOf="@id/latestUpd"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/latestUpd"
-                    />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:ellipsize="end"
-                    android:text="For any updates from Govt. of India regarding COVID-19 ,
+                    <TextView
+                        android:id="@+id/latestUpd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/white_rectangle_backgrounf"
+                        android:paddingStart="8dp"
+                        android:paddingTop="2dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="2dp"
+                        android:text="Latest Update"
+                        android:textColor="#000000"
+                        android:textSize="16dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_info_black_24dp"
+                        android:tint="#ffffff"
+                        app:layout_constraintBottom_toBottomOf="@id/latestUpd"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/latestUpd" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:ellipsize="end"
+                        android:text="For any updates from Govt. of India regarding COVID-19 ,
 click here"
-                    android:textSize="20sp"
-                    app:layout_constraintTop_toBottomOf="@id/latestUpd"
-                    android:textColor="#ffffff"/>
+                        android:textColor="#ffffff"
+                        android:textSize="20sp"
+                        app:layout_constraintTop_toBottomOf="@id/latestUpd" />
 
 
-
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+        </ScrollView>
 
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</FrameLayout>
 
+
+
+
+
+</FrameLayout>

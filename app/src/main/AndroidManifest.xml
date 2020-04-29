@@ -29,19 +29,29 @@
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"></activity>
         <activity
             android:name=".LogIn"
-            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+
+
+
+        </activity>
+
         <activity
             android:name=".BottomNavActivity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBhRrHnzIgQ7eJD8VBShV71eLAapgVxjS4" />

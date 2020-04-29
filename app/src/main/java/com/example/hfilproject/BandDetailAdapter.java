@@ -35,7 +35,7 @@ public class BandDetailAdapter extends RecyclerView.Adapter<BandDetailAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.description.setText(data.get(position).getDescription());
-        holder.image.setImageResource(data.get(position).getImageResource());
+//        holder.image.setImageResource(data.get(position).getImageResource());
     }
 
 

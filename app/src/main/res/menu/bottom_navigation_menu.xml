@@ -6,18 +6,15 @@
         android:title="Home" />
     <item
         android:id="@+id/item2"
-        android:icon="@drawable/ic_widgets_black_24dp"
-        android:title="Logs" />
+        android:icon="@drawable/ic_person_pin_circle_black_24dp"
+        android:title="Map" />
     <item
         android:id="@+id/item3"
-        android:icon="@drawable/ic_notifications_active_black_24dp"
-        android:title="Logs" />
+        android:icon="@drawable/ic_widgets_black_24dp"
+        android:title="History" />
     <item
         android:id="@+id/item4"
-        android:icon="@drawable/ic_contacts_black_24dp"
-        android:title="Info" />
-    <item
-        android:id="@+id/item5"
-        android:icon="@drawable/ic_notifications_active_black_24dp"
-        android:title="Notifications" />
+        android:icon="@drawable/ic_live_help_black_24dp"
+        android:title="Help" />
+
 </menu>

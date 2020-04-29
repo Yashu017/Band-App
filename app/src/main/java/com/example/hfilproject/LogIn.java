@@ -40,7 +40,6 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -261,110 +260,120 @@ public class LogIn extends AppCompatActivity {
             }
 
             RequestQueue requestQueue = Volley.newRequestQueue(LogIn.this);
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://api-c19.ap-south-1.elasticbeanstalk.com/"+ "api/auth/signup",
-                    new com.android.volley.Response.Listener<String>() {
+            StringRequest stringRequest=new StringRequest(Request.Method.POST,
+                    "http://api-c19.ap-south-1.elasticbeanstalk.com/" + "api/auth/signup",
+                    new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            int errorCode = 1;
+
                             String token;
+                            int errorCode=2;
                             final JSONObject jsonObject;
                             try {
-                                jsonObject = new JSONObject(response);
-                                errorCode = (int) jsonObject.get("errorCode");
-                                if (!editProfile) {
-                                    token = (String) jsonObject.get("token");
-                                    editor.putString("token", token);
+
+                                jsonObject=new JSONObject(response);
+                                errorCode=(int)jsonObject.get("errorCode");
+                                if(!editProfile)
+                                {
+                                    token=(String) jsonObject.get("token");
+                                    editor.putString("token",token);
                                     editor.apply();
                                 }
-                                Toast.makeText(LogIn.this, "token" + sharedPrefs.getString("token", ""), Toast.LENGTH_LONG).show();
+                            }catch (Exception exx)
+                            {
+                                exx.printStackTrace();
 
-
-                            Toast.makeText(LogIn.this, response, Toast.LENGTH_LONG).show();
-                            Log.e("tag",response);
-                            if (errorCode != 0 && errorCode != 1) {
-//                                Toast.makeText(ProfileNew.this, "error code" + errorCode, Toast.LENGTH_SHORT).show();
-                                editor.putString("name", name.getText().toString());
-                                editor.putString("age", age.getText().toString());
-                                editor.putString("address", address.getText().toString());
-                                editor.putString("quarantineType", quarnType);
-                                editor.putBoolean("profileStatus", true);
+                            }
+                            if(errorCode!=0 && errorCode!=1)
+                            {
+                                editor.putString("name",name.getText().toString());
+                                editor.putString("age",age.getText().toString());
+                                editor.putString("address",address.getText().toString());
+                                editor.putBoolean("profileStatus",true);
                                 editor.commit();
                                 progressBar.setVisibility(View.GONE);
-                                if (editProfile) {
+                                if(editProfile)
+                                {
                                     finish();
-                                } else {
-                                    Intent i = new Intent(LogIn.this, BottomNavActivity.class);
+                                }
+                                else
+                                {
+                                    Intent i=new Intent(LogIn.this,BottomNavActivity.class);
                                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                     startActivity(i);
                                     finish();
                                 }
-                            } else if(errorCode==0){
-                                Toast.makeText(LogIn.this, "User Exists" + response, Toast.LENGTH_SHORT).show();
-                                Log.e("error", response);
+                            }
+                            else if(errorCode==0){
+                                Toast.makeText(LogIn.this,"User Exists",Toast.LENGTH_SHORT).show();
                                 progressBar.setVisibility(View.GONE);
                             }
-                            else if (errorCode==1)
+                            else if(errorCode==1)
                             {
-                                Toast.makeText(LogIn.this, "Device Registered" + response, Toast.LENGTH_SHORT).show();
-                                Log.e("error", response);
+                                Toast.makeText(LogIn.this,"Bluetooth ID already registered",Toast.LENGTH_SHORT).show();
                                 progressBar.setVisibility(View.GONE);
-                            }
-                            r=response;
-
-                        }catch (JSONException e)
-                            {
-                                e.printStackTrace();
                             }
                         }
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-
-                    Log.e("VOLLEY", error.toString());
+                    Log.e("Volley",error.toString());
                     progressBar.setVisibility(View.GONE);
-                    Toast.makeText(LogIn.this, error.toString(), Toast.LENGTH_SHORT).show();
-                    Toast.makeText(LogIn.this, r, Toast.LENGTH_LONG).show();
-                    Log.e("resp",r+ " ");
+                    Toast.makeText(LogIn.this,error.toString(),Toast.LENGTH_SHORT).show();
+
+
+
 
                 }
-
-        }) {
-
-                @Override
-                public String getBodyContentType() {
-                    return "application/x-www-form-urlencoded; charset=UTF-8";
-                }
+            })
+            {
 
 
-                @Override
-                public Map<String, String> getHeaders() {
-                    HashMap<String, String> headers = new HashMap<>();
-                    headers.put("access-token", "" + sharedPrefs.getString("token", ""));
-                    return headers;
-                }
 
                 @Override
                 protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("Name", name.getText().toString());
-                    params.put("phoneNumber",phoneNumber.getText().toString());
-                    params.put("age", age.getText().toString());
-                    params.put("address", address.getText().toString());
-                    params.put("quarantineType", quarnType);
-                    params.put("bluetoothId", "N/A");
+                    Map<String,String> params= new HashMap<String, String>();
+                    params.put("name","kll");
+                    params.put("phoneNumber","8219341697");
+                    params.put("age","14");
+//                    params.put("address","UNA");
+                    params.put("quarantineType","home");
+                    params.put("bluetoothId","N/a");
                     params.put("status","1");
+
                     return params;
+                }
+
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String,String> header=new HashMap<>();
+                    header.put("access-token",""+sharedPrefs.getString("token",""));
+                  //  header.put("Content-Type", "application/x-www-form-urlencoded;");
+
+                    return header;
+                }
+
+                @Override
+                public String getBodyContentType() {
+
+                    return "application/x-www-form-urlencoded; charset=UTF-8";
                 }
 
             };
             stringRequest.setRetryPolicy(new DefaultRetryPolicy(5000,
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             requestQueue.add(stringRequest);
-        } else
-            Toast.makeText(LogIn.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+        }else
+        {
 
-    }
+            Toast.makeText(LogIn.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+            progressBar.setVisibility(View.GONE);
+
+        }
+
+
+
+        }
 
         private void getUI () {
 

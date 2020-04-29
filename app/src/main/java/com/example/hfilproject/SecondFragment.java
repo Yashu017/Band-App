@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -17,6 +18,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * A simple {@link Fragment} subclass.
  */
 public class SecondFragment extends Fragment {
+
 
     CircleImageView pass;
     private double lat1, long1;
@@ -34,10 +36,12 @@ public class SecondFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
+
         View view = inflater.inflate(R.layout.fragment_second, container, false);
 
         pass = view.findViewById(R.id.openMAp);
         address = view.findViewById(R.id.originalAddressFrag);
+
 
 
 
@@ -52,6 +56,8 @@ public class SecondFragment extends Fragment {
 
             }
         });
+
+
         return view;
     }
 

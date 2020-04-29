@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class BottomNavActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, ThirdFragment.OnFragmentInteractionListener, FourthFragment.OnFragmentInteractionListener
-{
+,FifthFragment.OnFragmentInteractionListener{
     BottomNavigationView bottomNavigationView;
 
     @Override
@@ -25,9 +25,8 @@ public class BottomNavActivity extends AppCompatActivity implements BottomNaviga
         bottomNavigationView.setSelectedItemId(R.id.item1);
 
 
-       ActionBar actionBar = getSupportActionBar();
-       getSupportActionBar().hide();
-
+        ActionBar actionBar = getSupportActionBar();
+        getSupportActionBar().hide();
 
 
     }
@@ -45,6 +44,7 @@ public class BottomNavActivity extends AppCompatActivity implements BottomNaviga
                 return true;
             case R.id.item2:
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.fragment_container, secondFragment).commit();
+
                 return true;
             case R.id.item3:
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.fragment_container, thirdFragment).commit();
@@ -52,7 +52,7 @@ public class BottomNavActivity extends AppCompatActivity implements BottomNaviga
             case R.id.item4:
                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.fragment_container, fourthFragment).commit();
                 return true;
-            case R.id.item5:
+
 
             default:
                 //   getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).addToBackStack(null).replace(R.id.fragment_container, firstFragment).commit();
