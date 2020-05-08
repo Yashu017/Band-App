@@ -1,5 +1,7 @@
 package com.example.hfilproject;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -13,20 +15,42 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class BottomNavActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, ThirdFragment.OnFragmentInteractionListener, FourthFragment.OnFragmentInteractionListener
 ,FifthFragment.OnFragmentInteractionListener{
     BottomNavigationView bottomNavigationView;
+    SharedPreferences sharedPref;
+    SharedPreferences.Editor editor;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom_nav);
         bottomNavigationView = findViewById(R.id.bottomNavigation);
-
-
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.item1);
-
-
         ActionBar actionBar = getSupportActionBar();
         getSupportActionBar().hide();
+
+
+
+        sharedPref = getSharedPreferences("app", MODE_PRIVATE);
+        editor = sharedPref.edit();
+
+        // Checking whether user has logged in or not
+        if (sharedPref.getBoolean("loginStatus", false) == false) {
+            Intent i = new Intent(this, MainActivity.class);
+            startActivity(i);
+            finish();
+
+        }
+
+        //Checking whether user has created profile or not
+        else if (sharedPref.getBoolean("profileStatus", false) == false) {
+            Intent i = new Intent(this, LogIn.class);
+            startActivity(i);
+            finish();
+
+        }
+
+
 
 
     }
@@ -65,4 +89,6 @@ public class BottomNavActivity extends AppCompatActivity implements BottomNaviga
     public void onClicked() {
 
     }
+
+
 }

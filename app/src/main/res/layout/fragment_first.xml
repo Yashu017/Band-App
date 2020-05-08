@@ -35,7 +35,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/userName"
+                android:id="@+id/userNameFF"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
@@ -54,7 +54,6 @@
                 android:layout_marginEnd="15dp"
                 android:clickable="true"
                 android:src="@drawable/ic_notifications_active_white_24dp"
-                android:tint="#ffffff"
                 app:layout_constraintBottom_toBottomOf="@+id/hello"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/hello" />
@@ -208,64 +207,64 @@
 
 
 
-            <RelativeLayout
-                android:id="@+id/bluetooth"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="25dp"
-                android:background="@drawable/white_rectangle_backgrounf"
-                android:gravity="center"
-                android:padding="15dp"
-                app:layout_constraintDimensionRatio="H, 1:1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/layoutAddress"
-                android:clickable="true"
-                >
+<!--            <RelativeLayout-->
+<!--                android:id="@+id/bluetooth"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="25dp"-->
+<!--                android:background="@drawable/white_rectangle_backgrounf"-->
+<!--                android:gravity="center"-->
+<!--                android:padding="15dp"-->
+<!--                app:layout_constraintDimensionRatio="H, 1:1"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/layoutAddress"-->
+<!--                android:clickable="true"-->
+<!--                >-->
 
-                <ImageView
-                    android:id="@+id/btt"
-                    android:layout_width="117dp"
-                    android:layout_height="129dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:padding="8dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/bt1" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/btt"-->
+<!--                    android:layout_width="117dp"-->
+<!--                    android:layout_height="129dp"-->
+<!--                    android:layout_marginStart="8dp"-->
+<!--                    android:layout_marginLeft="8dp"-->
+<!--                    android:layout_marginTop="8dp"-->
+<!--                    android:layout_marginEnd="8dp"-->
+<!--                    android:layout_marginRight="8dp"-->
+<!--                    android:layout_marginBottom="8dp"-->
+<!--                    android:padding="8dp"-->
+<!--                    android:scaleType="centerCrop"-->
+<!--                    android:src="@drawable/bt1" />-->
 
-                <TextView
-                    android:id="@+id/blueB"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/btt"
-                    android:text="Bluetooth"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
+<!--                <TextView-->
+<!--                    android:id="@+id/blueB"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_toRightOf="@+id/btt"-->
+<!--                    android:text="Bluetooth"-->
+<!--                    android:textSize="25sp"-->
+<!--                    android:textStyle="bold" />-->
 
-                <TextView
-                    android:id="@+id/blueHead"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/blueB"
-                    android:layout_toRightOf="@+id/btt"
-                    android:text="Bluetooth Id"
-                    android:layout_marginTop="5dp"
-                    android:textSize="20sp" />
+<!--                <TextView-->
+<!--                    android:id="@+id/blueHead"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_below="@+id/blueB"-->
+<!--                    android:layout_toRightOf="@+id/btt"-->
+<!--                    android:text="Bluetooth Id"-->
+<!--                    android:layout_marginTop="5dp"-->
+<!--                    android:textSize="20sp" />-->
 
-                <TextView
-                    android:id="@+id/originalBT"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/blueHead"
-                    android:layout_toRightOf="@+id/btt"
-                    android:text="00:00:00:00:00"
-                    android:layout_marginTop="5dp"
-                    android:textSize="20sp" />
+<!--                <TextView-->
+<!--                    android:id="@+id/originalBT"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_below="@+id/blueHead"-->
+<!--                    android:layout_toRightOf="@+id/btt"-->
+<!--                    android:text="00:00:00:00:00"-->
+<!--                    android:layout_marginTop="5dp"-->
+<!--                    android:textSize="20sp" />-->
 
-            </RelativeLayout>
+<!--            </RelativeLayout>-->
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -275,9 +274,9 @@
                 android:layout_margin="25dp"
                 android:background="@drawable/latest_update"
                 android:padding="20dp"
-                app:layout_constraintEnd_toEndOf="@id/bluetooth"
+                app:layout_constraintEnd_toEndOf="@id/layoutAddress"
                 app:layout_constraintStart_toStartOf="@id/layoutAddress"
-                app:layout_constraintTop_toBottomOf="@id/bluetooth">
+                app:layout_constraintTop_toBottomOf="@id/layoutAddress">
 
 
                     <TextView
@@ -290,6 +289,7 @@
                         android:paddingEnd="8dp"
                         android:paddingBottom="2dp"
                         android:text="Latest Update"
+                        android:clickable="true"
                         android:textColor="#000000"
                         android:textSize="16dp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -309,8 +309,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:ellipsize="end"
-                        android:text="For any updates from Govt. of India regarding COVID-19 ,
-click here"
+                        android:text="For any updates from Govt. of India regarding COVID-19
+,click on latest updates provoded above."
                         android:textColor="#ffffff"
                         android:textSize="20sp"
                         app:layout_constraintTop_toBottomOf="@id/latestUpd" />

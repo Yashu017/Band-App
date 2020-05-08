@@ -37,11 +37,7 @@
 
         <activity
             android:name=".BottomNavActivity"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
-
-        </activity>
-        <activity
-            android:name=".MainActivity"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
 
             <intent-filter>
@@ -49,6 +45,15 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+
+
+
         </activity>
 
 
@@ -59,8 +64,16 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+        <service android:name=".UpdateBackgroundLocation"
+            android:enabled="true"
+            android:exported="true"
+            android:foregroundServiceType="location"/>
 
-        <service android:name=".GeofenceTransitionService" />
+        <service android:name=".GeofenceTransitionService"
+            android:enabled="true"
+            android:exported="true"
+            android:foregroundServiceType="location"/>
+            
         <service
             android:name=".BLE.BluetoothLeService"
             android:enabled="true" />
@@ -83,5 +96,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <uses-permission android:name="com.example.yourpackage.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
 
 </manifest>

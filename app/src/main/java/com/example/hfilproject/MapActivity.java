@@ -65,6 +65,7 @@ public class MapActivity extends AppCompatActivity
     private TextView textLat, textLong;
 
     private MapFragment mapFragment;
+    Boolean check;
 
     public double forNextLat,forNextLong;
 
@@ -151,6 +152,7 @@ public class MapActivity extends AppCompatActivity
         return (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED);
     }
+
 
     // Asks for permission
     private void askPermission() {
@@ -309,14 +311,20 @@ public class MapActivity extends AppCompatActivity
             float zoom = 14f;
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, zoom);
             map.animateCamera(cameraUpdate);
+
         }
+
     }
 
 
+
+
     private double latitude,longitude;
+    private Marker geoFenceMarker;
+    LatLng l1;
+    private void markerForGeofence(LatLng latLng) {
 
-
-    private void getCurrentLocation() {
+        l1=latLng;
 
         final LocationRequest locationRequest=new LocationRequest();
         locationRequest.setInterval(10000);
@@ -341,28 +349,22 @@ public class MapActivity extends AppCompatActivity
 
 
                         }
+                        l1= new LatLng(latitude,longitude);
 
-                        markerForGeofence(new LatLng(latitude,longitude));
+                       // markerForGeofence(new LatLng(latitude,longitude));
 
 
                     }
                 }, Looper.getMainLooper());
 
-    }
-//add marker for geofence add krna
 
 
 
-
-
-    private Marker geoFenceMarker;
-
-    private void markerForGeofence(LatLng latLng) {
-        Log.i(TAG, "markerForGeofence(" + latLng + ")");
-        String title = latLng.latitude + ", " + latLng.longitude;
+        Log.i(TAG, "markerForGeofence(" + l1 + ")");
+        String title = l1.latitude + ", " + l1.longitude;
         // Define marker options
         MarkerOptions markerOptions = new MarkerOptions()
-                .position(latLng)
+                .position(l1)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
                 .title(title);
         if (map != null) {

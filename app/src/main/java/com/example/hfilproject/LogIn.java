@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,43 +28,53 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import com.example.hfilproject.Model.User;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
-import org.json.JSONObject;
-
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class LogIn extends AppCompatActivity {
 
     private SharedPreferences sharedPrefs;
+    public static Retrofit retrofit;
     private SharedPreferences.Editor editor;
-    private EditText name, age, phoneNumber, address;
+    private EditText name, age, phoneNumber, address,time;
     private Button submitProfile;
     private ProgressBar progressBar;
     private RadioButton hq, iw;
     private LinearLayout hq_l,iw_l;
+    String token;
+    String sendToken;
     private boolean editProfile;
     private boolean A=true;
     private int REQUEST_CODE_LOCATION_PERMISSION=1;
     private ResultReceiver resultReceiver;
     private double latitude,longitude;
+    String t;
     List<Address> addressList;
     Geocoder geocoder;
     String fulladdress,quarnType;
+    String bluetoothId = "9",status="1";
+    Boolean ok;
+    RelativeLayout timeRl;
+    int temp=0;
+
+
 
 
 
@@ -77,6 +88,8 @@ public class LogIn extends AppCompatActivity {
         editor = sharedPrefs.edit();
 
 
+
+
 //        String date_n = new SimpleDateFormat("yyyy.MM.dd  'at' HH:mm:ss z", Locale.getDefault()).format(new Date());
 //        dateS=findViewById(R.id.startDate);
 //        dateS.setText(date_n );
@@ -87,6 +100,7 @@ public class LogIn extends AppCompatActivity {
         phoneNumber.setText(sharedPrefs.getString("phoneNumber", ""));
         phoneNumber.setEnabled(false);
         address.setEnabled(false);
+
 
         if(A==true)
         {
@@ -110,11 +124,14 @@ public class LogIn extends AppCompatActivity {
             public void onClick(View v) {
                 editor.putBoolean("Home Quarantine", true);
                 editor.commit();
-                iw_l.setVisibility(View.GONE);
                 Toast.makeText(LogIn.this,"Your address will be fetched once you reach home",Toast.LENGTH_LONG).show();
                 address.setText("N/A");
                 quarnType="Personal Place";
                 Toast.makeText(LogIn.this,quarnType,Toast.LENGTH_SHORT).show();
+                iw.setChecked(false);
+                timeRl.setVisibility(View.VISIBLE);
+                temp=1;
+
 
 
 
@@ -126,27 +143,19 @@ public class LogIn extends AppCompatActivity {
             public void onClick(View v) {
                 editor.putBoolean("Isolation Ward ", true);
                 editor.commit();
-                hq_l.setVisibility(View.GONE);
+                hq.setChecked(false);
+
                 address.setText(fulladdress);
                 quarnType="Government Place";
                 Toast.makeText(LogIn.this,quarnType,Toast.LENGTH_SHORT).show();
+                timeRl.setVisibility(View.GONE);
             }
         });
-
-//        if(hq.isChecked())
-//        {
-//
-//            Toast.makeText(this,"Hello",Toast.LENGTH_SHORT).show();
-//
-//            Log.e("Tag","Ayush");
-//
-//            address.setText("adress will be fetched once you reach home");
-//
-//        }
-
-
-
-
+        if(temp==1)
+        {
+            editor.putString("time",time.getText().toString());
+            editor.commit();
+        }
 
 
 
@@ -154,7 +163,38 @@ public class LogIn extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 progressBar.setVisibility(View.VISIBLE);
-                submitPfl();
+
+
+                if(!name.getText().toString().isEmpty() && !address.getText().toString().isEmpty() &&! phoneNumber.getText().toString().isEmpty()
+                && !age.getText().toString().isEmpty() && time.getText().toString().isEmpty())
+                {
+                    Intent intent = new Intent();
+                    editProfile = false;
+                    if (intent.hasExtra("editProfile")) {
+                        editProfile = getIntent().getExtras().getBoolean("editProfile");
+                        Log.e("status", "" + editProfile);
+                    }
+
+                    submitProfile(
+                            name.getText().toString(),
+                            phoneNumber.getText().toString(),
+                            age.getText().toString(),
+                            address.getText().toString(),
+                            bluetoothId,quarnType,status,editProfile
+
+                    );
+
+
+
+
+                }
+                else{
+                    Toast.makeText(LogIn.this,"Please fill all fields",Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                }
+
+
+
             }
         });
 
@@ -239,142 +279,106 @@ public class LogIn extends AppCompatActivity {
 
         }
 
-
-
-
-
-
     }
-    String r;
-
-    private void submitPfl() {
 
 
-        if (!name.getText().toString().isEmpty() && !age.getText().toString().isEmpty() &&
-                !phoneNumber.getText().toString().isEmpty() && !address.getText().toString().isEmpty()) {
-            Intent intent = new Intent();
-            editProfile = false;
-            if (intent.hasExtra("editProfile")) {
-                editProfile = getIntent().getExtras().getBoolean("editProfile");
-                Log.e("status", "" + editProfile);
-            }
+    private void submitProfile(String name ,String phone, String age,String address,String bt,String qt,String val,Boolean editProfile) {
 
-            RequestQueue requestQueue = Volley.newRequestQueue(LogIn.this);
-            StringRequest stringRequest=new StringRequest(Request.Method.POST,
-                    "http://api-c19.ap-south-1.elasticbeanstalk.com/" + "api/auth/signup",
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
+        OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        okhttpbuilder.addInterceptor(logging);
 
-                            String token;
-                            int errorCode=2;
-                            final JSONObject jsonObject;
-                            try {
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
+                .addConverterFactory(GsonConverterFactory.create());
 
-                                jsonObject=new JSONObject(response);
-                                errorCode=(int)jsonObject.get("errorCode");
-                                if(!editProfile)
-                                {
-                                    token=(String) jsonObject.get("token");
-                                    editor.putString("token",token);
-                                    editor.apply();
-                                }
-                            }catch (Exception exx)
-                            {
-                                exx.printStackTrace();
+        retrofit = builder.build();
 
+        for_login login = retrofit.create(for_login.class);
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", name);
+        params.put("phoneNumber", phone);
+        params.put("age", age);
+        params.put("address", address);
+        params.put("quarantineType", qt);
+        params.put("bluetoothId", bt);
+        params.put("status", val);
+        Call<User> call = login.createAccount(token, params);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                String error1;
+                String res = "";
+                String res1;
+                try {
+                    if (response.isSuccessful() && response.code() == 200) {
+//                    res=new Gson().toJson(response.body());
+//
+                        if (response.body().getErrorCode() != null) {
+                            error1 = response.body().getErrorCode();
+                            Log.e("error", error1 + "");
+
+                            if (error1.equals("0")) {
+                                Toast.makeText(LogIn.this, "User already exist.Please try with another credentials", Toast.LENGTH_SHORT).show();
+                                progressBar.setVisibility(View.GONE);
+
+                            } else if (error1.equals("1")) {
+                                Toast.makeText(LogIn.this, "Your Bluetooth Device is already registered.", Toast.LENGTH_SHORT).show();
+                                progressBar.setVisibility(View.GONE);
                             }
-                            if(errorCode!=0 && errorCode!=1)
-                            {
-                                editor.putString("name",name.getText().toString());
-                                editor.putString("age",age.getText().toString());
-                                editor.putString("address",address.getText().toString());
-                                editor.putBoolean("profileStatus",true);
+                        } else {
+                            ok = true;
+                            Toast.makeText(LogIn.this, res + "", Toast.LENGTH_LONG).show();
+                            Log.e("response", res + "");
+                            sendToken = response.body().gettoken();
+                            Log.e("tk", sendToken);
+
+                            if (!editProfile) {
+                                editor.putString("token", sendToken);
+                                editor.apply();
+                            }
+
+                            if (ok == true) {
+                                editor.putString("name", name);
+                                editor.putString("address", address);
+                                editor.putString("age", age);
+                                editor.putString("quarantineType", qt);
+                                editor.putBoolean("profileStatus", true);
                                 editor.commit();
                                 progressBar.setVisibility(View.GONE);
-                                if(editProfile)
-                                {
+                                Toast.makeText(LogIn.this, "ok_pref", Toast.LENGTH_SHORT).show();
+                                if (editProfile) {
                                     finish();
-                                }
-                                else
-                                {
-                                    Intent i=new Intent(LogIn.this,BottomNavActivity.class);
+                                } else {
+                                    Intent i = new Intent(LogIn.this, BottomNavActivity.class);
                                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                     startActivity(i);
+                                    progressBar.setVisibility(View.GONE);
+                                    Toast.makeText(LogIn.this, "activity passed", Toast.LENGTH_SHORT).show();
                                     finish();
                                 }
                             }
-                            else if(errorCode==0){
-                                Toast.makeText(LogIn.this,"User Exists",Toast.LENGTH_SHORT).show();
-                                progressBar.setVisibility(View.GONE);
-                            }
-                            else if(errorCode==1)
-                            {
-                                Toast.makeText(LogIn.this,"Bluetooth ID already registered",Toast.LENGTH_SHORT).show();
-                                progressBar.setVisibility(View.GONE);
-                            }
                         }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e("Volley",error.toString());
-                    progressBar.setVisibility(View.GONE);
-                    Toast.makeText(LogIn.this,error.toString(),Toast.LENGTH_SHORT).show();
-
-
-
-
+                    } else {
+                        res = response.errorBody().string();
+                        Toast.makeText(LogIn.this, res, Toast.LENGTH_LONG).show();
+                        Log.e("res", res);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            })
-            {
+            }
 
 
-
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String,String> params= new HashMap<String, String>();
-                    params.put("name","kll");
-                    params.put("phoneNumber","8219341697");
-                    params.put("age","14");
-//                    params.put("address","UNA");
-                    params.put("quarantineType","home");
-                    params.put("bluetoothId","N/a");
-                    params.put("status","1");
-
-                    return params;
-                }
-
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    HashMap<String,String> header=new HashMap<>();
-                    header.put("access-token",""+sharedPrefs.getString("token",""));
-                  //  header.put("Content-Type", "application/x-www-form-urlencoded;");
-
-                    return header;
-                }
-
-                @Override
-                public String getBodyContentType() {
-
-                    return "application/x-www-form-urlencoded; charset=UTF-8";
-                }
-
-            };
-            stringRequest.setRetryPolicy(new DefaultRetryPolicy(5000,
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-            requestQueue.add(stringRequest);
-        }else
-        {
-
-            Toast.makeText(LogIn.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-            progressBar.setVisibility(View.GONE);
-
-        }
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
 
 
+            }
+        });
 
-        }
-
+    }
         private void getUI () {
 
             name = findViewById(R.id.nameL);
@@ -388,7 +392,19 @@ public class LogIn extends AppCompatActivity {
 
             iw_l = findViewById(R.id.ic);
             hq_l = findViewById(R.id.hq);
+            time=findViewById(R.id.startTime);
+            timeRl=findViewById(R.id.timeRL);
 
 
         }
+
+
+
+
+
+
+
     }
+
+
+

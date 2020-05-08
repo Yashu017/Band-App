@@ -202,66 +202,41 @@
             </RelativeLayout>
 
 
-<!--            <RelativeLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="15dp">-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:id="@+id/timeRL"
+                android:visibility="gone">
 
-<!--                <ImageView-->
-<!--                    android:layout_width="25dp"-->
-<!--                    android:layout_height="25dp"-->
-<!--                    android:layout_centerVertical="true"-->
-<!--                    android:src="@drawable/ic_numeric_24px" />-->
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_access_time_black_24dp"
+                    android:background="#68000000"/>
 
-<!--                <TextView-->
-<!--                    android:id="@+id/start"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="50dp"-->
-<!--                    android:layout_marginTop="10dp"-->
-<!--                    android:hint="Start Date"-->
-<!--                    android:textColorHint="@color/md_grey_700" />-->
+                <TextView
+                    android:id="@+id/start"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="10dp"
+                    android:hint="Estimated Time to reach home(in hrs) , "
+                    android:textColorHint="@color/md_grey_700" />
 
-<!--                <EditText-->
-<!--                    android:id="@+id/startDate"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_below="@id/start"-->
-<!--                    android:layout_marginStart="45dp"-->
-<!--                    android:singleLine="true"-->
-<!--                    android:textColor="@color/md_black_1000" />-->
+                <EditText
+                    android:id="@+id/startTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/start"
+                    android:layout_marginStart="45dp"
+                    android:clickable="true"
+                    android:inputType="numberSigned"
+                    android:textColor="@color/md_black_1000" />
 
-<!--            </RelativeLayout>-->
+            </RelativeLayout>
 
-<!--            <RelativeLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content">-->
-
-<!--                <ImageView-->
-<!--                    android:layout_width="25dp"-->
-<!--                    android:layout_height="25dp"-->
-<!--                    android:layout_centerVertical="true"-->
-<!--                    android:src="@drawable/ic_numeric_24px" />-->
-
-<!--                <TextView-->
-<!--                    android:id="@+id/endDAte"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="50dp"-->
-<!--                    android:layout_marginTop="10dp"-->
-<!--                    android:hint="End Date"-->
-<!--                    android:textColorHint="@color/md_grey_700" />-->
-
-<!--                <EditText-->
-<!--                    android:id="@+id/endDate"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_below="@id/endDAte"-->
-<!--                    android:layout_marginStart="45dp"-->
-<!--                    android:singleLine="true"-->
-<!--                    android:textColor="@color/md_black_1000" />-->
-
-<!--            </RelativeLayout>-->
 
                         <RelativeLayout
                             android:layout_width="match_parent"

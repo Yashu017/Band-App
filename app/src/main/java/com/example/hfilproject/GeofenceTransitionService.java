@@ -105,7 +105,8 @@ public class GeofenceTransitionService extends IntentService {
                 .setContentText("Geofence Notification!")
                 .setContentIntent(notificationPendingIntent)
                 .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)
-                .setAutoCancel(true);
+                .setAutoCancel(true)
+        .setOngoing(true);
         return notificationBuilder.build();
     }
 
