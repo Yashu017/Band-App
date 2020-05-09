@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LogIn"
-    android:background="#ffffff">
+    android:background="#ffffff"
+    tools:context=".LogIn">
 
     <ScrollView
         android:id="@+id/scroll_view"
@@ -24,21 +24,21 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal">
 
-               <TextView
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:id="@+id/title"
-                   android:text="App Title"
-                   android:textStyle="bold"
-                   android:textSize="30sp"
-                   android:layout_marginTop="20dp"/>
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="App Title"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="25dp"
@@ -67,8 +67,6 @@
                     android:textColor="@color/md_black_1000" />
 
             </RelativeLayout>
-
-
 
 
             <RelativeLayout
@@ -103,14 +101,12 @@
             </RelativeLayout>
 
 
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Type of Quarantine you are in"
                 android:layout_marginStart="50dp"
-                android:layout_marginTop="10dp"/>
-
+                android:layout_marginTop="10dp"
+                android:text="Type of Quarantine you are in" />
 
 
             <LinearLayout
@@ -128,15 +124,13 @@
                     android:text="Home Quarantine/Self Isolation" />
 
 
-
-                    <RadioButton
-                        android:id="@+id/hq_yes"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="22dp"
-                        android:text="Yes"
-                        android:textColor="@color/md_grey_700" />
-
+                <RadioButton
+                    android:id="@+id/hq_yes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="22dp"
+                    android:text="Yes"
+                    android:textColor="@color/md_grey_700" />
 
 
             </LinearLayout>
@@ -156,19 +150,16 @@
                     android:text="Isolation centres /Govt. Quarantine" />
 
 
-
-                    <RadioButton
-                        android:id="@+id/ic_yes"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:text="Yes"
-                        android:textColor="@color/md_grey_700" />
-
+                <RadioButton
+                    android:id="@+id/ic_yes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="Yes"
+                    android:textColor="@color/md_grey_700" />
 
 
             </LinearLayout>
-
 
 
             <RelativeLayout
@@ -179,8 +170,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_school_24px"
-                    />
+                    android:src="@drawable/ic_school_24px" />
 
                 <TextView
                     android:id="@+id/branch_label"
@@ -197,24 +187,45 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/branch_label"
                     android:layout_marginStart="45dp"
+                    android:maxLines="10"
                     android:textColor="@color/md_black_1000" />
 
+                <TextView
+                    android:id="@+id/branch_label2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/addressL"
+                    android:layout_marginStart="45dp"
+                    android:layout_marginTop="15dp"
+                    android:hint="Bluetooth Id"
+                    android:textColorHint="@color/md_grey_700" />
+
+
+                <EditText
+                    android:id="@+id/bluetooth"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/branch_label2"
+                    android:layout_marginStart="45dp"
+                    android:maxLines="10"
+                    android:textColor="@color/md_black_1000" />
             </RelativeLayout>
 
 
             <RelativeLayout
+                android:id="@+id/timeRL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:id="@+id/timeRL"
                 android:visibility="gone">
 
                 <ImageView
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_access_time_black_24dp"
-                    android:background="#68000000"/>
+                    android:background="#68000000"
+                    android:src="@drawable/ic_access_time_black_24dp" />
 
                 <TextView
                     android:id="@+id/start"
@@ -232,46 +243,43 @@
                     android:layout_below="@id/start"
                     android:layout_marginStart="45dp"
                     android:clickable="true"
-                    android:inputType="numberSigned"
+                    android:inputType="text"
                     android:textColor="@color/md_black_1000" />
 
             </RelativeLayout>
 
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:visibility="invisible"
-                            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="invisible">
 
-                            <ImageView
-                                android:layout_width="25dp"
-                                android:layout_height="25dp"
-                                android:layout_centerVertical="true"
-                                android:src="@drawable/fui_ic_phone_white_24dp"
-                                android:background="@color/md_grey_700"/>
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:background="@color/md_grey_700"
+                    android:src="@drawable/fui_ic_phone_white_24dp" />
 
-                            <TextView
-                                android:id="@+id/email_label"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="50dp"
-                                android:layout_marginTop="10dp"
-                                android:hint="Mobile Number"
-                                android:textColorHint="@color/md_grey_700" />
+                <TextView
+                    android:id="@+id/email_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="10dp"
+                    android:hint="Mobile Number"
+                    android:textColorHint="@color/md_grey_700" />
 
-                            <EditText
-                                android:id="@+id/mobileL"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_below="@id/email_label"
-                                android:layout_marginStart="45dp"
-                                android:inputType="none"
-                                android:textColor="@color/md_black_1000" />
+                <EditText
+                    android:id="@+id/mobileL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/email_label"
+                    android:layout_marginStart="45dp"
+                    android:inputType="none"
+                    android:textColor="@color/md_black_1000" />
 
-                        </RelativeLayout>
-
-
+            </RelativeLayout>
 
 
             <Button
