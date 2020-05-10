@@ -69,7 +69,7 @@ public class LogIn extends AppCompatActivity {
     List<Address> addressList;
     Geocoder geocoder;
     String fulladdress,quarnType;
-    String bluetoothId = "9",status="1";
+    String bluetoothId = "32",status="1";
     Boolean ok;
     RelativeLayout timeRl;
     int temp=0;
@@ -377,7 +377,7 @@ public class LogIn extends AppCompatActivity {
 
             }
         });
-
+bluetoothId=bluetoothId+1;
     }
         private void getUI () {
 
@@ -397,10 +397,6 @@ public class LogIn extends AppCompatActivity {
 
 
         }
-
-
-
-
 
 
 
