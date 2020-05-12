@@ -11,17 +11,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -56,6 +60,7 @@ public class FirstFragment extends Fragment {
     int geoStatus;
 
     int connected;
+    Button typeTemp;
 
     public FirstFragment() {
         // Required empty public constructor
@@ -83,12 +88,15 @@ public class FirstFragment extends Fragment {
         usernanme = rootView.findViewById(R.id.userNameFF);
 
         tp = rootView.findViewById(R.id.tp);
+        /*
         tp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SendTemperature();
             }
         });
+
+         */
         usernanme.setText(sharedPrefs.getString("name", ""));
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,9 +133,33 @@ public class FirstFragment extends Fragment {
             originalAddress.setText(sharedPrefs.getString("address", ""));
         }
         SendNotification();
+/*
+        final Handler handler = new Handler();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent serviceIntent = new Intent(getContext(), LocationIntentService.class);
+                        serviceIntent.putExtra("inputExtra", "Temperature");
+                        ContextCompat.startForegroundService(getContext(), serviceIntent);
 
+                    }
+                });
+            }
+        };
+        Timer timer = new Timer();
+        timer.schedule(timerTask, 0, 20 * 1000);
+*/
         return rootView;
 
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
 
     }
 

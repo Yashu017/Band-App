@@ -73,7 +73,7 @@ public class LogIn extends AppCompatActivity {
     List<Address> addressList;
     Geocoder geocoder;
     String fulladdress, quarnType;
-    String bluetoothId = "100", status = "1";
+    String bluetoothId = "222", status = "1";
     Boolean ok;
     RelativeLayout timeRl;
     int temp = 0;
@@ -280,6 +280,11 @@ public class LogIn extends AppCompatActivity {
             country = addressList.get(0).getCountryName();
             postalCode = addressList.get(0).getPostalCode();
             fulladdress = address1 + ",\n " + area + ",\n " + city + ",\n " + country + ",\n " + postalCode;
+
+            address.setText(fulladdress);
+            editor.putString("Updated Location", fulladdress);
+            editor.commit();
+
             Log.e("location", "" + fulladdress);
         } catch (Exception e) {
             e.printStackTrace();

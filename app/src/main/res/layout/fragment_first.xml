@@ -12,8 +12,6 @@
         android:layout_height="match_parent">
 
 
-
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layoutHeader"
             android:layout_width="match_parent"
@@ -70,9 +68,9 @@
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/kj"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/kj">
+                android:layout_height="wrap_content">
 
 
                 <RelativeLayout
@@ -112,15 +110,17 @@
                         android:textSize="25sp"
                         android:textStyle="bold" />
 
-                    <TextView
+                    <Button
                         android:id="@+id/typeTemp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/tempT"
                         android:layout_marginTop="5dp"
                         android:layout_toRightOf="@+id/tp"
-                        android:text="Recent Temperature:"
-                        android:textSize="20sp" />
+                        android:background="@drawable/latest_update"
+                        android:text="View Recent\n Temperature"
+                        android:textColor="#fff"
+                        android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/tempOriginal"
@@ -132,7 +132,8 @@
                         android:layout_toRightOf="@+id/tp"
                         android:text="000"
                         android:textSize="40sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/degree"
@@ -147,136 +148,135 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-            android:id="@+id/layoutAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="25dp"
-            android:background="@drawable/white_rectangle_backgrounf"
-            android:clickable="true"
-            android:gravity="center"
-            android:padding="15dp"
-            app:layout_constraintDimensionRatio="H, 1:1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layoutTemp">
+                    android:id="@+id/layoutAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="25dp"
+                    android:background="@drawable/white_rectangle_backgrounf"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:padding="15dp"
+                    app:layout_constraintDimensionRatio="H, 1:1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/layoutTemp">
 
-            <ImageView
-                android:id="@+id/adr"
-                android:layout_width="117dp"
-                android:layout_height="129dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
-                android:padding="8dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/locationhome" />
+                    <ImageView
+                        android:id="@+id/adr"
+                        android:layout_width="117dp"
+                        android:layout_height="129dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:padding="8dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/locationhome" />
 
-            <TextView
-                android:id="@+id/addressA"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/adr"
-                android:text="Location"
-                android:textSize="25sp"
-                android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/addressA"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/adr"
+                        android:text="Location"
+                        android:textSize="25sp"
+                        android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/addressHead"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/addressA"
-                android:layout_marginTop="5dp"
-                android:layout_toRightOf="@+id/adr"
-                android:text="Current Location:"
-                android:textSize="20sp" />
+                    <TextView
+                        android:id="@+id/addressHead"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/addressA"
+                        android:layout_marginTop="5dp"
+                        android:layout_toRightOf="@+id/adr"
+                        android:text="Current Location:"
+                        android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/originalAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/addressHead"
-                android:layout_marginTop="5dp"
-                android:layout_toRightOf="@+id/adr"
-                android:text="N/A"
-                android:textSize="20sp" />
-
-
-        </RelativeLayout>
+                    <TextView
+                        android:id="@+id/originalAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/addressHead"
+                        android:layout_marginTop="5dp"
+                        android:layout_toRightOf="@+id/adr"
+                        android:text="N/A"
+                        android:textSize="20sp" />
 
 
+                </RelativeLayout>
 
-<!--            <RelativeLayout-->
-<!--                android:id="@+id/bluetooth"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_margin="25dp"-->
-<!--                android:background="@drawable/white_rectangle_backgrounf"-->
-<!--                android:gravity="center"-->
-<!--                android:padding="15dp"-->
-<!--                app:layout_constraintDimensionRatio="H, 1:1"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@id/layoutAddress"-->
-<!--                android:clickable="true"-->
-<!--                >-->
 
-<!--                <ImageView-->
-<!--                    android:id="@+id/btt"-->
-<!--                    android:layout_width="117dp"-->
-<!--                    android:layout_height="129dp"-->
-<!--                    android:layout_marginStart="8dp"-->
-<!--                    android:layout_marginLeft="8dp"-->
-<!--                    android:layout_marginTop="8dp"-->
-<!--                    android:layout_marginEnd="8dp"-->
-<!--                    android:layout_marginRight="8dp"-->
-<!--                    android:layout_marginBottom="8dp"-->
-<!--                    android:padding="8dp"-->
-<!--                    android:scaleType="centerCrop"-->
-<!--                    android:src="@drawable/bt1" />-->
+                <!--            <RelativeLayout-->
+                <!--                android:id="@+id/bluetooth"-->
+                <!--                android:layout_width="match_parent"-->
+                <!--                android:layout_height="wrap_content"-->
+                <!--                android:layout_margin="25dp"-->
+                <!--                android:background="@drawable/white_rectangle_backgrounf"-->
+                <!--                android:gravity="center"-->
+                <!--                android:padding="15dp"-->
+                <!--                app:layout_constraintDimensionRatio="H, 1:1"-->
+                <!--                app:layout_constraintStart_toStartOf="parent"-->
+                <!--                app:layout_constraintTop_toBottomOf="@id/layoutAddress"-->
+                <!--                android:clickable="true"-->
+                <!--                >-->
 
-<!--                <TextView-->
-<!--                    android:id="@+id/blueB"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_toRightOf="@+id/btt"-->
-<!--                    android:text="Bluetooth"-->
-<!--                    android:textSize="25sp"-->
-<!--                    android:textStyle="bold" />-->
+                <!--                <ImageView-->
+                <!--                    android:id="@+id/btt"-->
+                <!--                    android:layout_width="117dp"-->
+                <!--                    android:layout_height="129dp"-->
+                <!--                    android:layout_marginStart="8dp"-->
+                <!--                    android:layout_marginLeft="8dp"-->
+                <!--                    android:layout_marginTop="8dp"-->
+                <!--                    android:layout_marginEnd="8dp"-->
+                <!--                    android:layout_marginRight="8dp"-->
+                <!--                    android:layout_marginBottom="8dp"-->
+                <!--                    android:padding="8dp"-->
+                <!--                    android:scaleType="centerCrop"-->
+                <!--                    android:src="@drawable/bt1" />-->
 
-<!--                <TextView-->
-<!--                    android:id="@+id/blueHead"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_below="@+id/blueB"-->
-<!--                    android:layout_toRightOf="@+id/btt"-->
-<!--                    android:text="Bluetooth Id"-->
-<!--                    android:layout_marginTop="5dp"-->
-<!--                    android:textSize="20sp" />-->
+                <!--                <TextView-->
+                <!--                    android:id="@+id/blueB"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_toRightOf="@+id/btt"-->
+                <!--                    android:text="Bluetooth"-->
+                <!--                    android:textSize="25sp"-->
+                <!--                    android:textStyle="bold" />-->
 
-<!--                <TextView-->
-<!--                    android:id="@+id/originalBT"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_below="@+id/blueHead"-->
-<!--                    android:layout_toRightOf="@+id/btt"-->
-<!--                    android:text="00:00:00:00:00"-->
-<!--                    android:layout_marginTop="5dp"-->
-<!--                    android:textSize="20sp" />-->
+                <!--                <TextView-->
+                <!--                    android:id="@+id/blueHead"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_below="@+id/blueB"-->
+                <!--                    android:layout_toRightOf="@+id/btt"-->
+                <!--                    android:text="Bluetooth Id"-->
+                <!--                    android:layout_marginTop="5dp"-->
+                <!--                    android:textSize="20sp" />-->
 
-<!--            </RelativeLayout>-->
+                <!--                <TextView-->
+                <!--                    android:id="@+id/originalBT"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_below="@+id/blueHead"-->
+                <!--                    android:layout_toRightOf="@+id/btt"-->
+                <!--                    android:text="00:00:00:00:00"-->
+                <!--                    android:layout_marginTop="5dp"-->
+                <!--                    android:textSize="20sp" />-->
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                <!--            </RelativeLayout>-->
 
-                android:layout_marginTop="25dp"
-                android:layout_margin="25dp"
-                android:background="@drawable/latest_update"
-                android:padding="20dp"
-                app:layout_constraintEnd_toEndOf="@id/layoutAddress"
-                app:layout_constraintStart_toStartOf="@id/layoutAddress"
-                app:layout_constraintTop_toBottomOf="@id/layoutAddress">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_margin="25dp"
+                    android:layout_marginTop="25dp"
+                    android:background="@drawable/latest_update"
+                    android:padding="20dp"
+                    app:layout_constraintEnd_toEndOf="@id/layoutAddress"
+                    app:layout_constraintStart_toStartOf="@id/layoutAddress"
+                    app:layout_constraintTop_toBottomOf="@id/layoutAddress">
 
 
                     <TextView
@@ -284,12 +284,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/white_rectangle_backgrounf"
+                        android:clickable="true"
                         android:paddingStart="8dp"
                         android:paddingTop="2dp"
                         android:paddingEnd="8dp"
                         android:paddingBottom="2dp"
                         android:text="Latest Update"
-                        android:clickable="true"
                         android:textColor="#000000"
                         android:textSize="16dp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -322,9 +322,6 @@
         </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
 
 
 </FrameLayout>

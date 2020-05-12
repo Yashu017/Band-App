@@ -13,6 +13,11 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,12 +52,21 @@ public class LocationService extends Service {
                 0, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         calendar.setTimeInMillis(System.currentTimeMillis());
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 2 * 60 * 1000, intent1);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 10 * 60 * 1000, intent1);
     }
 
     @Override
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String uid = user.getUid();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("User").child(uid);
+        HashMap<String, String> userMap = new HashMap<>();
+        userMap.put("Background", "background");
+        reference.setValue(userMap);
+
+        /*
         OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -90,6 +104,8 @@ public class LocationService extends Service {
                 Log.e("error", "" + t.getMessage());
             }
         });
+
+         */
     }
 
     @Nullable
