@@ -61,6 +61,7 @@ public class GeofenceTransitionService extends IntentService {
         if (geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
             int geoStatus = 1;
             sharedPrefs = getSharedPreferences("app", MODE_PRIVATE);
+            editor =sharedPrefs.edit();
             editor.putInt("geoStatus", geoStatus);
         }
     }

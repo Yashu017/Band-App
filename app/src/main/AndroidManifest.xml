@@ -29,9 +29,12 @@
         <activity
             android:name=".BLE.BLE_Activity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"></activity>
+        <activity android:name=".ViewTemperature"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
         <activity
             android:name=".LogIn"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+
 
 
 

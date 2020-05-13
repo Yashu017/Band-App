@@ -152,6 +152,15 @@ public class FirstFragment extends Fragment {
         Timer timer = new Timer();
         timer.schedule(timerTask, 0, 20 * 1000);
 */
+
+       typeTemp = rootView.findViewById(R.id.typeTemp);
+       typeTemp.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               Intent intent = new Intent(getContext(),ViewTemperature.class);
+               startActivity(intent);
+           }
+       });
         return rootView;
 
 

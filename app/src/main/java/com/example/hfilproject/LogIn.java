@@ -73,7 +73,7 @@ public class LogIn extends AppCompatActivity {
     List<Address> addressList;
     Geocoder geocoder;
     String fulladdress, quarnType;
-    String bluetoothId = "222", status = "1";
+    String bluetoothId = "223", status = "1";
     Boolean ok;
     RelativeLayout timeRl;
     int temp = 0;

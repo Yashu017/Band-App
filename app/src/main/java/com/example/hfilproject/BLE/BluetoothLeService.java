@@ -74,6 +74,7 @@ public class BluetoothLeService extends Service {
                 intentAction = ACTION_GATT_CONNECTED;
                 mConnectionState = STATE_CONNECTED;
                 sharedPrefs = getSharedPreferences("app", Context.MODE_PRIVATE);
+                editor = sharedPrefs.edit();
                 int connected = 1;
                 editor.putInt("Connection Status", connected);
                 editor.commit();
@@ -135,9 +136,10 @@ public class BluetoothLeService extends Service {
         builder.append(String.format("%.02f", tempValue));
         temp = Integer.parseInt(builder.toString());
         sharedPrefs = getSharedPreferences("app", Context.MODE_PRIVATE);
+        editor.putFloat("tempValue", tempValue);
         editor.putInt("temperature", temp);
         editor.commit();
-/*
+
         final byte[] data = characteristic.getValue();
 
         Log.v(TAG, "data.length: " + data.length);
@@ -147,11 +149,14 @@ public class BluetoothLeService extends Service {
             for (byte byteChar : data) {
                 stringBuilder.append(String.format("%02X ", byteChar));
 
+
                 Log.v(TAG, String.format("%02X ", byteChar));
             }
+            editor.putString("ReceiveData", stringBuilder.toString());
+            editor.commit();
             intent.putExtra(EXTRA_DATA, new String(data) + "\n" + stringBuilder.toString());
         }
-*/
+
         sendBroadcast(intent);
     }
 

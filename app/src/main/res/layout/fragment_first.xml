@@ -135,15 +135,7 @@
                         android:textStyle="bold"
                         android:visibility="gone" />
 
-                    <TextView
-                        android:id="@+id/degree"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/typeTemp"
-                        android:layout_marginTop="5dp"
-                        android:layout_toRightOf="@+id/tempOriginal"
-                        android:text="o"
-                        android:textSize="20sp" />
+
 
                 </RelativeLayout>
 
