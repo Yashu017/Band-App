@@ -157,7 +157,7 @@ public class FirstFragment extends Fragment {
        typeTemp.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               Intent intent = new Intent(getContext(),ViewTemperature.class);
+               Intent intent = new Intent(getContext(),TempActivity.class);
                startActivity(intent);
            }
        });

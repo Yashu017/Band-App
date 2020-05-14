@@ -59,18 +59,35 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.google.android.material:material:1.2.0-alpha04'
-    implementation 'no.nordicsemi.android:log:2.2.0'
-    implementation 'no.nordicsemi.android.support.v18:scanner:1.4.3'
+
     implementation 'com.mcxiaoke.volley:library:1.0.0'
     implementation 'com.squareup.retrofit2:retrofit:2.8.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
-    implementation 'no.nordicsemi.android:dfu:1.10.0'
+
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
-    implementation 'no.nordicsemi.android:ble-common:2.2.0-alpha06'
+
     implementation('org.simpleframework:simple-xml:2.7.1') {
         exclude group: 'stax', module: 'stax-api'
         exclude group: 'xpp3', module: 'xpp3'
     }
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'no.nordicsemi.android:log:2.2.0'
+    implementation 'no.nordicsemi.android.support.v18:scanner:1.4.3'
+
+    // The DFU Library is imported automatically from jcenter:
+    implementation 'no.nordicsemi.android:dfu:1.10.0'
+    // if you desire to build the DFU Library, clone the
+    // https://github.com/NordicSemiconductor/Android-DFU-Library project into DFULibrary folder,
+    // add it as a module into the project structure and uncomment the following line
+    // (and also the according lines in the settings.gradle):
+    // implementation project(':dfu')
+
+    // Gson is needed for DFU to work. The DFU library dependency to Gson is internal and would
+    // not be attached to APK.
+    // See: https://github.com/NordicSemiconductor/Android-nRF-Toolbox/issues/86
+
+    // Import the BLE Common Library.
+    // The BLE Common Library depends on BLE Library. It is enough to include the first one.
+    implementation 'no.nordicsemi.android:ble-common:2.2.0-alpha06'
 
 }
