@@ -5,6 +5,7 @@ public class User {
     public String name,phoneNumber,age,address,bluetoothId,quarantineType,status;
     public String token;
     public String errorCode;
+    String _id;
 
     public User(String name, String phoneNumber, String age, String address, String bluetoothId, String quarantineType, String status) {
         this.name = name;
@@ -15,6 +16,14 @@ public class User {
         this.bluetoothId = bluetoothId;
         this.quarantineType = quarantineType;
         this.status = status;
+    }
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
     public String getErrorCode() {

@@ -176,6 +176,7 @@ public class MapActivity extends AppCompatActivity
                     // Permission granted
                     getLastKnownLocation();
 
+
                 } else {
                     // Permission denied
                     permissionsDenied();
@@ -204,6 +205,7 @@ public class MapActivity extends AppCompatActivity
         map = googleMap;
       //  map.setOnMapClickListener(this);
         map.setOnMarkerClickListener(this);
+
     }
 
 //    @Override
@@ -231,6 +233,7 @@ public class MapActivity extends AppCompatActivity
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(UPDATE_INTERVAL)
                 .setFastestInterval(FASTEST_INTERVAL);
+
 
         if (checkPermission())
             LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
@@ -276,7 +279,10 @@ public class MapActivity extends AppCompatActivity
                 startLocationUpdates();
             } else {
                 Log.w(TAG, "No location retrieved yet");
+                getCurrentLocation();
                 startLocationUpdates();
+
+
             }
         } else askPermission();
     }
@@ -314,17 +320,16 @@ public class MapActivity extends AppCompatActivity
 
         }
 
+
     }
 
 
-
-
     private double latitude,longitude;
-    private Marker geoFenceMarker;
     LatLng l1;
-    private void markerForGeofence(LatLng latLng) {
 
-        l1=latLng;
+    public void getCurrentLocation()
+    {
+
 
         final LocationRequest locationRequest=new LocationRequest();
         locationRequest.setInterval(10000);
@@ -351,20 +356,26 @@ public class MapActivity extends AppCompatActivity
                         }
                         l1= new LatLng(latitude,longitude);
 
-                       // markerForGeofence(new LatLng(latitude,longitude));
+                         markerForGeofence(l1);
 
 
                     }
                 }, Looper.getMainLooper());
+    }
 
 
 
 
-        Log.i(TAG, "markerForGeofence(" + l1 + ")");
-        String title = l1.latitude + ", " + l1.longitude;
+
+
+    private Marker geoFenceMarker;
+
+    private void markerForGeofence(LatLng latLng) {
+        Log.i(TAG, "markerForGeofence(" + latLng + ")");
+        String title = latLng.latitude + ", " + latLng.longitude;
         // Define marker options
         MarkerOptions markerOptions = new MarkerOptions()
-                .position(l1)
+                .position(latLng)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
                 .title(title);
         if (map != null) {
@@ -395,7 +406,7 @@ public class MapActivity extends AppCompatActivity
 
     private static final long GEO_DURATION = 60 * 60 * 1000;
     private static final String GEOFENCE_REQ_ID = "My Geofence";
-    private static final float GEOFENCE_RADIUS = 500.0f; // in meters
+    private static final float GEOFENCE_RADIUS = 40.0f; // in meters
 
     // Create a Geofence
     private Geofence createGeofence(LatLng latLng, float radius) {

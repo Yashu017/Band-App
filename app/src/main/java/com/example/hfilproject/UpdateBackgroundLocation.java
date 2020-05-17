@@ -160,16 +160,19 @@ public class UpdateBackgroundLocation extends Service {
 
         PendingIntent servicePendingIntent =PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent activityPendingIntent=PendingIntent.getActivity(this,0,new Intent(this,SecondFragment.class),0);
-        NotificationCompat.Builder builder=new NotificationCompat.Builder(this)
+       NotificationCompat.Builder builder=new NotificationCompat.Builder(this)
                 .addAction(R.drawable.ic_launch_black_24dp,"Launch",activityPendingIntent)
                 .addAction(R.drawable.ic_launch_black_24dp,"Remove",servicePendingIntent)
                 .setContentText(text)
                 .setContentTitle(Common.getLocationTitle(this))
                 .setOngoing(true)
-                .setPriority(Notification.PRIORITY_HIGH)
+                .setPriority(Notification.PRIORITY_MIN)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setTicker(text)
                 .setWhen(System.currentTimeMillis());
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                new Intent(this, BottomNavActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+       builder.setContentIntent(contentIntent);
         builder.setChannelId(CHANNEL_ID);
           return builder.build();
     }

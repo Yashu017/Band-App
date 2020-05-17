@@ -18,6 +18,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.hfilproject.Adapter.AdapterBegin;
 import com.example.hfilproject.BLE.BLE_Activity;
 import com.example.hfilproject.Model.ModelBegin;
+import com.example.hfilproject.Model.User;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,7 +26,17 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
 
     //bluetooth scan
     private Button scan;
+
+    //retrofit
+    Retrofit retrofit;
 
 
     @Override
@@ -155,11 +169,12 @@ public class MainActivity extends AppCompatActivity {
                 editor.commit();
                 Log.d("phoneNumber", user.getPhoneNumber());
                 Log.d("UserId", user.getUid());
-                Intent intent = new Intent(this, LogIn.class);
-                intent.putExtra("editProfile", false);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
+//                Intent intent = new Intent(this, LogIn.class);
+//                intent.putExtra("editProfile", false);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                startActivity(intent);
+//                finish();
+                getUser(user.getPhoneNumber());
             } else {
                 Toast.makeText(this, "Login Failed", Toast.LENGTH_SHORT).show();
                 loginButton.setVisibility(View.VISIBLE);
@@ -167,6 +182,71 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+
+    }
+
+    private void getUser(String phoneNumber) {
+
+        OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        okhttpbuilder.addInterceptor(logging);
+
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
+                .addConverterFactory(GsonConverterFactory.create());
+
+        retrofit = builder.build();
+
+        for_login login = retrofit.create(for_login.class);
+        Map<String, Object> params = new HashMap<>();
+        params.put("phoneNumber", phoneNumber);
+        Call<User> call=login.ReInstall(params);
+        call.enqueue(new Callback<User>() {
+            @Override
+
+            public void onResponse(Call<User> call, Response<User> response) {
+                String name,address,bluetoothId,quarantineType,age,token,error1;
+                if (response.isSuccessful()&& response.code()==200)
+                {
+
+
+                        if (response.body().getErrorCode()!=null) {
+                            Intent intent = new Intent(MainActivity.this, LogIn.class);
+                            intent.putExtra("editProfile", false);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            name = response.body().getName();
+                            age = response.body().getAge();
+                            address = response.body().getAddress();
+                            quarantineType = response.body().getQuarantineType();
+                            bluetoothId = response.body().getBluetoothId();
+                            token = response.body().get_id();
+                            Log.e("tok",token);
+                            editor.putString("name", name);
+                            editor.putString("age", age);
+                            editor.putString("address", address);
+                            editor.putString("bluetoothId", bluetoothId);
+                            editor.putString("qt", quarantineType);
+                            editor.putString("token", token+"");
+                            editor.putBoolean("profileStatus", true);
+                            editor.commit();
+                            Intent intent = new Intent(MainActivity.this, BottomNavActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
+
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
+            }
+        });
 
     }
 }

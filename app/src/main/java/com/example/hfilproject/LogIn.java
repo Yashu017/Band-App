@@ -29,6 +29,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.hfilproject.Model.User;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -49,34 +50,40 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LogIn extends AppCompatActivity {
-
     private SharedPreferences sharedPrefs;
     public static Retrofit retrofit;
     private SharedPreferences.Editor editor;
-    private EditText name, age, phoneNumber, address,time;
+    private EditText name, age, phoneNumber, address, time,bluetoothId ;
     private Button submitProfile;
     private ProgressBar progressBar;
     private RadioButton hq, iw;
-    private LinearLayout hq_l,iw_l;
+    private LinearLayout hq_l, iw_l;
     String token;
     String sendToken;
     private boolean editProfile;
-    private boolean A=true;
-    private int REQUEST_CODE_LOCATION_PERMISSION=1;
+    private boolean A = true;
+    private int REQUEST_CODE_LOCATION_PERMISSION = 1;
     private ResultReceiver resultReceiver;
-    private double latitude,longitude;
+    private double latitude, longitude;
     String t;
     List<Address> addressList;
     Geocoder geocoder;
+
     String fulladdress,quarnType;
-    String bluetoothId = "32",status="1";
+    String status="1";
+
     Boolean ok;
     RelativeLayout timeRl;
-    int temp=0;
+    int temp = 0;
 
 
-
-
+    private static final String TAG = "LogIn";
+    String address1;
+    String area;
+    String city;
+    String postalCode;
+    String country;
+    FusedLocationProviderClient fusedLocationProviderClient;
 
 
     @Override
@@ -88,27 +95,23 @@ public class LogIn extends AppCompatActivity {
         editor = sharedPrefs.edit();
 
 
-
-
 //        String date_n = new SimpleDateFormat("yyyy.MM.dd  'at' HH:mm:ss z", Locale.getDefault()).format(new Date());
 //        dateS=findViewById(R.id.startDate);
 //        dateS.setText(date_n );
 //        dateS.setEnabled(false);
 
-
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getUI();
         phoneNumber.setText(sharedPrefs.getString("phoneNumber", ""));
         phoneNumber.setEnabled(false);
         address.setEnabled(false);
 
 
-        if(A==true)
-        {
-            if(ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED)
-            {
-                ActivityCompat.requestPermissions(LogIn.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE_LOCATION_PERMISSION);
+        if (A == true) {
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(LogIn.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION_PERMISSION);
 
-            }else {
+            } else {
 
                 getCurrentLocation();
             }
@@ -117,23 +120,18 @@ public class LogIn extends AppCompatActivity {
         }
 
 
-
-
         hq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 editor.putBoolean("Home Quarantine", true);
                 editor.commit();
-                Toast.makeText(LogIn.this,"Your address will be fetched once you reach home",Toast.LENGTH_LONG).show();
+                Toast.makeText(LogIn.this, "Your address will be fetched once you reach home", Toast.LENGTH_LONG).show();
                 address.setText("N/A");
-                quarnType="Personal Place";
-                Toast.makeText(LogIn.this,quarnType,Toast.LENGTH_SHORT).show();
+                quarnType = "Personal Place";
+                Toast.makeText(LogIn.this, quarnType, Toast.LENGTH_SHORT).show();
                 iw.setChecked(false);
                 timeRl.setVisibility(View.VISIBLE);
-                temp=1;
-
-
-
+                temp = 1;
 
 
             }
@@ -145,15 +143,23 @@ public class LogIn extends AppCompatActivity {
                 editor.commit();
                 hq.setChecked(false);
 
-                address.setText(fulladdress);
-                quarnType="Government Place";
-                Toast.makeText(LogIn.this,quarnType,Toast.LENGTH_SHORT).show();
+
+                quarnType = "Government Place";
+                Toast.makeText(LogIn.this, quarnType, Toast.LENGTH_SHORT).show();
                 timeRl.setVisibility(View.GONE);
+                time.setText("a");
+                address.setText(address1 + "\n" + area + "\n" + city + "\n" + country + "\n" + postalCode);
             }
         });
-        if(temp==1)
+        if (temp == 1) {
+            editor.putString("time", time.getText().toString());
+            Log.e("time",time.getText().toString());
+            editor.commit();
+        }
+        else
         {
-            editor.putString("time",time.getText().toString());
+            editor.putString("time", "0");
+            Log.e("time",time.getText().toString());
             editor.commit();
         }
 
@@ -165,9 +171,8 @@ public class LogIn extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
 
 
-                if(!name.getText().toString().isEmpty() && !address.getText().toString().isEmpty() &&! phoneNumber.getText().toString().isEmpty()
-                && !age.getText().toString().isEmpty() && time.getText().toString().isEmpty())
-                {
+                if (!name.getText().toString().isEmpty() && !address.getText().toString().isEmpty() && !phoneNumber.getText().toString().isEmpty()
+                        && !age.getText().toString().isEmpty() && !time.getText().toString().isEmpty() && !bluetoothId.getText().toString().isEmpty()) {
                     Intent intent = new Intent();
                     editProfile = false;
                     if (intent.hasExtra("editProfile")) {
@@ -180,19 +185,15 @@ public class LogIn extends AppCompatActivity {
                             phoneNumber.getText().toString(),
                             age.getText().toString(),
                             address.getText().toString(),
-                            bluetoothId,quarnType,status,editProfile
+                            bluetoothId.getText().toString(), quarnType, status, editProfile
 
                     );
 
 
-
-
-                }
-                else{
-                    Toast.makeText(LogIn.this,"Please fill all fields",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(LogIn.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
                 }
-
 
 
             }
@@ -204,77 +205,90 @@ public class LogIn extends AppCompatActivity {
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#673AB7")));
 
 
-
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode==REQUEST_CODE_LOCATION_PERMISSION&& grantResults.length>0)
-        {
-            if(grantResults[0]==PackageManager.PERMISSION_GRANTED)
-            {
-                               getCurrentLocation();
+        if (requestCode == REQUEST_CODE_LOCATION_PERMISSION && grantResults.length > 0) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getCurrentLocation();
 
-            }
-            else
-            {
-                Toast.makeText(this,"Access Denied",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Access Denied", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
 
-
     private void getCurrentLocation() {
 
-        final LocationRequest locationRequest=new LocationRequest();
+        final LocationRequest locationRequest = new LocationRequest();
         locationRequest.setInterval(10000);
         locationRequest.setFastestInterval(3000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         LocationServices.getFusedLocationProviderClient(LogIn.this)
-                .requestLocationUpdates(locationRequest,new LocationCallback(){
+                .requestLocationUpdates(locationRequest, new LocationCallback() {
 
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
                         super.onLocationResult(locationResult);
                         LocationServices.getFusedLocationProviderClient(LogIn.this)
                                 .removeLocationUpdates(this);
-                        if(locationResult!=null && locationResult.getLocations().size()>0)
-                        {
-                            int latestLoc=locationResult.getLocations().size()-1;
-
-                            latitude=locationResult.getLocations().get(latestLoc).getLatitude();
-                             longitude=locationResult.getLocations().get(latestLoc).getLongitude();
 
 
+                        if (locationResult != null && locationResult.getLocations().size() > 0) {
+                            int latestLoc = locationResult.getLocations().size() - 1;
 
+                            latitude = locationResult.getLocations().get(latestLoc).getLatitude();
+                            longitude = locationResult.getLocations().get(latestLoc).getLongitude();
+
+                            locInWords();
                         }
-
-                        locInWords();
 
 
                     }
                 }, Looper.getMainLooper());
 
+/*
+        Task<Location> locationTask = fusedLocationProviderClient.getLastLocation();
+        locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    latitude = location.getLatitude();
+                    longitude = location.getLongitude();
+
+
+                }
+                locInWords();
+            }
+        });
+
+        locationTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e(TAG, "onFailure: " + e.getLocalizedMessage());
+            }
+        });
+
+ */
     }
 
     private void locInWords() {
 
-        geocoder=new Geocoder(this, Locale.getDefault());
+        geocoder = new Geocoder(getBaseContext(), Locale.getDefault());
         try {
-            addressList=geocoder.getFromLocation(latitude,longitude,REQUEST_CODE_LOCATION_PERMISSION);
-            String address1=addressList.get(0).getAddressLine(0);
-            String area=addressList.get(0).getLocality();
-            String city=addressList.get(0).getAdminArea();
-            String country=addressList.get(0).getCountryName();
-            String postalCode=addressList.get(0).getPostalCode();
-             fulladdress= address1 + ", " + area+", " + city + ", " + country + ", "+ postalCode;
-
-        }
-        catch (Exception e)
-        {
+            addressList = geocoder.getFromLocation(latitude, longitude, REQUEST_CODE_LOCATION_PERMISSION);
+            address1 = addressList.get(0).getAddressLine(0);
+            area = addressList.get(0).getLocality();
+            city = addressList.get(0).getAdminArea();
+            country = addressList.get(0).getCountryName();
+            postalCode = addressList.get(0).getPostalCode();
+            fulladdress = address1 + ",\n " + area + ",\n " + postalCode;
+            Log.e("location", "" + fulladdress);
+        } catch (Exception e) {
             e.printStackTrace();
 
         }
@@ -282,7 +296,7 @@ public class LogIn extends AppCompatActivity {
     }
 
 
-    private void submitProfile(String name ,String phone, String age,String address,String bt,String qt,String val,Boolean editProfile) {
+    private void submitProfile(String name, String phone, String age, String address, String bt, String qt, String val, Boolean editProfile) {
 
         OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
@@ -377,30 +391,32 @@ public class LogIn extends AppCompatActivity {
 
             }
         });
-bluetoothId=bluetoothId+1;
+
     }
-        private void getUI () {
 
-            name = findViewById(R.id.nameL);
-            phoneNumber = findViewById(R.id.mobileL);
-            age = findViewById(R.id.ageL);
-            address = findViewById(R.id.addressL);
-            submitProfile = findViewById(R.id.submit_profile);
-            progressBar = findViewById(R.id.profile_progress);
-            hq = findViewById(R.id.hq_yes);
-            iw = findViewById(R.id.ic_yes);
-
-            iw_l = findViewById(R.id.ic);
-            hq_l = findViewById(R.id.hq);
-            time=findViewById(R.id.startTime);
-            timeRl=findViewById(R.id.timeRL);
+    private void getUI() {
 
 
-        }
-
+        name = findViewById(R.id.nameL);
+        phoneNumber = findViewById(R.id.mobileL);
+        age = findViewById(R.id.ageL);
+        address = findViewById(R.id.addressL);
+        submitProfile = findViewById(R.id.submit_profile);
+        progressBar = findViewById(R.id.profile_progress);
+        hq = findViewById(R.id.hq_yes);
+        iw = findViewById(R.id.ic_yes);
+        bluetoothId = findViewById(R.id.bluetoothId);
+        iw_l = findViewById(R.id.ic);
+        hq_l = findViewById(R.id.hq);
+        time = findViewById(R.id.startTime);
+        timeRl = findViewById(R.id.timeRL);
 
 
     }
+
+
+}
+
 
 
 

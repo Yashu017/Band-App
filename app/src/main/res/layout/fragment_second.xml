@@ -47,7 +47,8 @@
                 android:layout_below="@id/openMAp"
                 android:layout_centerHorizontal="true"
                 android:textSize="25sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:id="@+id/geofence"/>
 
 
 

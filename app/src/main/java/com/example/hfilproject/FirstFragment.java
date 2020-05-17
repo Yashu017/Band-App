@@ -4,34 +4,75 @@ package com.example.hfilproject;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class FirstFragment extends Fragment {
-
+    TextView addresesHead;
     ImageButton button;
     View rootView;
     SharedPreferences sharedPrefs;
     SharedPreferences.Editor editor;
-    TextView usernanme,latestUpd,originalAddress;
-    Double latitude,longitude;
+    TextView usernanme, latestUpd, originalAddress;
+    Double latitude, longitude;
+    ImageView tp;
+    String token;
+    int temp;
+    Retrofit retrofit;
 
+    String sendToken;
 
+    int status;
+    String sendTokenBle;
+    String token1;
+    int geoStatus;
 
+    int connected;
+    String timeToFetchAddress;
+    int t;
 
     public FirstFragment() {
         // Required empty public constructor
@@ -44,14 +85,33 @@ public class FirstFragment extends Fragment {
         sharedPrefs = getActivity().getSharedPreferences("app", Context.MODE_PRIVATE);
         editor = sharedPrefs.edit();
 
+        token = sharedPrefs.getString("token", "");
+        temp = sharedPrefs.getInt("temperature", 0);
+        connected = sharedPrefs.getInt("Connection Status", 0);
+        geoStatus = sharedPrefs.getInt("geoStatus", 0);
+         timeToFetchAddress=sharedPrefs.getString("time","");
+         Log.e("tt",timeToFetchAddress);
+//         t=Integer.parseInt(timeToFetchAddress);
+//         Log.e("t",t+"");
+        //  Toast.makeText(getContext(), ""+temp, Toast.LENGTH_SHORT).show();
 
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_first, container, false);
         button = rootView.findViewById(R.id.notificationBell);
-        latestUpd=rootView.findViewById(R.id.latestUpd);
-        originalAddress=rootView.findViewById(R.id.originalAddress);
-        usernanme=rootView.findViewById(R.id.userNameFF);
-        usernanme.setText(sharedPrefs.getString("name",""));
+        latestUpd = rootView.findViewById(R.id.latestUpd);
+        originalAddress = rootView.findViewById(R.id.originalAddress);
+        addresesHead = rootView.findViewById(R.id.addressHead);
+        usernanme = rootView.findViewById(R.id.userNameFF);
+
+
+        tp = rootView.findViewById(R.id.tp);
+        tp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SendTemperature();
+            }
+        });
+        usernanme.setText(sharedPrefs.getString("name", ""));
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,24 +135,227 @@ public class FirstFragment extends Fragment {
         });
 
 
-        if(sharedPrefs.getString("quarantineType","").equals("N/A"))
-        {
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
+        if (!sharedPrefs.getString("time", "").equals( "0" )) {
+            new java.util.Timer().schedule(
+                    new java.util.TimerTask() {
                 @Override
                 public void run() {
 
-                }
-            }, 60000);
-        }
+                   getGoogleApiClient();
 
-        else
-        {
-            originalAddress.setText(sharedPrefs.getString("address",""));
+                }
+            }, 1000*60*60);
+        } else {
+            addresesHead.setVisibility(View.GONE);
+            originalAddress.setText(sharedPrefs.getString("address", ""));
+
         }
+        SendNotification();
 
         return rootView;
 
+
+    }
+    GoogleApiClient mGoogleApiClient;
+    private void getGoogleApiClient() {
+
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                        @Override
+                        public void onConnected(@Nullable Bundle bundle) {
+                            FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
+
+                            if (ActivityCompat.checkSelfPermission(getActivity(),android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                Log.e(getClass().getName(), "Location permission not granted");
+                                return;
+                            }
+
+                            Task task = mFusedLocationClient.getLastLocation();
+
+                            task.addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+                                @Override
+                                public void onSuccess(Location location) {
+                                    // Got last known location. In some rare situations this can be null.
+                                    if (location != null) {
+                                        double latitude1 = location.getLatitude();
+                                        double longitude1 = location.getLongitude();
+
+                                      Geocoder  geocoder = new Geocoder(getContext(), Locale.getDefault());
+                                        try {
+                                            List<Address> addressList = geocoder.getFromLocation(latitude1, longitude1,1);
+                                            String address1 = addressList.get(0).getAddressLine(0);
+                                            String area = addressList.get(0).getLocality();
+                                           String city = addressList.get(0).getAdminArea();
+                                           // country = addressList.get(0).getCountryName();
+                                           // postalCode = addressList.get(0).getPostalCode();
+                                           String fulladdress = address1 + ",\n " + area + ",\n " ;
+                                            Log.e("location", "" + fulladdress);
+                                            originalAddress.setText(fulladdress);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        originalAddress.setText("Unable to fetch location.");
+                                    }
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onConnectionSuspended(int i) {
+                            Log.e(getClass().getName(), "onConnectionSuspended() ");
+                        }
+                    })
+                    .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
+                        @Override
+                        public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+                            Log.e(getClass().getName(), "Get location failure : " + connectionResult.getErrorMessage());
+                        }
+                    })
+                    .build();
+        }
+        mGoogleApiClient.connect();
     }
 
+
+
+    private void SendNotification() {
+        int categoryType = 0;
+        String connectionStatus = "Bluetooth Disconnected";
+        String geofenceStatus = "Geo fence breached.";
+        token1 = sharedPrefs.getString("token", "");
+
+        if (connected != 1) {
+            OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+            okhttpbuilder.addInterceptor(logging);
+
+            Retrofit.Builder builder = new Retrofit.Builder()
+                    .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
+                    .addConverterFactory(GsonConverterFactory.create());
+
+            retrofit = builder.build();
+            for_login login = retrofit.create(for_login.class);
+            Map<String, Object> params = new HashMap<>();
+            params.put("notification", connectionStatus);
+            params.put("category", categoryType);
+            Call<UserNotification> call = login.userNotify(token1, params);
+            call.enqueue(new Callback<UserNotification>() {
+                @Override
+                public void onResponse(Call<UserNotification> call, Response<UserNotification> response) {
+                    String error;
+                    if (response.isSuccessful() && response.code() == 200) {
+                        if (response.body().getErrorCode() != null) {
+                            error = response.body().getErrorCode();
+                            if (error.equals("2")) {
+                                Toast.makeText(getContext(), "User not found.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        sendTokenBle = response.body().getToken();
+                        Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UserNotification> call, Throwable t) {
+                    Toast.makeText(getContext(), "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.e("error", "" + t.getMessage());
+                }
+            });
+        }
+
+        if (geoStatus != 1) {
+            OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+            okhttpbuilder.addInterceptor(logging);
+
+            Retrofit.Builder builder = new Retrofit.Builder()
+                    .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
+                    .addConverterFactory(GsonConverterFactory.create());
+
+            retrofit = builder.build();
+            for_login login = retrofit.create(for_login.class);
+            Map<String, Object> params = new HashMap<>();
+            params.put("notification", geofenceStatus);
+            params.put("category", categoryType);
+            Call<UserNotification> call = login.userNotify(token1, params);
+            call.enqueue(new Callback<UserNotification>() {
+                @Override
+                public void onResponse(Call<UserNotification> call, Response<UserNotification> response) {
+                    String error;
+                    if (response.isSuccessful() && response.code() == 200) {
+                        if (response.body().getErrorCode() != null) {
+                            error = response.body().getErrorCode();
+                            if (error.equals("2")) {
+                                Toast.makeText(getContext(), "User not found.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        sendTokenBle = response.body().getToken();
+                        Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UserNotification> call, Throwable t) {
+                    Toast.makeText(getContext(), "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.e("error", "" + t.getMessage());
+                }
+            });
+        }
+
+
+    }
+
+    private void SendTemperature() {
+        OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        okhttpbuilder.addInterceptor(logging);
+
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
+                .addConverterFactory(GsonConverterFactory.create());
+
+        retrofit = builder.build();
+
+        for_login login = retrofit.create(for_login.class);
+        Map<String, Object> params = new HashMap<>();
+        params.put("temperature", temp);
+
+        Call<UserTemp> tempCall = login.userTemp(token, params);
+        tempCall.enqueue(new Callback<UserTemp>() {
+            @Override
+            public void onResponse(Call<UserTemp> call, Response<UserTemp> response) {
+                String error;
+                if (response.isSuccessful() && response.code() == 200) {
+                    if (response.body().getErrorCode() != null) {
+                        error = response.body().getErrorCode();
+                        if (error.equals("2")) {
+                            Toast.makeText(getContext(), "User not found.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    sendToken = response.body().getToken();
+                    Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserTemp> call, Throwable t) {
+                Toast.makeText(getContext(), "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("error", "" + t.getMessage());
+            }
+        });
+
+    }
+
+
 }
+

@@ -11,6 +11,7 @@ import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.ParcelUuid;
@@ -18,6 +19,8 @@ import android.util.Log;
 
 import java.util.List;
 import java.util.UUID;
+
+import no.nordicsemi.android.ble.data.Data;
 
 public class BluetoothLeService extends Service {
     private final static String TAG = BluetoothLeService.class.getSimpleName();
@@ -55,6 +58,10 @@ public class BluetoothLeService extends Service {
     public final static UUID UUID_GENUINO101_switchChare =
             UUID.fromString(String_GENUINO101_switchChar);
 
+    private SharedPreferences sharedPrefs;
+    private SharedPreferences.Editor editor;
+
+    int temp;
     // Implements callback methods for GATT events that the app cares about.  For example,
     // connection change and services discovered.
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
@@ -64,6 +71,11 @@ public class BluetoothLeService extends Service {
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 intentAction = ACTION_GATT_CONNECTED;
                 mConnectionState = STATE_CONNECTED;
+                sharedPrefs = getSharedPreferences("app", Context.MODE_PRIVATE);
+                int connected = 1;
+                editor.putInt("Connection Status", connected);
+                editor.commit();
+
                 broadcastUpdate(intentAction);
                 Log.i(TAG, "Connected to GATT server.");
                 // Attempts to discover services after successful connection.
@@ -112,23 +124,35 @@ public class BluetoothLeService extends Service {
                                  final BluetoothGattCharacteristic characteristic) {
         final Intent intent = new Intent(action);
         Log.w(TAG, "broadcastUpdate()");
+        int offset = 0;
 
+        final float tempValue = characteristic.getFloatValue(Data.FORMAT_FLOAT, offset);
+        offset += 4;
+
+        final StringBuilder builder = new StringBuilder();
+        builder.append(String.format("%.02f", tempValue));
+        temp = Integer.parseInt(builder.toString());
+        sharedPrefs = getSharedPreferences("app", Context.MODE_PRIVATE);
+        editor.putInt("temperature", temp);
+        editor.commit();
+/*
         final byte[] data = characteristic.getValue();
 
         Log.v(TAG, "data.length: " + data.length);
 
         if (data != null && data.length > 0) {
             final StringBuilder stringBuilder = new StringBuilder(data.length);
-            for(byte byteChar : data) {
+            for (byte byteChar : data) {
                 stringBuilder.append(String.format("%02X ", byteChar));
 
                 Log.v(TAG, String.format("%02X ", byteChar));
             }
             intent.putExtra(EXTRA_DATA, new String(data) + "\n" + stringBuilder.toString());
         }
-
+*/
         sendBroadcast(intent);
     }
+
     public class LocalBinder extends Binder {
         BluetoothLeService getService() {
             return BluetoothLeService.this;
@@ -180,12 +204,11 @@ public class BluetoothLeService extends Service {
      * Connects to the GATT server hosted on the Bluetooth LE device.
      *
      * @param address The device address of the destination device.
-     *
      * @return Return true if the connection is initiated successfully. The connection result
-     *         is reported asynchronously through the
-     *         {@code BluetoothGattCallback#onConnectionStateChange(
-     *         android.bluetooth.BluetoothGatt, int, int)}
-     *         callback.
+     * is reported asynchronously through the
+     * {@code BluetoothGattCallback#onConnectionStateChange(
+     * android.bluetooth.BluetoothGatt, int, int)}
+     * callback.
      */
     public boolean connect(final String address) {
         if (mBluetoothAdapter == null || address == null) {
@@ -266,7 +289,7 @@ public class BluetoothLeService extends Service {
      * Enables or disables notification on a give characteristic.
      *
      * @param characteristic Characteristic to act on.
-     * @param enabled If true, enable notification.  False otherwise.
+     * @param enabled        If true, enable notification.  False otherwise.
      */
     public void setCharacteristicNotification(BluetoothGattCharacteristic characteristic,
                                               boolean enabled) {
@@ -278,13 +301,14 @@ public class BluetoothLeService extends Service {
     }
 
 
-        public List<BluetoothGattService> getSupportedGattServices () {
+    public List<BluetoothGattService> getSupportedGattServices() {
 
-            if (mBluetoothGatt == null)
+        if (mBluetoothGatt == null)
 
-                return null;
+            return null;
 
-                return mBluetoothGatt.getServices();
-            
+        return mBluetoothGatt.getServices();
 
-    }}
+
+    }
+}

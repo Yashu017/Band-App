@@ -15,8 +15,26 @@ public interface for_login {
     @FormUrlEncoded
 
     @POST("api/auth/signup/")
-     Call<User> createAccount(@Header("access-token")String token,
-                              @FieldMap Map<String, Object> params)
+    Call<User> createAccount(@Header("access-token") String token,
+                             @FieldMap Map<String, Object> params)
             ;
+
+    @FormUrlEncoded
+    @POST("/api/location/")
+    Call<UserLocation> userLocation(@Header("access-token") String token, @FieldMap Map<String, Object> params);
+
+
+    @FormUrlEncoded
+    @POST("/api/temperature/")
+    Call<UserTemp> userTemp(@Header("access-token") String token, @FieldMap Map<String, Object> params);
+
+    @FormUrlEncoded
+    @POST("/api/notification/")
+    Call<UserNotification> userNotify(@Header("access-token") String token1, @FieldMap Map<String, Object> params);
+
+
+    @FormUrlEncoded
+    @POST("/api/getUser")
+    Call<User> ReInstall(@FieldMap Map<String,Object> params);
 
 }
