@@ -2,6 +2,10 @@ package com.example.hfilproject;
 
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -20,6 +24,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,6 +33,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 
 import com.example.hfilproject.Model.User;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -36,6 +43,9 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -69,8 +79,10 @@ public class LogIn extends AppCompatActivity {
     List<Address> addressList;
     Geocoder geocoder;
 
+
     String fulladdress,quarnType;
     String status="1";
+
 
     Boolean ok;
     RelativeLayout timeRl;
@@ -259,20 +271,16 @@ public class LogIn extends AppCompatActivity {
                 if (location != null) {
                     latitude = location.getLatitude();
                     longitude = location.getLongitude();
-
-
                 }
                 locInWords();
             }
         });
-
         locationTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.e(TAG, "onFailure: " + e.getLocalizedMessage());
             }
         });
-
  */
     }
 
@@ -287,6 +295,9 @@ public class LogIn extends AppCompatActivity {
             country = addressList.get(0).getCountryName();
             postalCode = addressList.get(0).getPostalCode();
             fulladdress = address1 + ",\n " + area + ",\n " + postalCode;
+            address.setText(fulladdress);
+            editor.putString("Updated Location", fulladdress);
+            editor.commit();
             Log.e("location", "" + fulladdress);
         } catch (Exception e) {
             e.printStackTrace();
@@ -416,7 +427,5 @@ public class LogIn extends AppCompatActivity {
 
 
 }
-
-
 
 

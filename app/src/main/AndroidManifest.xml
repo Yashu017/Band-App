@@ -4,6 +4,7 @@
     package="com.example.hfilproject">
 
     <application
+
         android:allowBackup="true"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
@@ -21,14 +22,29 @@
                 android:value="@integer/google_play_services_version" />
         </activity>
         <activity
+            android:name=".DeviceListActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+
+        <activity
+            android:name=".TempActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+        <activity
             android:name=".BLE.ControllerActivity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
         <activity
             android:name=".BLE.BLE_Activity"
+
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
         <activity
             android:name=".LogIn"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"></activity>
+
+
+
+        <activity android:name=".BleProfileServiceReadyActivity" />
+
         <activity
             android:name=".BottomNavActivity"
             android:launchMode="singleTop"
@@ -46,6 +62,18 @@
             android:name=".MainActivity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"></activity>
 
+        <activity
+            android:name=".HTActivity"
+            android:icon="@drawable/ic_hts_feature"
+            android:label="@string/hts_feature_title"
+            android:theme="@style/AppThemeBase">
+
+        </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:theme="@style/AppThemeBase" />
+
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBhRrHnzIgQ7eJD8VBShV71eLAapgVxjS4" />
@@ -58,6 +86,12 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <service
+            android:name=".BLETemperatureService"
+            android:enabled="true" />
+
+
         <service
             android:name=".UpdateBackgroundLocation"
             android:enabled="true"
@@ -68,13 +102,32 @@
             android:enabled="true"
             android:exported="true"
             android:foregroundServiceType="location" />
+
         <service
             android:name=".BLE.BluetoothLeService"
             android:enabled="true" />
+        <service
+            android:name=".HTService"
+            android:enabled="true"
+            android:label="HTM" />
 
         <service
             android:name=".LocationService"
             android:enabled="true" />
+        <service android:name=".LocationIntentService" />
+
+
+        <service
+            android:name=".LocationService"
+            android:enabled="true" />
+
+        <receiver android:name=".IntentReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+
     </application>
 
     <permission
@@ -84,6 +137,7 @@
     <uses-feature
         android:name="android.hardware.bluetooth_le"
         android:required="true" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />

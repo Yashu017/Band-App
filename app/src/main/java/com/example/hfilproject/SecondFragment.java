@@ -132,7 +132,6 @@ public class SecondFragment extends Fragment implements SharedPreferences.OnShar
         fence = view.findViewById(R.id.geofence);
 
 
-
         Dexter.withActivity(getActivity())
                 .withPermissions(Arrays.asList(
                         Manifest.permission.ACCESS_FINE_LOCATION,
@@ -270,7 +269,11 @@ public class SecondFragment extends Fragment implements SharedPreferences.OnShar
                 String country = addressList.get(0).getCountryName();
                 String postalCode = addressList.get(0).getPostalCode();
                 fullAddress = address1 + ", " + area + ", " + city + ", " + country + ", " + postalCode;
+
+
                 address.setText(fullAddress);
+
+
                 locUpdates.setVisibility(View.GONE);
             } catch (Exception e) {
                 e.printStackTrace();

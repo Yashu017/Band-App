@@ -6,6 +6,8 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
+import android.bluetooth.BluetoothGattServer;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
@@ -13,13 +15,30 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.ParcelUuid;
 import android.util.Log;
 
-import java.util.List;
-import java.util.UUID;
 
+import java.util.List;
+
+import androidx.annotation.NonNull;
+
+import java.util.Date;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import java.util.UUID;
+import java.util.concurrent.LinkedBlockingDeque;
+
+import no.nordicsemi.android.ble.BleManager;
+
+import no.nordicsemi.android.ble.Request;
+import no.nordicsemi.android.ble.callback.FailCallback;
 import no.nordicsemi.android.ble.data.Data;
 
 public class BluetoothLeService extends Service {
@@ -72,6 +91,7 @@ public class BluetoothLeService extends Service {
                 intentAction = ACTION_GATT_CONNECTED;
                 mConnectionState = STATE_CONNECTED;
                 sharedPrefs = getSharedPreferences("app", Context.MODE_PRIVATE);
+                editor = sharedPrefs.edit();
                 int connected = 1;
                 editor.putInt("Connection Status", connected);
                 editor.commit();
@@ -133,9 +153,10 @@ public class BluetoothLeService extends Service {
         builder.append(String.format("%.02f", tempValue));
         temp = Integer.parseInt(builder.toString());
         sharedPrefs = getSharedPreferences("app", Context.MODE_PRIVATE);
+        editor.putFloat("tempValue", tempValue);
         editor.putInt("temperature", temp);
         editor.commit();
-/*
+
         final byte[] data = characteristic.getValue();
 
         Log.v(TAG, "data.length: " + data.length);
@@ -145,11 +166,14 @@ public class BluetoothLeService extends Service {
             for (byte byteChar : data) {
                 stringBuilder.append(String.format("%02X ", byteChar));
 
+
                 Log.v(TAG, String.format("%02X ", byteChar));
             }
+            editor.putString("ReceiveData", stringBuilder.toString());
+            editor.commit();
             intent.putExtra(EXTRA_DATA, new String(data) + "\n" + stringBuilder.toString());
         }
-*/
+
         sendBroadcast(intent);
     }
 
