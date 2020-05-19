@@ -1,6 +1,8 @@
 package com.example.hfilproject;
 
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,11 +19,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -34,6 +41,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static com.example.hfilproject.App.CHANNEL_ID;
 
 
 /**
@@ -61,6 +70,14 @@ public class FirstFragment extends Fragment {
 
     int connected;
     Button typeTemp;
+    int hours, minutes;
+    String date;
+    String token2;
+    int tempReceived;
+    TextView setTemp;
+
+    String token3;
+    String locReceived;
 
     public FirstFragment() {
         // Required empty public constructor
@@ -77,6 +94,10 @@ public class FirstFragment extends Fragment {
         temp = sharedPrefs.getInt("temperature", 0);
         connected = sharedPrefs.getInt("Connection Status", 0);
         geoStatus = sharedPrefs.getInt("geoStatus", 0);
+        hours = sharedPrefs.getInt("hours", 0);
+        minutes = sharedPrefs.getInt("minutes", 0);
+        date = sharedPrefs.getString("dateSelected", "");
+
 
         //  Toast.makeText(getContext(), ""+temp, Toast.LENGTH_SHORT).show();
 
@@ -86,7 +107,7 @@ public class FirstFragment extends Fragment {
         latestUpd = rootView.findViewById(R.id.latestUpd);
         originalAddress = rootView.findViewById(R.id.originalAddress);
         usernanme = rootView.findViewById(R.id.userNameFF);
-
+        setTemp = rootView.findViewById(R.id.tempOriginal);
         tp = rootView.findViewById(R.id.tp);
         /*
         tp.setOnClickListener(new View.OnClickListener() {
@@ -132,7 +153,7 @@ public class FirstFragment extends Fragment {
         } else {
             originalAddress.setText(sharedPrefs.getString("address", ""));
         }
-        SendNotification();
+        // SendNotification();
 /*
         final Handler handler = new Handler();
         TimerTask timerTask = new TimerTask() {
@@ -153,18 +174,124 @@ public class FirstFragment extends Fragment {
         timer.schedule(timerTask, 0, 20 * 1000);
 */
 
-       typeTemp = rootView.findViewById(R.id.typeTemp);
-       typeTemp.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               Intent intent = new Intent(getContext(),TempActivity.class);
-               startActivity(intent);
-           }
-       });
+        typeTemp = rootView.findViewById(R.id.typeTemp);
+        typeTemp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), HTActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //  SendReminder();
+
+        GetTemperature();
+        Get_Location();
         return rootView;
 
 
     }
+
+    private void Get_Location() {
+        token3 = sharedPrefs.getString("token", "");
+        OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        okhttpbuilder.addInterceptor(logging);
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
+                .addConverterFactory(GsonConverterFactory.create());
+
+        retrofit = builder.build();
+        for_login login = retrofit.create(for_login.class);
+        Call<GetLocation> call = login.getLoc(token3);
+        call.enqueue(new Callback<GetLocation>() {
+            @Override
+            public void onResponse(Call<GetLocation> call, Response<GetLocation> response) {
+                if (response.isSuccessful() && response.code() == 200) {
+                    GetLocation getLocation = response.body();
+                    locReceived = getLocation.getLocation();
+                    Log.e("Success", "" + response.code());
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetLocation> call, Throwable t) {
+                Toast.makeText(getContext(), "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("error", "" + t.getMessage());
+            }
+        });
+
+    }
+
+    private void GetTemperature() {
+        token2 = sharedPrefs.getString("token", "");
+        OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        okhttpbuilder.addInterceptor(logging);
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
+                .addConverterFactory(GsonConverterFactory.create());
+
+        retrofit = builder.build();
+        for_login login = retrofit.create(for_login.class);
+        Call<GetTemp> call = login.getTemp(token2);
+        call.enqueue(new Callback<GetTemp>() {
+            @Override
+            public void onResponse(Call<GetTemp> call, Response<GetTemp> response) {
+                if (response.isSuccessful() && response.code() == 200) {
+                    GetTemp getTemp = response.body();
+                    tempReceived = getTemp.getTemperature();
+                    Log.e("Success", "" + response.code());
+                    setTemp.setText("" + tempReceived);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetTemp> call, Throwable t) {
+                Toast.makeText(getContext(), "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("error", "" + t.getMessage());
+            }
+        });
+    }
+
+    private void SendReminder() {
+
+        Calendar c = Calendar.getInstance();
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int min = c.get(Calendar.MINUTE);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+        String currentDate = sdf.format(new Date());
+        if (date == currentDate) {
+            if (hours == hour && minutes == min) {
+
+                Toast.makeText(getContext(), "" + hour, Toast.LENGTH_SHORT).show();
+
+                /*
+                Intent i = new Intent(getContext(), FirstFragment.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                PendingIntent pd = PendingIntent.getActivity(getContext(), 2, i, 0);
+
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), CHANNEL_ID)
+                        .setContentTitle("Reminder")
+                        .setSmallIcon(R.drawable.ic_alarm)
+                        .setPriority(NotificationManagerCompat.IMPORTANCE_HIGH)
+                        .setContentText("Please update your current location.")
+                        .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
+                        .setContentIntent(pd)
+                        .setAutoCancel(true);
+                NotificationManagerCompat manager = NotificationManagerCompat.from(getContext());
+                manager.notify(1, builder.build());
+                */
+            }
+        }
+
+    }
+
 
     @Override
     public void onResume() {

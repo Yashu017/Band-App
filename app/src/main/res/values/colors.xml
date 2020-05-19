@@ -13,5 +13,16 @@
 
 
 
+    <!--
+		Nordic logo on splash screen.
+		When using light/dark top background, consider changing status bar to light/dark
+		in styles-v23.
+	-->
+
+    <!-- Common -->
+    <color name="black">#FF000000</color>
+    <color name="lightGray">#FFF5F5F5</color>
+
+
 
 </resources>

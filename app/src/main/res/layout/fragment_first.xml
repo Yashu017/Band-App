@@ -132,9 +132,7 @@
                         android:layout_toRightOf="@+id/tp"
                         android:text="000"
                         android:textSize="40sp"
-                        android:textStyle="bold"
-                        android:visibility="gone" />
-
+                        android:textStyle="bold" />
 
 
                 </RelativeLayout>
