@@ -51,6 +51,8 @@ public class BottomNavActivity extends AppCompatActivity implements BottomNaviga
         //Checking whether user has created profile or not
         else if (sharedPref.getBoolean("profileStatus", false) == false) {
             Intent i = new Intent(this, LogIn.class);
+            editor.putBoolean("firstTime",true);
+            editor.commit();
             startActivity(i);
             finish();
 

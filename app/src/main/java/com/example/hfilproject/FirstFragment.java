@@ -71,7 +71,7 @@ public class FirstFragment extends Fragment {
     int geoStatus;
 
     int connected;
-    String timeToFetchAddress;
+    int timeToFetchAddress;
     int t;
 
     public FirstFragment() {
@@ -89,8 +89,9 @@ public class FirstFragment extends Fragment {
         temp = sharedPrefs.getInt("temperature", 0);
         connected = sharedPrefs.getInt("Connection Status", 0);
         geoStatus = sharedPrefs.getInt("geoStatus", 0);
-         timeToFetchAddress=sharedPrefs.getString("time","");
-         Log.e("tt",timeToFetchAddress);
+         timeToFetchAddress=Integer.parseInt(sharedPrefs.getString("time"," "));
+         Log.e("tt",timeToFetchAddress+"");
+
 //         t=Integer.parseInt(timeToFetchAddress);
 //         Log.e("t",t+"");
         //  Toast.makeText(getContext(), ""+temp, Toast.LENGTH_SHORT).show();
@@ -144,7 +145,7 @@ public class FirstFragment extends Fragment {
                    getGoogleApiClient();
 
                 }
-            }, 1000*60*60);
+            }, 1000*60*60*timeToFetchAddress);
         } else {
             addresesHead.setVisibility(View.GONE);
             originalAddress.setText(sharedPrefs.getString("address", ""));

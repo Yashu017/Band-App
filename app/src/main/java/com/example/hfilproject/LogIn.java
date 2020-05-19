@@ -152,7 +152,7 @@ public class LogIn extends AppCompatActivity {
             }
         });
         if (temp == 1) {
-            editor.putString("time", time.getText().toString());
+            editor.putString("time", (time.getText().toString()));
             Log.e("time",time.getText().toString());
             editor.commit();
         }
@@ -201,7 +201,7 @@ public class LogIn extends AppCompatActivity {
 
 
         ActionBar actionBar = getSupportActionBar();
-        getSupportActionBar().show();
+        getSupportActionBar().hide();
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#673AB7")));
 
 

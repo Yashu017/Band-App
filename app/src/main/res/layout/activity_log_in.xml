@@ -5,313 +5,292 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
+    xmlns:card_view="http://schemas.android.com/tools"
     tools:context=".LogIn">
 
-    <ScrollView
-        android:id="@+id/scroll_view"
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#fff">
+        android:background="@drawable/backlog">
 
-        <LinearLayout
+        <ImageView
+            android:layout_width="330dp"
+            android:layout_height="200dp"
+            android:id="@+id/logo"
+            android:src="@drawable/logo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="13dp"
+            />
+
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:layout_height="match_parent"
+            android:layout_below="@+id/logo"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginBottom="40dp"
+            android:background="@drawable/gg"
+            android:layout_centerHorizontal="true"
+            card_view:cardCornerRadius="5dp"
+            card_view:contentPadding="25dp"
+            card_view:cardBackgroundColor="#d5efd4"
+            card_view:cardElevation="6dp"
+            card_view:cardMaxElevation="10dp"
+            android:padding="8dp"
+            >
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal">
 
-                <TextView
-                    android:id="@+id/title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:text="App Title"
-                    android:textSize="30sp"
-                    android:textStyle="bold" />
-            </RelativeLayout>
-
-            <RelativeLayout
+            <ScrollView
+                android:id="@+id/scroll_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:background="#fff">
 
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_title_24px" />
-
-                <TextView
-                    android:id="@+id/name_label"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginStart="50dp"
-                    android:hint="Name"
-                    android:textColorHint="@color/md_grey_700" />
-
-
-                <EditText
-                    android:id="@+id/nameL"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/name_label"
-                    android:layout_marginStart="45dp"
-                    android:nextFocusDown="@id/ageL"
-                    android:singleLine="true"
-                    android:textColor="@color/md_black_1000" />
-
-            </RelativeLayout>
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_numeric_24px" />
-
-                <TextView
-                    android:id="@+id/age_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="50dp"
-                    android:layout_marginTop="10dp"
-                    android:hint="Age"
-                    android:textColorHint="@color/md_grey_700" />
-
-                <EditText
-                    android:id="@+id/ageL"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/age_label"
-                    android:layout_marginStart="45dp"
-                    android:inputType="number"
-                    android:singleLine="true"
-                    android:textColor="@color/md_black_1000" />
-
-            </RelativeLayout>
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="10dp"
-                android:text="Type of Quarantine you are in" />
-
-
-            <LinearLayout
-                android:id="@+id/hq"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="12dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="Home Quarantine/Self Isolation" />
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <RelativeLayout
+                        android:layout_width="240dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp"
+                        >
+
+                        <TextView
+                            android:id="@+id/title"
+                            android:padding="8dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:textColor="#B0302F2F"
+                            android:text="Welcome! Please enter your details."
+                            android:textSize="20sp"
+                            android:gravity="center"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
 
 
-                <RadioButton
-                    android:id="@+id/hq_yes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="22dp"
-                    android:textColor="@color/md_grey_700" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/nameL"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:singleLine="true"
+                            android:padding="10dp"
+                            android:textColor="#B0302F2F"
+                            android:background="@drawable/dat"
+                            android:hint="Name"
+                            android:textColorHint="#B0302F2F"
+                            android:inputType="text"
+                            android:textSize="20sp"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/ageL"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:padding="10dp"
+                            android:background="@drawable/dat"
+                            android:inputType="number"
+                            android:singleLine="true"
+                            android:hint="Age"
+                            android:textColor="#B0302F2F"
+                            android:textColorHint="#B0302F2F"
+                            android:textSize="20sp"/>
+                    </RelativeLayout>
 
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ic"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="12dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="Isolation centres /Govt. Quarantine" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:textSize="18sp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:padding="8dp"
+                        android:textColor="#84000000"
+                        android:text="Type of Quarantine" />
 
 
-                <RadioButton
-                    android:id="@+id/ic_yes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:textColor="@color/md_grey_700" />
+                    <LinearLayout
+                        android:id="@+id/hq"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:textColor="#B0302F2F"
+                            android:textSize="15sp"
+                            android:text="Home Quarantine/Self Isolation" />
 
 
-            </LinearLayout>
+                        <RadioButton
+                            android:id="@+id/hq_yes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="28dp"
+                            android:buttonTint="#B0302F2F"
+                            android:textColor="@color/md_grey_700" />
 
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                    </LinearLayout>
 
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_school_24px" />
+                    <LinearLayout
+                        android:id="@+id/ic"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/branch_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="50dp"
-                    android:layout_marginTop="15dp"
-                    android:hint="Address"
-                    android:textColorHint="@color/md_grey_700" />
-
-                <EditText
-                    android:id="@+id/addressL"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/branch_label"
-                    android:layout_marginStart="45dp"
-                    android:maxLines="10"
-                    android:textColor="@color/md_black_1000" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:textSize="15sp"
+                            android:textColor="#B0302F2F"
+                            android:text="Isolation centres /Govt. Quarantine" />
 
 
-            </RelativeLayout>
+                        <RadioButton
+                            android:id="@+id/ic_yes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:buttonTint="#B0302F2F"
+                            android:textColor="@color/md_grey_700" />
 
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
+                    </LinearLayout>
 
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_centerVertical="true"
-                    android:background="@color/md_grey_700"
-                  />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/blue"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="50dp"
-                    android:layout_marginTop="10dp"
-                    android:hint="Enter bluetooth id(just for testing purpose)"
-                    android:textColorHint="@color/md_grey_700" />
-
-                <EditText
-                    android:id="@+id/bluetoothId"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/blue"
-                    android:layout_marginStart="45dp"
-                    android:inputType="number"
-                    android:textColor="@color/md_black_1000" />
-
-            </RelativeLayout>
+                        <EditText
+                            android:id="@+id/addressL"
+                            android:textColorHint="#B0302F2F"
+                            android:textColor="#B0302F2F"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:padding="10dp"
+                            android:background="@drawable/dat"
+                            android:hint="Address"
+                            android:maxLines="10"
+                            android:inputType="text"
+                            android:textSize="20sp"/>
+                    </RelativeLayout>
 
 
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/bluetoothId"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:padding="10dp"
+                            android:textColor="#B0302F2F"
+                            android:textColorHint="#B0302F2F"
+                            android:background="@drawable/dat"
+                            android:hint="Enter bluetooth id"
+                            android:inputType="number"
+                            android:textSize="20sp"/>
+                    </RelativeLayout>
 
 
 
-            <RelativeLayout
-                android:id="@+id/timeRL"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:visibility="invisible">
+                    <RelativeLayout
+                        android:id="@+id/timeRL"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_centerVertical="true"
-                    android:background="#68000000"
-                    android:src="@drawable/ic_access_time_black_24dp" />
+                        <EditText
+                            android:id="@+id/startTime"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:padding="10dp"
+                            android:textColor="#B0302F2F"
+                            android:textColorHint="#B0302F2F"
+                            android:background="@drawable/dat"
+                            android:hint="Estimated Time to reach home ,"
+                            android:clickable="true"
+                            android:inputType="number"
+                            android:textSize="20sp"/>
+                    </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/start"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="50dp"
-                    android:layout_marginTop="10dp"
-                    android:hint="Estimated Time to reach home(in hrs) , "
-                    android:textColorHint="@color/md_grey_700" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
-                <EditText
-                    android:id="@+id/startTime"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/start"
-                    android:layout_marginStart="45dp"
-                    android:clickable="true"
-                    android:inputType="number"
-                    android:textColor="@color/md_black_1000" />
-
-            </RelativeLayout>
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="invisible">
-
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_centerVertical="true"
-                    android:background="@color/md_grey_700"
-                    android:src="@drawable/fui_ic_phone_white_24dp" />
-
-                <TextView
-                    android:id="@+id/email_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="50dp"
-                    android:layout_marginTop="10dp"
-                    android:hint="Mobile Number"
-                    android:textColorHint="@color/md_grey_700" />
-
-                <EditText
-                    android:id="@+id/mobileL"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/email_label"
-                    android:layout_marginStart="45dp"
-                    android:inputType="none"
-                    android:textColor="@color/md_black_1000" />
-
-            </RelativeLayout>
+                        <EditText
+                            android:id="@+id/mobileL"
+                            android:textColor="#B0302F2F"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColorHint="#B0302F2F"
+                            android:layout_margin="10dp"
+                            android:padding="10dp"
+                            android:background="@drawable/dat"
+                            android:inputType="number"
+                            android:textSize="20sp"/>
+                    </RelativeLayout>
 
 
-            <Button
-                android:id="@+id/submit_profile"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="14dp"
-                android:layout_marginEnd="24dp"
+                    <Button
+                        android:id="@+id/submit_profile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="24dp"
+                        android:background="@drawable/buttob"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:text="Submit"
+                        android:textColor="#fff" />
 
-                android:background="@drawable/buttob"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:text="Submit"
-                android:textColor="#fff" />
-        </LinearLayout>
-    </ScrollView>
+                </LinearLayout>
+            </ScrollView>
+
+        </RelativeLayout>
 
     <ProgressBar
         android:id="@+id/profile_progress"
@@ -321,4 +300,5 @@
         android:layout_marginTop="20dp"
         android:elevation="2dp"
         android:visibility="gone" />
+</RelativeLayout>
 </RelativeLayout>

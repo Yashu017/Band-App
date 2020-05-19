@@ -2,6 +2,7 @@ package com.example.hfilproject;
 
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -63,6 +64,8 @@ public class MapActivity extends AppCompatActivity
     private Location lastLocation;
 
     private TextView textLat, textLong;
+    SharedPreferences sharedPrefs;
+    SharedPreferences.Editor editor;
 
     private MapFragment mapFragment;
     Boolean check;
@@ -85,6 +88,19 @@ public class MapActivity extends AppCompatActivity
         textLat = (TextView) findViewById(R.id.lat);
         textLong = (TextView) findViewById(R.id.lon);
 
+        sharedPrefs = getSharedPreferences("app", MODE_PRIVATE);
+        editor = sharedPrefs.edit();
+
+        if(sharedPrefs.getBoolean("firstTime",false)==true) {
+
+            new AlertDialog.Builder(MapActivity.this)
+                    .setTitle("How to use")
+                    .setMessage("You are being redirected to geofence activity.If you find your location with yellow pointer is not correct you can use one time " +
+                            "feature to change your geofence location by using the CREATE GEOFENCE button in your action bar on the top")
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setNeutralButton("OK", null)
+                    .show();
+        }
 
         // initialize GoogleMaps
         initGMaps();
@@ -132,7 +148,17 @@ public class MapActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.geofence: {
-                startGeofence();
+                if(sharedPrefs.getBoolean("firstTime",false) == true){
+                    getCurrentLocation();
+                    item.setEnabled(false);
+                }
+                else
+                {
+                    item.setEnabled(false);
+                }
+
+             //   startGeofence();
+
                 return true;
             }
 //            case R.id.clear: {
@@ -277,6 +303,9 @@ public class MapActivity extends AppCompatActivity
                         " | Lat: " + lastLocation.getLatitude());
                 writeLastLocation();
                 startLocationUpdates();
+
+
+
             } else {
                 Log.w(TAG, "No location retrieved yet");
                 getCurrentLocation();
