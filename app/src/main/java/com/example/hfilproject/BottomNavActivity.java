@@ -31,8 +31,7 @@ public class BottomNavActivity extends AppCompatActivity implements BottomNaviga
         getSupportActionBar().hide();
 
         BluetoothAdapter mBtAdapter=BluetoothAdapter.getDefaultAdapter();
-        if(!mBtAdapter.isEnabled())
-        {
+        if(!mBtAdapter.isEnabled()) {
             mBtAdapter.enable();
         }
 
@@ -61,12 +60,14 @@ public class BottomNavActivity extends AppCompatActivity implements BottomNaviga
 
 
 
+
     }
 
     FirstFragment firstFragment = new FirstFragment();
     SecondFragment secondFragment = new SecondFragment();
     ThirdFragment thirdFragment = new ThirdFragment();
     FourthFragment fourthFragment = new FourthFragment();
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {

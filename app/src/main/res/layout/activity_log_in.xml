@@ -15,8 +15,8 @@
         android:background="@drawable/backlog">
 
         <ImageView
-            android:layout_width="330dp"
-            android:layout_height="200dp"
+            android:layout_width="210dp"
+            android:layout_height="150dp"
             android:id="@+id/logo"
             android:src="@drawable/logo"
             android:layout_centerHorizontal="true"
@@ -31,13 +31,8 @@
             android:layout_marginTop="20dp"
             android:layout_marginStart="28dp"
             android:layout_marginBottom="40dp"
-            android:background="@drawable/gg"
+            android:background="@drawable/white_rectangle_backgrounf"
             android:layout_centerHorizontal="true"
-            card_view:cardCornerRadius="5dp"
-            card_view:contentPadding="25dp"
-            card_view:cardBackgroundColor="#d5efd4"
-            card_view:cardElevation="6dp"
-            card_view:cardMaxElevation="10dp"
             android:padding="8dp"
             >
 
@@ -46,7 +41,9 @@
                 android:id="@+id/scroll_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#fff">
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                >
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -58,15 +55,15 @@
                         android:layout_width="240dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         >
 
                         <TextView
                             android:id="@+id/title"
-                            android:padding="8dp"
+                            android:padding="4dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
+                            android:layout_marginTop="4dp"
                             android:textColor="#B0302F2F"
                             android:text="Welcome! Please enter your details."
                             android:textSize="20sp"
@@ -78,7 +75,7 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
+                        android:layout_marginTop="6dp"
                         android:orientation="horizontal">
 
                         <EditText
@@ -87,19 +84,19 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:singleLine="true"
-                            android:padding="10dp"
+                            android:padding="6dp"
                             android:textColor="#B0302F2F"
                             android:background="@drawable/dat"
                             android:hint="Name"
                             android:textColorHint="#B0302F2F"
                             android:inputType="text"
-                            android:textSize="20sp"/>
+                            android:textSize="18sp"/>
                     </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="6dp"
                         android:orientation="horizontal">
 
                         <EditText
@@ -107,25 +104,25 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            android:padding="10dp"
+                            android:padding="6dp"
                             android:background="@drawable/dat"
                             android:inputType="number"
                             android:singleLine="true"
                             android:hint="Age"
                             android:textColor="#B0302F2F"
                             android:textColorHint="#B0302F2F"
-                            android:textSize="20sp"/>
+                            android:textSize="18sp"/>
                     </RelativeLayout>
 
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
+                        android:layout_marginTop="8dp"
                         android:textSize="18sp"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
-                        android:padding="8dp"
+                        android:padding="4dp"
                         android:textColor="#84000000"
                         android:text="Type of Quarantine" />
 
@@ -189,7 +186,7 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="6dp"
                         android:orientation="horizontal">
 
                         <EditText
@@ -199,19 +196,20 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            android:padding="10dp"
+                            android:padding="6dp"
                             android:background="@drawable/dat"
                             android:hint="Address"
+                            android:ellipsize="start"
                             android:maxLines="10"
                             android:inputType="text"
-                            android:textSize="20sp"/>
+                            android:textSize="18sp"/>
                     </RelativeLayout>
 
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="6dp"
                         android:orientation="horizontal">
 
                         <EditText
@@ -219,13 +217,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            android:padding="10dp"
+                            android:padding="6dp"
                             android:textColor="#B0302F2F"
                             android:textColorHint="#B0302F2F"
                             android:background="@drawable/dat"
                             android:hint="Enter bluetooth id"
                             android:inputType="number"
-                            android:textSize="20sp"/>
+                            android:textSize="18sp"/>
                     </RelativeLayout>
 
 
@@ -234,7 +232,7 @@
                         android:id="@+id/timeRL"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="6dp"
                         android:orientation="horizontal"
                         android:visibility="gone">
 
@@ -243,20 +241,20 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            android:padding="10dp"
+                            android:padding="6dp"
                             android:textColor="#B0302F2F"
                             android:textColorHint="#B0302F2F"
                             android:background="@drawable/dat"
                             android:hint="Estimated Time to reach home ,"
                             android:clickable="true"
-                            android:inputType="number"
-                            android:textSize="20sp"/>
+                            android:inputType="numberSigned"
+                            android:textSize="18sp"/>
                     </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="6dp"
                         android:orientation="horizontal"
                         android:visibility="gone">
 
@@ -267,10 +265,10 @@
                             android:layout_height="wrap_content"
                             android:textColorHint="#B0302F2F"
                             android:layout_margin="10dp"
-                            android:padding="10dp"
+                            android:padding="6dp"
                             android:background="@drawable/dat"
                             android:inputType="number"
-                            android:textSize="20sp"/>
+                            android:textSize="18sp"/>
                     </RelativeLayout>
 
 

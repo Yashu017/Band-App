@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
@@ -95,11 +96,13 @@ public class MapActivity extends AppCompatActivity
 
             new AlertDialog.Builder(MapActivity.this)
                     .setTitle("How to use")
-                    .setMessage("You are being redirected to geofence activity.If you find your location with yellow pointer is not correct you can use one time " +
-                            "feature to change your geofence location by using the CREATE GEOFENCE button in your action bar on the top")
+                    .setMessage("You are being directed to geofence activity.If you find that your location shown with red pointer is not correct,then please wait for some time and move your phone a bit. As soon as your pointer is on correct location you can use one time " +
+                            "feature to change your geofence location by using the CREATE GEOFENCE button in your action bar on the top.")
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .setNeutralButton("OK", null)
                     .show();
+
+
         }
 
         // initialize GoogleMaps
@@ -151,6 +154,8 @@ public class MapActivity extends AppCompatActivity
                 if(sharedPrefs.getBoolean("firstTime",false) == true){
                     getCurrentLocation();
                     item.setEnabled(false);
+                    editor.putBoolean("firstTime",false);
+                    editor.commit();
                 }
                 else
                 {
@@ -175,8 +180,11 @@ public class MapActivity extends AppCompatActivity
     private boolean checkPermission() {
         Log.d(TAG, "checkPermission()");
         // Ask for permission if it wasn't granted yet
-        return (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED);
+        if(Build.VERSION.SDK_INT >= 21)
+        {
+        check= (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED);}
+        return check;
     }
 
 

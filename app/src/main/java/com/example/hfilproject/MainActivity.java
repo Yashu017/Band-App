@@ -166,9 +166,12 @@ public class MainActivity extends AppCompatActivity {
                 editor.putBoolean("loginStatus", true);
                 editor.putString("phoneNumber", user.getPhoneNumber());
                 editor.putString("firebaseId", user.getUid());
+               // editor.putString("time","0");
+                editor.putBoolean("firstTime",true);
                 editor.commit();
                 Log.d("phoneNumber", user.getPhoneNumber());
                 Log.d("UserId", user.getUid());
+
 //                Intent intent = new Intent(this, LogIn.class);
 //                intent.putExtra("editProfile", false);
 //                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -228,6 +231,15 @@ public class MainActivity extends AppCompatActivity {
                             editor.putString("name", name);
                             editor.putString("age", age);
                             editor.putString("address", address);
+                            if(sharedPref.getString("address","").equals("N/A"))
+                            {
+                                editor.putString("time","1");
+                                editor.commit();
+                            }
+                            else {
+                                editor.putString("time","0");
+                                editor.commit();
+                            }
                             editor.putString("bluetoothId", bluetoothId);
                             editor.putString("qt", quarantineType);
                             editor.putString("token", token+"");

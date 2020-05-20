@@ -2,10 +2,6 @@ package com.example.hfilproject;
 
 
 import android.Manifest;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -13,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.ResultReceiver;
@@ -24,8 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,7 +28,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.DialogFragment;
 
 import com.example.hfilproject.Model.User;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -43,9 +37,6 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -119,7 +110,7 @@ public class LogIn extends AppCompatActivity {
         address.setEnabled(false);
 
 
-        if (A == true) {
+        if (Build.VERSION.SDK_INT >= 21) {
             if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(LogIn.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION_PERMISSION);
 
@@ -294,7 +285,7 @@ public class LogIn extends AppCompatActivity {
             city = addressList.get(0).getAdminArea();
             country = addressList.get(0).getCountryName();
             postalCode = addressList.get(0).getPostalCode();
-            fulladdress = address1 + ",\n " + area + ",\n " + postalCode;
+            fulladdress = address1 + ",\n " + city + ",\n "+country+",\n";
             address.setText(fulladdress);
             editor.putString("Updated Location", fulladdress);
             editor.commit();

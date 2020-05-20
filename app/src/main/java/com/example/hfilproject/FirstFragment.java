@@ -1,8 +1,6 @@
 package com.example.hfilproject;
 
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,8 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +27,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -37,17 +34,13 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -57,15 +50,13 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.example.hfilproject.App.CHANNEL_ID;
-
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class FirstFragment extends Fragment {
     TextView addresesHead;
-    ImageButton button;
+    Button button;
     View rootView;
     SharedPreferences sharedPrefs;
     SharedPreferences.Editor editor;
@@ -88,7 +79,7 @@ public class FirstFragment extends Fragment {
     int timeToFetchAddress;
     int t;
 
-    Button typeTemp;
+    RelativeLayout typeTemp;
     int hours, minutes;
     String date;
     String token2;
@@ -319,7 +310,7 @@ public class FirstFragment extends Fragment {
 
             @Override
             public void onFailure(Call<GetLocation> call, Throwable t) {
-                Toast.makeText(getContext(), "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
+             //   Toast.makeText(getContext(), "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.e("error", "" + t.getMessage());
             }
         });
