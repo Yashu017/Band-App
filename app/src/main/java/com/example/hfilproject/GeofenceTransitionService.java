@@ -12,6 +12,7 @@ import android.graphics.Color;
 
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
@@ -20,7 +21,17 @@ import com.google.android.gms.location.GeofenceStatusCodes;
 import com.google.android.gms.location.GeofencingEvent;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class GeofenceTransitionService extends IntentService {
@@ -31,6 +42,9 @@ public class GeofenceTransitionService extends IntentService {
 
     SharedPreferences sharedPrefs;
     SharedPreferences.Editor editor;
+    Retrofit retrofit;
+    String token1;
+    String sendTokenBle;
 
     public GeofenceTransitionService() {
         super(TAG);
@@ -61,7 +75,7 @@ public class GeofenceTransitionService extends IntentService {
         if (geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
             int geoStatus = 1;
             sharedPrefs = getSharedPreferences("app", MODE_PRIVATE);
-            editor =sharedPrefs.edit();
+            editor = sharedPrefs.edit();
             editor.putInt("geoStatus", geoStatus);
         }
     }
@@ -77,10 +91,14 @@ public class GeofenceTransitionService extends IntentService {
         String status = null;
         if (geoFenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER)
             status = "Entering ";
-        else if (geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT)
+        else if (geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
             status = "Exiting ";
+            PostNotification();
+        }
+
         return status + TextUtils.join(", ", triggeringGeofencesList);
     }
+
 
     private void sendNotification(String msg) {
         Log.i(TAG, "sendNotification: " + msg);
@@ -136,4 +154,53 @@ public class GeofenceTransitionService extends IntentService {
                 return "Unknown error.";
         }
     }
+
+    private void PostNotification() {
+        int categoryType = 0;
+        sharedPrefs = getSharedPreferences("app", Context.MODE_PRIVATE);
+        editor = sharedPrefs.edit();
+
+        token1 = sharedPrefs.getString("token", "");
+
+
+        String geofenceStatus = "Geo fence breached.";
+        OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        okhttpbuilder.addInterceptor(logging);
+
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
+                .addConverterFactory(GsonConverterFactory.create());
+
+        retrofit = builder.build();
+        for_login login = retrofit.create(for_login.class);
+        Map<String, Object> params = new HashMap<>();
+        params.put("notification", geofenceStatus);
+        params.put("category", categoryType);
+        Call<UserNotification> call = login.userNotify(token1, params);
+        call.enqueue(new Callback<UserNotification>() {
+            @Override
+            public void onResponse(Call<UserNotification> call, Response<UserNotification> response) {
+                String error;
+                if (response.isSuccessful() && response.code() == 200) {
+                    if (response.body().getErrorCode() != null) {
+                        error = response.body().getErrorCode();
+                        if (error.equals("2")) {
+                            Toast.makeText(GeofenceTransitionService.this, "User not found.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    sendTokenBle = response.body().getToken();
+                    Toast.makeText(GeofenceTransitionService.this, "Success", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserNotification> call, Throwable t) {
+                Toast.makeText(GeofenceTransitionService.this, "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("GeofenceTransition", "" + t.getMessage());
+            }
+        });
+    }
+
 }

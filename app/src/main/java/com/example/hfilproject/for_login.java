@@ -1,7 +1,9 @@
 package com.example.hfilproject;
 
 import com.example.hfilproject.Model.User;
+import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -34,10 +36,9 @@ public interface for_login {
     Call<UserNotification> userNotify(@Header("access-token") String token1, @FieldMap Map<String, Object> params);
 
 
-
     @FormUrlEncoded
     @POST("/api/getUser")
-    Call<User> ReInstall(@FieldMap Map<String,Object> params);
+    Call<User> ReInstall(@FieldMap Map<String, Object> params);
 
 
     @GET("/api/getTemperatures")

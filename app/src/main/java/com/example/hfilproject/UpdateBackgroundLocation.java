@@ -10,6 +10,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Binder;
 import android.os.Build;
@@ -35,6 +37,8 @@ import com.google.android.gms.tasks.Task;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -74,6 +78,9 @@ public class UpdateBackgroundLocation extends Service {
     String sendToken;
     String location;
     Retrofit retrofit;
+    int geoStatus;
+
+    String fullAddress;
 
     public UpdateBackgroundLocation() {
 
@@ -86,6 +93,8 @@ public class UpdateBackgroundLocation extends Service {
         sharedPrefs = getSharedPreferences("app", Context.MODE_PRIVATE);
 
         token = sharedPrefs.getString("token", "");
+        geoStatus = sharedPrefs.getInt("geoStatus", 0);
+
 
         locationCallback = new LocationCallback() {
             @Override
@@ -131,104 +140,62 @@ public class UpdateBackgroundLocation extends Service {
         }, 0, 1 * 60000);
 
 
-        timer2.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                SendTemperature();
-            }
-        }, 0, 30000);
+        sendNotification();
         return START_NOT_STICKY;
+    }
+
+    private void sendNotification() {
+
     }
 
     private void SendLocation() {
 
-        location = sharedPrefs.getString("Updated Location", "");
-        OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-        okhttpbuilder.addInterceptor(logging);
+        location = sharedPrefs.getString("updated Location", "");
+        if (location != null) {
+            Log.e("token", "" + location);
+            OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+            okhttpbuilder.addInterceptor(logging);
 
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
-                .addConverterFactory(GsonConverterFactory.create());
+            Retrofit.Builder builder = new Retrofit.Builder()
+                    .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
+                    .addConverterFactory(GsonConverterFactory.create());
 
-        retrofit = builder.build();
+            retrofit = builder.build();
 
-        for_login login = retrofit.create(for_login.class);
-        Map<String, Object> params = new HashMap<>();
-        params.put("location", location);
-        Call<UserLocation> call = login.userLocation(token, params);
-        call.enqueue(new Callback<UserLocation>() {
-            @Override
-            public void onResponse(Call<UserLocation> call, Response<UserLocation> response) {
-                String error;
-                if (response.isSuccessful() && response.code() == 200) {
-                    if (response.body().getErrorCode() != null) {
-                        error = response.body().getErrorCode();
-                        if (error.equals("2")) {
-                            Toast.makeText(UpdateBackgroundLocation.this, "User not found.", Toast.LENGTH_SHORT).show();
+            for_login login = retrofit.create(for_login.class);
+            Map<String, Object> params = new HashMap<>();
+            params.put("location", fullAddress);
+            Call<UserLocation> call = login.userLocation(token, params);
+            call.enqueue(new Callback<UserLocation>() {
+                @Override
+                public void onResponse(Call<UserLocation> call, Response<UserLocation> response) {
+                    String error;
+                    if (response.isSuccessful() && response.code() == 200) {
+                        if (response.body().getErrorCode() != null) {
+                            error = response.body().getErrorCode();
+                            if (error.equals("2")) {
+                                Toast.makeText(UpdateBackgroundLocation.this, "User not found.", Toast.LENGTH_SHORT).show();
+                            }
                         }
+                        sendToken = response.body().getToken();
+                        Toast.makeText(UpdateBackgroundLocation.this, "Location sent to server.", Toast.LENGTH_SHORT).show();
+                        Log.e("Location Posted", "Success");
                     }
-                    sendToken = response.body().getToken();
-                    Toast.makeText(UpdateBackgroundLocation.this, "Success", Toast.LENGTH_SHORT).show();
-                    Log.e("Result", "Success");
                 }
-            }
 
-            @Override
-            public void onFailure(Call<UserLocation> call, Throwable t) {
-                Toast.makeText(UpdateBackgroundLocation.this, "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("error", "" + t.getMessage());
-            }
-        });
+                @Override
+                public void onFailure(Call<UserLocation> call, Throwable t) {
+                    Toast.makeText(UpdateBackgroundLocation.this, "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.e("error", "" + t.getMessage());
+                }
+            });
+
+        }
 
     }
 
-
-    private void SendTemperature() {
-        temp = sharedPrefs.getInt("temperature", 0);
-
-        OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-        okhttpbuilder.addInterceptor(logging);
-
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
-                .addConverterFactory(GsonConverterFactory.create());
-
-        retrofit = builder.build();
-
-        for_login login = retrofit.create(for_login.class);
-        Map<String, Object> params = new HashMap<>();
-        params.put("temperature", temp);
-
-        Call<UserTemp> tempCall = login.userTemp(token, params);
-        tempCall.enqueue(new Callback<UserTemp>() {
-            @Override
-            public void onResponse(Call<UserTemp> call, Response<UserTemp> response) {
-                String error;
-                if (response.isSuccessful() && response.code() == 200) {
-                    if (response.body().getErrorCode() != null) {
-                        error = response.body().getErrorCode();
-                        if (error.equals("2")) {
-                            Toast.makeText(UpdateBackgroundLocation.this, "User not found.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    sendToken = response.body().getToken();
-                    Toast.makeText(UpdateBackgroundLocation.this, "Temp Success", Toast.LENGTH_SHORT).show();
-                    Log.e("Result", " Temp Success");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UserTemp> call, Throwable t) {
-                Toast.makeText(UpdateBackgroundLocation.this, "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("error", "" + t.getMessage());
-            }
-        });
-
-    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -257,6 +224,23 @@ public class UpdateBackgroundLocation extends Service {
                         public void onComplete(@NonNull Task<Location> task) {
                             if (task.isSuccessful() && task.getResult() != null) {
                                 mLocation = task.getResult();
+                                double latitude = mLocation.getLatitude();
+                                double longitude = mLocation.getLongitude();
+                                Geocoder geocoder = new Geocoder(UpdateBackgroundLocation.this, Locale.getDefault());
+                                try {
+                                    List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 3);
+                                    String address1 = addressList.get(0).getAddressLine(0);
+                                    String area = addressList.get(0).getLocality();
+                                    String city = addressList.get(0).getAdminArea();
+                                    String country = addressList.get(0).getCountryName();
+                                    String postalCode = addressList.get(0).getPostalCode();
+                                    fullAddress = address1 + ", " + area + ", " + city + ", " + country + ", " + postalCode;
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+
+                                }
+
                             } else {
                                 Log.e("Message", "Failed to get location");
 
@@ -277,6 +261,8 @@ public class UpdateBackgroundLocation extends Service {
 
     private void onNewLocation(Location lastLocation) {
         mLocation = lastLocation;
+
+
         EventBus.getDefault().postSticky(new SendLocation(mLocation));
         if (serviceIsRunningINForeground(this)) {
             mNotificationManager.notify(NOTI_ID, getNotification());
@@ -304,7 +290,7 @@ public class UpdateBackgroundLocation extends Service {
                 .setWhen(System.currentTimeMillis());
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, BottomNavActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
-       builder.setContentIntent(contentIntent);
+        builder.setContentIntent(contentIntent);
         builder.setChannelId(CHANNEL_ID);
         return builder.build();
     }

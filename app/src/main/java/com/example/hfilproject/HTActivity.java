@@ -23,6 +23,7 @@ public class HTActivity extends BleProfileServiceReadyActivity<HTService.HTSBind
     private TextView tempValueView;
     private TextView unitView;
     private TextView batteryLevelView;
+    static float postValue;
 
     @Override
     protected void onCreateView(final Bundle savedInstanceState) {

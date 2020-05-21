@@ -127,8 +127,8 @@
         <item name="android:spinnerItemStyle">@style/ActionBar.SpinnerTitle</item>
         <item name="actionMenuTextColor">@color/actionBarMenuTextColor</item>
         <item name="alertDialogTheme">@style/AppTheme.DialogTheme</item>
-        <item name="colorPrimary">#651FFF</item>
-        <item name="colorPrimaryDark">#651FFF</item>
+        <item name="colorPrimary">#003663</item>
+        <item name="colorPrimaryDark">#003663</item>
         <item name="colorAccent">@color/nordicLake</item>
         <item name="buttonStyle">@style/Widget.Button</item>
         <item name="android:spinnerStyle">@style/Widget.AppCompat.Spinner

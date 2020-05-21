@@ -2,9 +2,9 @@ package com.example.hfilproject;
 
 public class GetTemp {
 
-    private int temperature;
+    private float temperature;
 
-    public int getTemperature() {
+    public float getTemperature() {
         return temperature;
     }
 }

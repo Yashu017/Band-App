@@ -6,11 +6,10 @@
     <color name="tool">#30aaff</color>
     <color name="white">#ffffff</color>
 
-    <color name="color1">#9C27B0</color>
+    <color name="color1">#003663</color>
     <color name="color2">#1E88E5</color>
     <color name="color3">#304FFE</color>
-    <color name="color4">#AA00FF</color>
-
+    <color name="color4">#003663</color>
 
 
     <!--
@@ -22,7 +21,6 @@
     <!-- Common -->
     <color name="black">#FF000000</color>
     <color name="lightGray">#FFF5F5F5</color>
-
 
 
 </resources>

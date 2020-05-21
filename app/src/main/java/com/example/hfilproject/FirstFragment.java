@@ -83,7 +83,7 @@ public class FirstFragment extends Fragment {
     int hours, minutes;
     String date;
     String token2;
-    int tempReceived;
+    float tempReceived;
     TextView setTemp;
 
     String token3;
@@ -106,13 +106,12 @@ public class FirstFragment extends Fragment {
         connected = sharedPrefs.getInt("Connection Status", 0);
         geoStatus = sharedPrefs.getInt("geoStatus", 0);
 
-         timeToFetchAddress=Integer.parseInt(sharedPrefs.getString("time"," "));
-         Log.e("tt",timeToFetchAddress+"");
+        timeToFetchAddress = Integer.parseInt(sharedPrefs.getString("time", " "));
+        Log.e("tt", timeToFetchAddress + "");
 
         hours = sharedPrefs.getInt("hours", 0);
         minutes = sharedPrefs.getInt("minutes", 0);
         date = sharedPrefs.getString("dateSelected", "");
-
 
 
 //         t=Integer.parseInt(timeToFetchAddress);
@@ -136,7 +135,6 @@ public class FirstFragment extends Fragment {
                 SendTemperature();
             }
         });
-
          */
         usernanme.setText(sharedPrefs.getString("name", ""));
         button.setOnClickListener(new View.OnClickListener() {
@@ -162,16 +160,16 @@ public class FirstFragment extends Fragment {
         });
 
 
-        if (!sharedPrefs.getString("time", "").equals( "0" )) {
+        if (!sharedPrefs.getString("time", "").equals("0")) {
             new java.util.Timer().schedule(
                     new java.util.TimerTask() {
-                @Override
-                public void run() {
+                        @Override
+                        public void run() {
 
-                   getGoogleApiClient();
+                            getGoogleApiClient();
 
-                }
-            }, 1000*60*60*timeToFetchAddress);
+                        }
+                    }, 1000 * 60 * 60 * timeToFetchAddress);
         } else {
             addresesHead.setVisibility(View.GONE);
             originalAddress.setText(sharedPrefs.getString("address", ""));
@@ -189,7 +187,6 @@ public class FirstFragment extends Fragment {
                         Intent serviceIntent = new Intent(getContext(), LocationIntentService.class);
                         serviceIntent.putExtra("inputExtra", "Temperature");
                         ContextCompat.startForegroundService(getContext(), serviceIntent);
-
                     }
                 });
             }
@@ -210,12 +207,14 @@ public class FirstFragment extends Fragment {
         //  SendReminder();
 
         GetTemperature();
-        Get_Location();
+
         return rootView;
 
 
     }
+
     GoogleApiClient mGoogleApiClient;
+
     private void getGoogleApiClient() {
 
         if (mGoogleApiClient == null) {
@@ -226,7 +225,7 @@ public class FirstFragment extends Fragment {
                         public void onConnected(@Nullable Bundle bundle) {
                             FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
-                            if (ActivityCompat.checkSelfPermission(getActivity(),android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                                 Log.e(getClass().getName(), "Location permission not granted");
                                 return;
                             }
@@ -241,15 +240,15 @@ public class FirstFragment extends Fragment {
                                         double latitude1 = location.getLatitude();
                                         double longitude1 = location.getLongitude();
 
-                                      Geocoder  geocoder = new Geocoder(getContext(), Locale.getDefault());
+                                        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
                                         try {
-                                            List<Address> addressList = geocoder.getFromLocation(latitude1, longitude1,1);
+                                            List<Address> addressList = geocoder.getFromLocation(latitude1, longitude1, 1);
                                             String address1 = addressList.get(0).getAddressLine(0);
                                             String area = addressList.get(0).getLocality();
-                                           String city = addressList.get(0).getAdminArea();
-                                           // country = addressList.get(0).getCountryName();
-                                           // postalCode = addressList.get(0).getPostalCode();
-                                           String fulladdress = address1 + ",\n " + area + ",\n " ;
+                                            String city = addressList.get(0).getAdminArea();
+                                            // country = addressList.get(0).getCountryName();
+                                            // postalCode = addressList.get(0).getPostalCode();
+                                            String fulladdress = address1 + ",\n " + area + ",\n ";
                                             Log.e("location", "" + fulladdress);
                                             originalAddress.setText(fulladdress);
                                         } catch (Exception e) {
@@ -257,9 +256,7 @@ public class FirstFragment extends Fragment {
 
                                         }
 
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         originalAddress.setText("Unable to fetch location.");
                                     }
                                 }
@@ -283,40 +280,6 @@ public class FirstFragment extends Fragment {
     }
 
 
-
-    private void Get_Location() {
-        token3 = sharedPrefs.getString("token", "");
-        OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-        okhttpbuilder.addInterceptor(logging);
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
-                .addConverterFactory(GsonConverterFactory.create());
-
-        retrofit = builder.build();
-        for_login login = retrofit.create(for_login.class);
-        Call<GetLocation> call = login.getLoc(token3);
-        call.enqueue(new Callback<GetLocation>() {
-            @Override
-            public void onResponse(Call<GetLocation> call, Response<GetLocation> response) {
-                if (response.isSuccessful() && response.code() == 200) {
-                    GetLocation getLocation = response.body();
-                    locReceived = getLocation.getLocation();
-                    Log.e("Success", "" + response.code());
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<GetLocation> call, Throwable t) {
-             //   Toast.makeText(getContext(), "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("error", "" + t.getMessage());
-            }
-        });
-
-    }
-
     private void GetTemperature() {
         token2 = sharedPrefs.getString("token", "");
         OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
@@ -338,6 +301,7 @@ public class FirstFragment extends Fragment {
                     tempReceived = getTemp.getTemperature();
                     Log.e("Success", "" + response.code());
                     setTemp.setText("" + tempReceived);
+                    Toast.makeText(getContext(), "Temperature received from server.", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -365,9 +329,7 @@ public class FirstFragment extends Fragment {
                 /*
                 Intent i = new Intent(getContext(), FirstFragment.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-
                 PendingIntent pd = PendingIntent.getActivity(getContext(), 2, i, 0);
-
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), CHANNEL_ID)
                         .setContentTitle("Reminder")
                         .setSmallIcon(R.drawable.ic_alarm)
