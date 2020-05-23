@@ -138,8 +138,8 @@
 
                 <ImageView
                     android:id="@+id/adr"
-                    android:layout_width="120dp"
-                    android:layout_height="140dp"
+                    android:layout_width="100dp"
+                    android:layout_height="120dp"
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/posblue" />
 

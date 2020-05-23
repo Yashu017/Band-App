@@ -19,7 +19,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#605196">
+            android:background="#003663">
 
             <ImageView
                 android:id="@+id/thermometer"

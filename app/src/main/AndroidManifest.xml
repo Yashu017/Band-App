@@ -13,6 +13,7 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
+
         <activity
             android:name=".MapActivity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
@@ -37,7 +38,9 @@
         <activity
             android:name=".LogIn"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
-        <activity android:name=".BleProfileServiceReadyActivity" />
+        <activity
+            android:name=".BleProfileServiceReadyActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
         <activity
             android:name=".BottomNavActivity"
             android:launchMode="singleTop"
@@ -47,7 +50,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".MainActivity"
@@ -56,7 +58,7 @@
             android:name=".HTActivity"
             android:icon="@drawable/ic_hts_feature"
             android:label="@string/hts_feature_title"
-            android:theme="@style/AppThemeBase"></activity>
+            android:theme="@style/AppThemeBase" />
         <activity
             android:name=".SettingsActivity"
             android:theme="@style/AppThemeBase" />
@@ -73,12 +75,12 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
         <receiver android:name=".IntentReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
         <service
             android:name=".BLETemperatureService"
             android:enabled="true" />
@@ -103,7 +105,6 @@
             android:name=".LocationService"
             android:enabled="true" />
         <service android:name=".LocationIntentService" />
-
         <service
             android:name=".LocationService"
             android:enabled="true" />

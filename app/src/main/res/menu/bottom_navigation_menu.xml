@@ -10,7 +10,7 @@
         android:title="Map" />
     <item
         android:id="@+id/item3"
-        android:icon="@drawable/ic_widgets_black_24dp"
+        android:icon="@drawable/ic_history_black_24dp"
         android:title="History" />
     <item
         android:id="@+id/item4"
