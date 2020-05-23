@@ -42,13 +42,14 @@ public abstract class BleProfileServiceReadyActivity<E extends BleProfileService
     protected static final int REQUEST_ENABLE_BT = 2;
 
     private E service;
-
+    String bluetoothId;
     private TextView deviceNameView;
     private Button connectButton;
 
     private ILogSession logSession;
     private BluetoothDevice bluetoothDevice;
     private String deviceName;
+    private TextView deviceId;
 
     private final BroadcastReceiver commonBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -144,9 +145,10 @@ public abstract class BleProfileServiceReadyActivity<E extends BleProfileService
 
             // Update UI
             deviceName = bleService.getDeviceName();
+            bluetoothId = bleService.getDeviceAddress();
             deviceNameView.setText(deviceName);
             connectButton.setText(R.string.action_disconnect);
-
+            deviceId.setText(bluetoothId);
             // And notify user if device is connected
             if (bleService.isConnected()) {
                 onDeviceConnected(bluetoothDevice);
@@ -166,11 +168,13 @@ public abstract class BleProfileServiceReadyActivity<E extends BleProfileService
             Logger.d(logSession, "Activity disconnected from the service");
             deviceNameView.setText(getDefaultDeviceName());
             connectButton.setText(R.string.action_connect);
-
+            bluetoothId = null;
             service = null;
             deviceName = null;
+            deviceId = null;
             bluetoothDevice = null;
             logSession = null;
+            deviceId.setText("Bluetooth Id: --");
             onServiceUnbound();
         }
     };
@@ -196,7 +200,7 @@ public abstract class BleProfileServiceReadyActivity<E extends BleProfileService
         onCreateView(savedInstanceState);
 
         final Toolbar toolbar = findViewById(R.id.toolbar_actionbar);
-       setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
 
         // Common nRF Toolbox view references are obtained here
         setUpView();
@@ -331,6 +335,7 @@ public abstract class BleProfileServiceReadyActivity<E extends BleProfileService
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         connectButton = findViewById(R.id.action_connect);
         deviceNameView = findViewById(R.id.device_name);
+        deviceId = findViewById(R.id.bluetoothID);
     }
 
     @Override
@@ -468,7 +473,9 @@ public abstract class BleProfileServiceReadyActivity<E extends BleProfileService
     @Override
     public void onDeviceDisconnected(@NonNull final BluetoothDevice device) {
         connectButton.setText(R.string.action_connect);
-        deviceNameView.setText("Device Not Connected");
+        deviceNameView.setText("Device Name:--");
+        deviceId.setText("Bluetooth Id: --");
+
 
         try {
             Logger.d(logSession, "Unbinding from the service...");
@@ -588,6 +595,7 @@ public abstract class BleProfileServiceReadyActivity<E extends BleProfileService
 
     /**
      * Checks the {@link BleProfileService#EXTRA_DEVICE} in the given intent and compares it with the connected BluetoothDevice object.
+     *
      * @param intent intent received via a broadcast from the service
      * @return true if the data in the intent apply to the connected device, false otherwise
      */
@@ -599,8 +607,8 @@ public abstract class BleProfileServiceReadyActivity<E extends BleProfileService
     /**
      * Shows the scanner fragment.
      *
-     * @param filter               the UUID filter used to filter out available devices. The fragment will always show all bonded devices as there is no information about their
-     *                             services
+     * @param filter the UUID filter used to filter out available devices. The fragment will always show all bonded devices as there is no information about their
+     *               services
      * @see #getFilterUUID()
      */
     private void showDeviceScanningDialog(final UUID filter) {

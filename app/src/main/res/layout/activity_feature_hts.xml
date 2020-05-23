@@ -52,9 +52,20 @@
             android:ellipsize="end"
             android:freezesText="true"
             android:maxLines="1"
-            android:text="@string/hts_default_name"
-            android:textAllCaps="true"
+            android:text="Device Name:--"
             android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/bluetoothID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/device_name"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:text="Bluetooth Id: --"
+            android:textColor="#000"
+            android:textSize="18sp"
+            android:visibility="gone" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/text_hts_value"
