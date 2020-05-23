@@ -167,6 +167,7 @@ class DeviceListAdapter extends BaseAdapter {
                 final String name = device.name;
                 holder.name.setText(name != null ? name : parent.getContext().getString(R.string.not_available));
                 holder.address.setText(device.device.getAddress());
+
                 if (!device.isBonded || device.rssi != ExtendedBluetoothDevice.NO_RSSI) {
                     final int rssiPercent = (int) (100.0f * (127.0f + device.rssi) / (127.0f + 20.0f));
                     holder.rssi.setImageLevel(rssiPercent);

@@ -115,7 +115,7 @@ public class SecondFragment extends Fragment implements SharedPreferences.OnShar
             @Override
             public void onClick(View v) {
 
-                sendLocation();
+                //sendLocation();
                 Intent intent = new Intent(getActivity(), MapActivity.class);
                 startActivity(intent);
 
@@ -269,7 +269,8 @@ public class SecondFragment extends Fragment implements SharedPreferences.OnShar
                 String country = addressList.get(0).getCountryName();
                 String postalCode = addressList.get(0).getPostalCode();
                 fullAddress = address1 + ", " + area + ", " + city + ", " + country + ", " + postalCode;
-
+                editor.putString("updated Location", fullAddress);
+                editor.commit();
 
                 address.setText(fullAddress);
 

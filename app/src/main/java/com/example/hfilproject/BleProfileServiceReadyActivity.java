@@ -456,6 +456,7 @@ public abstract class BleProfileServiceReadyActivity<E extends BleProfileService
     @Override
     public void onDeviceConnected(@NonNull final BluetoothDevice device) {
         deviceNameView.setText(deviceName);
+
         connectButton.setText(R.string.action_disconnect);
     }
 
@@ -467,7 +468,7 @@ public abstract class BleProfileServiceReadyActivity<E extends BleProfileService
     @Override
     public void onDeviceDisconnected(@NonNull final BluetoothDevice device) {
         connectButton.setText(R.string.action_connect);
-        deviceNameView.setText(getDefaultDeviceName());
+        deviceNameView.setText("Device Not Connected");
 
         try {
             Logger.d(logSession, "Unbinding from the service...");

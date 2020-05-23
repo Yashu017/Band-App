@@ -14,8 +14,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
@@ -33,7 +37,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FifthFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private List<Notification> notifications;
+    private List<Notification> notificationList;
     View rootView;
     private OnFragmentInteractionListener listener;
 
@@ -43,6 +47,9 @@ public class FifthFragment extends Fragment {
     Retrofit retrofit;
     String notif;
     TextView tv2;
+    GetNotification getNotification;
+    NotificationItem item;
+    private ArrayList<NotificationItem> arrayList = null;
 
     public FifthFragment() {
         // Required empty public constructor
@@ -54,13 +61,9 @@ public class FifthFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_fifth, container, false);
-        //  recyclerView = (RecyclerView) rootView.findViewById(R.id.notificationRecycler);
-        // NotificationAdapter adapter = new NotificationAdapter(getContext(), notifications);
-        //  LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.notificationRecycler);
 
-        // recyclerView.setLayoutManager(layoutManager);
-        // recyclerView.setAdapter(adapter);
-     //   getNotification();
+        getNotification();
 
         tv2 = rootView.findViewById(R.id.textView2);
         return rootView;
@@ -85,11 +88,45 @@ public class FifthFragment extends Fragment {
         call.enqueue(new Callback<GetNotification>() {
             @Override
             public void onResponse(Call<GetNotification> call, Response<GetNotification> response) {
-                if (response.isSuccessful() && response.code() == 200) {
-                    GetNotification getNotification = response.body();
-                    notif = getNotification.getNotification();
-                    tv2.setText("" + notif);
-                    Log.e("Success", "" + response.code());
+                if (response.isSuccessful()) {
+
+                    Log.e("Response", "" + response.message());
+                    Log.e("Content", "" + response.body().getNotification());
+                    GetNotification notification = response.body();
+                    arrayList = notification.getNotification();
+                    int length = arrayList.size();
+                    Log.e("Length", "" + length);
+
+
+                    // notificationList.add(new Notification("Warning", "11:00 AM", "" + notif));
+                    //   notificationList.add(new Notification("Warning", "1:00 PM", "You have breached geo-fencing.Please stay in your quarantine place."));
+                    // notificationList.add(new Notification("Warning", "3:00 PM", "This device is not connected with C Watch. Please connect again."));
+
+                    if (arrayList != null) {
+                        for (NotificationItem item : arrayList) {
+
+                            String msg = item.getNotification();
+                            Log.e("Msg", "" + msg);
+                            notificationList.add(new Notification("", "", "" + msg));
+                        }
+
+
+                        NotificationAdapter adapter = new NotificationAdapter(getContext(), notificationList);
+                        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+
+                        recyclerView.setLayoutManager(layoutManager);
+                        recyclerView.setAdapter(adapter);
+                    }
+
+
+                   /*
+                    NotificationItem item = arrayList.get(0);
+                    String noti = item.getNotification();
+                    long time = item.getTime();
+                    int category = item.getCategory();
+                    Log.e("TAG", "" + noti + time + category);
+
+                    */
 
                 }
             }
@@ -100,15 +137,18 @@ public class FifthFragment extends Fragment {
                 Log.e("error", "" + t.getMessage());
             }
         });
+
+
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //    notifications = new ArrayList<>();
-        //   notifications.add(new Notification("Warning", "11:00 AM", "" + notif));
-        //   notifications.add(new Notification("Warning", "1:00 PM", "You have breached geo-fencing.Please stay in your quarantine place."));
-        //   notifications.add(new Notification("Warning", "3:00 PM", "This device is not connected with C Watch. Please connect again."));
+        notificationList = new ArrayList<>();
+
+        ////  notificationList.add(new Notification("Warning", "11:00 AM", "" + notif));
+        // notificationList.add(new Notification("Warning", "1:00 PM", "You have breached geo-fencing.Please stay in your quarantine place."));
+        //notificationList.add(new Notification("Warning", "3:00 PM", "This device is not connected with C Watch. Please connect again."));
 
     }
 

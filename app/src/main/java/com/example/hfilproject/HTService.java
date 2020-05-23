@@ -8,7 +8,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,11 +19,22 @@ import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import no.nordicsemi.android.ble.common.profile.ht.TemperatureMeasurementCallback;
 import no.nordicsemi.android.ble.common.profile.ht.TemperatureType;
 import no.nordicsemi.android.ble.common.profile.ht.TemperatureUnit;
 import no.nordicsemi.android.log.Logger;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HTService extends BleProfileService implements HTManagerCallbacks {
     public static final String BROADCAST_HTS_MEASUREMENT = "no.nordicsemi.android.nrftoolbox.hts.BROADCAST_HTS_MEASUREMENT";
@@ -34,11 +48,24 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
     private final static int NOTIFICATION_ID = 267;
     private final static int OPEN_ACTIVITY_REQ = 0;
     private final static int DISCONNECT_REQ = 1;
-    /** The last received temperature value in Celsius degrees. */
+    /**
+     * The last received temperature value in Celsius degrees.
+     */
     private Float temp;
+
+    private float tempData;
 
     @SuppressWarnings("unused")
     private HTManager manager;
+
+    int categoryType = 0;
+    SharedPreferences sharedPrefs;
+    SharedPreferences.Editor editor;
+    String sendToken;
+    String token1;
+    Retrofit retrofit;
+    String sendTokenBle;
+
 
     private final LocalBinder minder = new HTSBinder();
 
@@ -73,6 +100,15 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
         final IntentFilter filter = new IntentFilter();
         filter.addAction(ACTION_DISCONNECT);
         registerReceiver(disconnectActionBroadcastReceiver, filter);
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                PostTemperature();
+            }
+        }, 0, 1 * 60000);
+
+
     }
 
     @Override
@@ -98,7 +134,58 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
     public void onDeviceDisconnected(@NonNull final BluetoothDevice device) {
         super.onDeviceDisconnected(device);
         temp = null;
+        SendNotification();
+
     }
+
+    private void SendNotification() {
+        sharedPrefs = getSharedPreferences("app", Context.MODE_PRIVATE);
+        editor = sharedPrefs.edit();
+
+        token1 = sharedPrefs.getString("token", "");
+
+        String connectionStatus = "Bluetooth Disconnected";
+        OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        okhttpbuilder.addInterceptor(logging);
+
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
+                .addConverterFactory(GsonConverterFactory.create());
+
+        retrofit = builder.build();
+        for_login login = retrofit.create(for_login.class);
+        Map<String, Object> params = new HashMap<>();
+        params.put("notification", connectionStatus);
+        params.put("category", categoryType);
+        Call<UserNotification> call = login.userNotify(token1, params);
+        call.enqueue(new Callback<UserNotification>() {
+            @Override
+            public void onResponse(Call<UserNotification> call, Response<UserNotification> response) {
+                String error;
+                if (response.isSuccessful() && response.code() == 200) {
+                    if (response.body().getErrorCode() != null) {
+                        error = response.body().getErrorCode();
+                        if (error.equals("2")) {
+                            Toast.makeText(HTService.this, "User not found.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    sendTokenBle = response.body().getToken();
+                    Toast.makeText(HTService.this, " Bluetooth disconnected", Toast.LENGTH_SHORT).show();
+                    Log.e("Disconnected", "Bluetooth Service");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserNotification> call, Throwable t) {
+                Toast.makeText(HTService.this, "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("error in HT Service", "" + t.getMessage());
+            }
+        });
+
+    }
+
 
     @Override
     public void onTemperatureMeasurementReceived(@NonNull final BluetoothDevice device,
@@ -107,16 +194,69 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
                                                  @Nullable @TemperatureType final Integer type) {
         temp = TemperatureMeasurementCallback.toCelsius(temperature, unit);
 
+        tempData = TemperatureMeasurementCallback.toFahrenheit(temperature, unit);
+
+
         final Intent broadcast = new Intent(BROADCAST_HTS_MEASUREMENT);
         broadcast.putExtra(EXTRA_DEVICE, getBluetoothDevice());
         broadcast.putExtra(EXTRA_TEMPERATURE, temp);
         // ignore the rest
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcast);
 
+
         if (!bound) {
             // Here we may update the notification to display the current temperature.
             // TODO modify the notification here
         }
+    }
+
+    private void PostTemperature() {
+
+
+        OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        okhttpbuilder.addInterceptor(logging);
+
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
+                .addConverterFactory(GsonConverterFactory.create());
+
+        retrofit = builder.build();
+
+        for_login login = retrofit.create(for_login.class);
+        Map<String, Object> params = new HashMap<>();
+        if (temp != null) {
+            params.put("temperature", temp);
+
+            Call<UserTemp> tempCall = login.userTemp(token1, params);
+            tempCall.enqueue(new Callback<UserTemp>() {
+                @Override
+                public void onResponse(Call<UserTemp> call, Response<UserTemp> response) {
+                    String error;
+                    if (response.isSuccessful() && response.code() == 200) {
+                        if (response.body().getErrorCode() != null) {
+                            error = response.body().getErrorCode();
+                            if (error.equals("2")) {
+                                Toast.makeText(HTService.this, "User not found.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        sendToken = response.body().getToken();
+                        Toast.makeText(HTService.this, "Temp sent to server.", Toast.LENGTH_SHORT).show();
+                        Log.e("Result", " Temp Success");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UserTemp> call, Throwable t) {
+                    Toast.makeText(HTService.this, "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.e("error", "" + t.getMessage());
+                }
+            });
+
+        }
+
+
     }
 
     @Override
@@ -130,7 +270,7 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
     /**
      * Sets the service as a foreground service
      */
-    private void startForegroundService(){
+    private void startForegroundService() {
         // when the activity closes we need to show the notification that user is connected to the peripheral sensor
         // We start the service as a foreground service as Android 8.0 (Oreo) onwards kills any running background services
         final android.app.Notification notification = createNotification(R.string.uart_notification_connected_message, 0);
@@ -145,7 +285,7 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
     /**
      * Stops the service as a foreground service
      */
-    private void stopForegroundService(){
+    private void stopForegroundService() {
         // when the activity rebinds to the service, remove the notification and stop the foreground service
         // on devices running Android 8.0 (Oreo) or above
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -157,9 +297,9 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
 
     /**
      * Creates the notification
-     *  @param messageResId
-     *            message resource id. The message must have one String parameter,<br />
-     *            f.e. <code>&lt;string name="name"&gt;%s is connected&lt;/string&gt;</code>
+     *
+     * @param messageResId message resource id. The message must have one String parameter,<br />
+     *                     f.e. <code>&lt;string name="name"&gt;%s is connected&lt;/string&gt;</code>
      * @param defaults
      */
     @SuppressWarnings("SameParameterValue")
@@ -172,10 +312,10 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
         final PendingIntent disconnectAction = PendingIntent.getBroadcast(this, DISCONNECT_REQ, disconnect, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // both activities above have launchMode="singleTask" in the AndroidManifest.xml file, so if the task is already running, it will be resumed
-        final PendingIntent pendingIntent = PendingIntent.getActivities(this, OPEN_ACTIVITY_REQ, new Intent[] { parentIntent, targetIntent }, PendingIntent.FLAG_UPDATE_CURRENT);
+        final PendingIntent pendingIntent = PendingIntent.getActivities(this, OPEN_ACTIVITY_REQ, new Intent[]{parentIntent, targetIntent}, PendingIntent.FLAG_UPDATE_CURRENT);
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(this, ToolboxApplication.CONNECTED_DEVICE_CHANNEL);
         builder.setContentIntent(pendingIntent);
-        builder.setContentTitle(getString(R.string.app_name)).setContentText(getString(messageResId, getDeviceName()));
+        builder.setContentTitle(getString(R.string.app_name)).setContentText(getDeviceName() + " is connected");
         builder.setSmallIcon(R.drawable.ic_stat_notify_hts);
         builder.setShowWhen(defaults != 0).setDefaults(defaults).setAutoCancel(true).setOngoing(true);
         builder.addAction(new NotificationCompat.Action(R.drawable.ic_action_bluetooth, getString(R.string.hts_notification_action_disconnect), disconnectAction));

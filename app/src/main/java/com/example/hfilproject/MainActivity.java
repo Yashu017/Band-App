@@ -73,12 +73,11 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
 
-
         scan = findViewById(R.id.btnScan);
         scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intenti = new Intent(MainActivity.this, BLE_Activity.class);
+                Intent intenti = new Intent(MainActivity.this, ScanActivity.class);
                 startActivity(intenti);
             }
         });
@@ -100,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
         viewPager.setPadding(130, 0, 130, 0);
 
-        Integer[] colorTemp = {getResources().getColor(R.color.color1),
+        Integer[] colorTemp = {getResources().getColor(R.color.color4),
                 getResources().getColor(R.color.color2),
                 getResources().getColor(R.color.color3),
                 getResources().getColor(R.color.color4)};
@@ -166,8 +165,8 @@ public class MainActivity extends AppCompatActivity {
                 editor.putBoolean("loginStatus", true);
                 editor.putString("phoneNumber", user.getPhoneNumber());
                 editor.putString("firebaseId", user.getUid());
-               // editor.putString("time","0");
-                editor.putBoolean("firstTime",true);
+                // editor.putString("time","0");
+                editor.putBoolean("firstTime", true);
                 editor.commit();
                 Log.d("phoneNumber", user.getPhoneNumber());
                 Log.d("UserId", user.getUid());
@@ -204,53 +203,50 @@ public class MainActivity extends AppCompatActivity {
         for_login login = retrofit.create(for_login.class);
         Map<String, Object> params = new HashMap<>();
         params.put("phoneNumber", phoneNumber);
-        Call<User> call=login.ReInstall(params);
+        Call<User> call = login.ReInstall(params);
         call.enqueue(new Callback<User>() {
             @Override
 
             public void onResponse(Call<User> call, Response<User> response) {
-                String name,address,bluetoothId,quarantineType,age,token,error1;
-                if (response.isSuccessful()&& response.code()==200)
-                {
+                String name, address, bluetoothId, quarantineType, age, token, error1;
+                if (response.isSuccessful() && response.code() == 200) {
 
 
-                        if (response.body().getErrorCode()!=null) {
-                            Intent intent = new Intent(MainActivity.this, LogIn.class);
-                            intent.putExtra("editProfile", false);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            name = response.body().getName();
-                            age = response.body().getAge();
-                            address = response.body().getAddress();
-                            quarantineType = response.body().getQuarantineType();
-                            bluetoothId = response.body().getBluetoothId();
-                            token = response.body().get_id();
-                            Log.e("tok",token);
-                            editor.putString("name", name);
-                            editor.putString("age", age);
-                            editor.putString("address", address);
-                            if(sharedPref.getString("address","").equals("N/A"))
-                            {
-                                editor.putString("time","1");
-                                editor.commit();
-                            }
-                            else {
-                                editor.putString("time","0");
-                                editor.commit();
-                            }
-                            editor.putString("bluetoothId", bluetoothId);
-                            editor.putString("qt", quarantineType);
-                            editor.putString("token", token+"");
-                            editor.putBoolean("profileStatus", true);
+                    if (response.body().getErrorCode() != null) {
+                        Intent intent = new Intent(MainActivity.this, LogIn.class);
+                        intent.putExtra("editProfile", false);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        name = response.body().getName();
+                        age = response.body().getAge();
+                        address = response.body().getAddress();
+                        quarantineType = response.body().getQuarantineType();
+                        bluetoothId = response.body().getBluetoothId();
+                        token = response.body().get_id();
+                        Log.e("tok", token);
+                        editor.putString("name", name);
+                        editor.putString("age", age);
+                        editor.putString("address", address);
+                        if (sharedPref.getString("address", "").equals("N/A")) {
+                            editor.putString("time", "1");
                             editor.commit();
-                            Intent intent = new Intent(MainActivity.this, BottomNavActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                            finish();
+                        } else {
+                            editor.putString("time", "0");
+                            editor.commit();
                         }
+                        editor.putString("bluetoothId", bluetoothId);
+                        editor.putString("qt", quarantineType);
+                        editor.putString("token", token + "");
+                        editor.putBoolean("profileStatus", true);
+                        editor.commit();
+                       Intent intent = new Intent(MainActivity.this, BottomNavActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                      startActivity(intent);
+                        finish();
                     }
+                }
 
             }
 
