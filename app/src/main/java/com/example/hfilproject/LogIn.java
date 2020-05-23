@@ -15,6 +15,7 @@ import android.os.Looper;
 import android.os.ResultReceiver;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -54,7 +55,9 @@ public class LogIn extends AppCompatActivity {
     private SharedPreferences sharedPrefs;
     public static Retrofit retrofit;
     private SharedPreferences.Editor editor;
-    private EditText name, age, phoneNumber, address, time,bluetoothId ;
+    private EditText name, age, phoneNumber, address, time;
+
+   private EditText bluetoothId;
     private Button submitProfile;
     private ProgressBar progressBar;
     private RadioButton hq, iw;
@@ -71,8 +74,8 @@ public class LogIn extends AppCompatActivity {
     Geocoder geocoder;
 
 
-    String fulladdress,quarnType;
-    String status="1";
+    String fulladdress, quarnType;
+    String status = "1";
 
 
     Boolean ok;
@@ -156,16 +159,13 @@ public class LogIn extends AppCompatActivity {
         });
         if (temp == 1) {
             editor.putString("time", (time.getText().toString()));
-            Log.e("time",time.getText().toString());
+            Log.e("time", time.getText().toString());
             editor.commit();
-        }
-        else
-        {
+        } else {
             editor.putString("time", "0");
-            Log.e("time",time.getText().toString());
+            Log.e("time", time.getText().toString());
             editor.commit();
         }
-
 
 
         submitProfile.setOnClickListener(new View.OnClickListener() {

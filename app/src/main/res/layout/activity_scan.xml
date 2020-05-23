@@ -9,19 +9,29 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/device_name"
-        android:layout_below="@id/toolbar_actionbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_below="@id/toolbar_actionbar"
         android:layout_centerHorizontal="true"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="8dp"
         android:ellipsize="end"
         android:freezesText="true"
         android:maxLines="1"
-        android:text="Device Not Connected"
+        android:text="Device Name:--"
         android:textAllCaps="true"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-       />
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/bluetoothID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/device_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:text="Bluetooth Id: --"
+        android:textColor="#000"
+        android:textSize="18sp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/action_connect"

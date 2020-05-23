@@ -243,7 +243,7 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
                         }
                         sendToken = response.body().getToken();
                         Toast.makeText(HTService.this, "Temp sent to server.", Toast.LENGTH_SHORT).show();
-                        Log.e("Result", " Temp Success");
+                        Log.e("Result", " Temp Sent to server.");
                     }
                 }
 
