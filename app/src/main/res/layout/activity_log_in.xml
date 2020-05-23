@@ -74,7 +74,8 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
                         android:layout_marginTop="6dp"
                         android:orientation="horizontal">
 
@@ -95,7 +96,8 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
                         android:layout_marginTop="6dp"
                         android:orientation="horizontal">
 
@@ -117,7 +119,8 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.5"
                         android:layout_marginTop="8dp"
                         android:textSize="18sp"
                         android:layout_marginStart="10dp"
@@ -185,7 +188,8 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
                         android:layout_marginTop="6dp"
                         android:orientation="horizontal">
 
@@ -208,7 +212,8 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
                         android:layout_marginTop="6dp"
                         android:orientation="horizontal">
 
@@ -231,7 +236,8 @@
                     <RelativeLayout
                         android:id="@+id/timeRL"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
                         android:layout_marginTop="6dp"
                         android:orientation="horizontal"
                         android:visibility="gone">
@@ -253,7 +259,8 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
                         android:layout_marginTop="6dp"
                         android:orientation="horizontal"
                         android:visibility="gone">

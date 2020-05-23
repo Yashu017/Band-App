@@ -151,7 +151,7 @@ public class LogIn extends AppCompatActivity {
                 Toast.makeText(LogIn.this, quarnType, Toast.LENGTH_SHORT).show();
                 timeRl.setVisibility(View.GONE);
                 time.setText("a");
-                address.setText(address1 + "\n" + area + "\n" + city + "\n" + country + "\n" + postalCode);
+                address.setText(address1 + ".");
             }
         });
         if (temp == 1) {
@@ -254,25 +254,7 @@ public class LogIn extends AppCompatActivity {
                     }
                 }, Looper.getMainLooper());
 
-/*
-        Task<Location> locationTask = fusedLocationProviderClient.getLastLocation();
-        locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null) {
-                    latitude = location.getLatitude();
-                    longitude = location.getLongitude();
-                }
-                locInWords();
-            }
-        });
-        locationTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e(TAG, "onFailure: " + e.getLocalizedMessage());
-            }
-        });
- */
+
     }
 
     private void locInWords() {
@@ -285,7 +267,7 @@ public class LogIn extends AppCompatActivity {
             city = addressList.get(0).getAdminArea();
             country = addressList.get(0).getCountryName();
             postalCode = addressList.get(0).getPostalCode();
-            fulladdress = address1 + ",\n " + city + ",\n "+country+",\n";
+            fulladdress = address1 + ".";
             address.setText(fulladdress);
             editor.putString("Updated Location", fulladdress);
             editor.commit();

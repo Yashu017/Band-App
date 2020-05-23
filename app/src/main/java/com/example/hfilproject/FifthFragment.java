@@ -8,16 +8,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,8 @@ public class FifthFragment extends Fragment {
     TextView tv2;
     GetNotification getNotification;
     NotificationItem item;
+    Button back;
+
     private ArrayList<NotificationItem> arrayList = null;
 
     public FifthFragment() {
@@ -62,12 +65,25 @@ public class FifthFragment extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_fifth, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.notificationRecycler);
+        back=rootView.findViewById(R.id.backNoti);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                FirstFragment name=new FirstFragment();
+                fragmentTransaction.replace(R.id.fragment_container, name);
+                fragmentTransaction.commit();
+            }
+        });
+
 
         getNotification();
 
         tv2 = rootView.findViewById(R.id.textView2);
         return rootView;
     }
+
 
     private void getNotification() {
         sharedPrefs = getActivity().getSharedPreferences("app", Context.MODE_PRIVATE);
@@ -93,16 +109,17 @@ public class FifthFragment extends Fragment {
                     Log.e("Response", "" + response.message());
                     Log.e("Content", "" + response.body().getNotification());
                     GetNotification notification = response.body();
-                    arrayList = notification.getNotification();
-                    int length = arrayList.size();
-                    Log.e("Length", "" + length);
 
+                    arrayList = notification.getNotification();
 
                     // notificationList.add(new Notification("Warning", "11:00 AM", "" + notif));
                     //   notificationList.add(new Notification("Warning", "1:00 PM", "You have breached geo-fencing.Please stay in your quarantine place."));
                     // notificationList.add(new Notification("Warning", "3:00 PM", "This device is not connected with C Watch. Please connect again."));
 
                     if (arrayList != null) {
+
+                        int length = arrayList.size();
+                        Log.e("Length", "" + length);
                         for (NotificationItem item : arrayList) {
 
                             String msg = item.getNotification();
@@ -111,6 +128,14 @@ public class FifthFragment extends Fragment {
                         }
 
 
+                        NotificationAdapter adapter = new NotificationAdapter(getContext(), notificationList);
+                        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+
+                        recyclerView.setLayoutManager(layoutManager);
+                        recyclerView.setAdapter(adapter);
+                    }
+                    else {
+                        notificationList.add(new Notification("Info", "00:00", "" + "No new Notification"));
                         NotificationAdapter adapter = new NotificationAdapter(getContext(), notificationList);
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
 
@@ -129,6 +154,8 @@ public class FifthFragment extends Fragment {
                     */
 
                 }
+
+
             }
 
             @Override
@@ -145,6 +172,7 @@ public class FifthFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         notificationList = new ArrayList<>();
+
 
         ////  notificationList.add(new Notification("Warning", "11:00 AM", "" + notif));
         // notificationList.add(new Notification("Warning", "1:00 PM", "You have breached geo-fencing.Please stay in your quarantine place."));

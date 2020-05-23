@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HFIL Project</string>
+    <string name="app_name">C-Watch</string>
 
     <string name="CLIENT_CHARACTERISTIC_CONFIG">00002902-0000-1000-8000-00805f9b34fb"</string>
 

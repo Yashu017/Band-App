@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -570,4 +571,14 @@ public class MapActivity extends AppCompatActivity
 //        if (geoFenceLimits != null)
 //            geoFenceLimits.remove();
 //    }
+
+    @Override
+    public void onBackPressed() {
+        if (sharedPrefs.getBoolean("firstTime",false)==false) {
+            super.onBackPressed();
+        } else {
+            Toast.makeText(this,"Please select Create Geofence on Toolbar above",Toast.LENGTH_LONG).show();
+        }
+    }
+
 }

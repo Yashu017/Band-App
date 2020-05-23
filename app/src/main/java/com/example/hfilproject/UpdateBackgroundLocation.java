@@ -114,7 +114,7 @@ public class UpdateBackgroundLocation extends Service {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, getString(R.string.app_name),
-                    NotificationManager.IMPORTANCE_DEFAULT);
+                    NotificationManager.IMPORTANCE_MIN);
             mNotificationManager.createNotificationChannel(mChannel);
         }
 
@@ -279,10 +279,9 @@ public class UpdateBackgroundLocation extends Service {
         PendingIntent servicePendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent activityPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, SecondFragment.class), 0);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .addAction(R.drawable.ic_launch_black_24dp, "Launch", activityPendingIntent)
-                .addAction(R.drawable.ic_launch_black_24dp, "Remove", servicePendingIntent)
-                .setContentText(text)
-                .setContentTitle(Common.getLocationTitle(this))
+               // .setContentText(text)
+                .setContentText("Your own KAWACH in your protection.")
+                //.setContentTitle(Common.getLocationTitle(this))
                 .setOngoing(true)
                 .setPriority(Notification.PRIORITY_MIN)
                 .setSmallIcon(R.mipmap.ic_launcher)

@@ -2,6 +2,7 @@ package com.example.hfilproject;
 
 import android.animation.ArgbEvaluator;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,17 +11,27 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.hfilproject.Adapter.AdapterBegin;
-import com.example.hfilproject.BLE.BLE_Activity;
 import com.example.hfilproject.Model.ModelBegin;
 import com.example.hfilproject.Model.User;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -49,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseUser user;
     private Button loginButton;
 
+    private GoogleApiClient googleApiClient;
+
     //start screen
     private ViewPager viewPager;
     AdapterBegin adapter;
@@ -72,6 +85,39 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         getSupportActionBar().hide();
 
+      LocationRequest request=new LocationRequest().setFastestInterval(1500).setInterval(30000).setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+      LocationSettingsRequest.Builder builder;
+      builder=new  LocationSettingsRequest.Builder().addLocationRequest(request);
+      Task<LocationSettingsResponse> result = LocationServices.getSettingsClient(this).checkLocationSettings(builder.build());
+      result.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
+          @Override
+          public void onComplete(@NonNull Task<LocationSettingsResponse> task) {
+
+              try {
+                  task.getResult(ApiException.class);
+              } catch (ApiException e) {
+                  switch (e.getStatusCode())
+                  {
+                      case LocationSettingsStatusCodes
+                              .RESOLUTION_REQUIRED:
+                          ResolvableApiException Rexception=(ResolvableApiException) e;
+                          try {
+                              Rexception.startResolutionForResult(MainActivity.this,8989);
+                          } catch (IntentSender.SendIntentException ex) {
+                              ex.printStackTrace();
+                          }catch (ClassCastException ex)
+                          {
+
+                          }
+                          break;
+                      case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                              break;
+
+                  }
+              }
+
+          }
+      });
 
         scan = findViewById(R.id.btnScan);
         scan.setOnClickListener(new View.OnClickListener() {
@@ -230,10 +276,10 @@ public class MainActivity extends AppCompatActivity {
                         editor.putString("age", age);
                         editor.putString("address", address);
                         if (sharedPref.getString("address", "").equals("N/A")) {
-                            editor.putString("time", "1");
+                            editor.putString("time", "0");
                             editor.commit();
                         } else {
-                            editor.putString("time", "0");
+                            editor.putString("time", "1");
                             editor.commit();
                         }
                         editor.putString("bluetoothId", bluetoothId);

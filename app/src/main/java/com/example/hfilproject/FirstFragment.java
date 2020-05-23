@@ -160,6 +160,8 @@ public class FirstFragment extends Fragment {
         });
 
 
+
+
         if (!sharedPrefs.getString("time", "").equals("0")) {
             new java.util.Timer().schedule(
                     new java.util.TimerTask() {
@@ -169,7 +171,7 @@ public class FirstFragment extends Fragment {
                             getGoogleApiClient();
 
                         }
-                    }, 1000 * 60 * 60 * timeToFetchAddress);
+                    }, 1000*60*60*timeToFetchAddress  );
         } else {
             addresesHead.setVisibility(View.GONE);
             originalAddress.setText(sharedPrefs.getString("address", ""));
@@ -248,9 +250,11 @@ public class FirstFragment extends Fragment {
                                             String city = addressList.get(0).getAdminArea();
                                             // country = addressList.get(0).getCountryName();
                                             // postalCode = addressList.get(0).getPostalCode();
-                                            String fulladdress = address1 + ",\n " + area + ",\n ";
+                                            String fulladdress = address1 + ". ";
                                             Log.e("location", "" + fulladdress);
                                             originalAddress.setText(fulladdress);
+                                            addresesHead.setVisibility(View.GONE);
+
                                         } catch (Exception e) {
                                             e.printStackTrace();
 

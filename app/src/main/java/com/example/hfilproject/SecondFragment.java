@@ -106,6 +106,7 @@ public class SecondFragment extends Fragment implements SharedPreferences.OnShar
 
         View view = inflater.inflate(R.layout.fragment_second, container, false);
         sharedPrefs = getContext().getSharedPreferences("app", Context.MODE_PRIVATE);
+        editor=sharedPrefs.edit();
         token = sharedPrefs.getString("token", "");
 
 
@@ -269,12 +270,11 @@ public class SecondFragment extends Fragment implements SharedPreferences.OnShar
                 String country = addressList.get(0).getCountryName();
                 String postalCode = addressList.get(0).getPostalCode();
                 fullAddress = address1 + ", " + area + ", " + city + ", " + country + ", " + postalCode;
-                editor.putString("updated Location", fullAddress);
-                editor.commit();
 
                 address.setText(fullAddress);
 
-
+                editor.putString("updated Location", fullAddress);
+                editor.commit();
                 locUpdates.setVisibility(View.GONE);
             } catch (Exception e) {
                 e.printStackTrace();
