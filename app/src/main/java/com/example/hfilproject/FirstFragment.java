@@ -285,7 +285,8 @@ public class FirstFragment extends Fragment {
 
 
     private void GetTemperature() {
-        token2 = sharedPrefs.getString("token", "");
+        token= sharedPrefs.getString("token", "");
+
         OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -296,7 +297,7 @@ public class FirstFragment extends Fragment {
 
         retrofit = builder.build();
         for_login login = retrofit.create(for_login.class);
-        Call<GetTemp> call = login.getTemp(token2);
+        Call<GetTemp> call = login.getTemp(token);
         call.enqueue(new Callback<GetTemp>() {
             @Override
             public void onResponse(Call<GetTemp> call, Response<GetTemp> response) {
@@ -304,8 +305,9 @@ public class FirstFragment extends Fragment {
                     GetTemp getTemp = response.body();
                     tempReceived = getTemp.getTemperature();
                     Log.e("Success", "" + response.code());
-                    setTemp.setText("" + tempReceived);
+
                     Toast.makeText(getContext(), "Temperature received from server.", Toast.LENGTH_SHORT).show();
+                    setTemp.setText(String.format("%.2f", tempReceived));
                 }
             }
 

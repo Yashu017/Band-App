@@ -42,7 +42,7 @@ public interface for_login {
 
 
     @GET("/api/getTemperatures")
-    Call<GetTemp> getTemp(@Header("access-token") String token2);
+    Call<GetTemp> getTemp(@Header("access-token") String token);
 
     @GET("/api/getLocations")
     Call<GetLocation> getLoc(@Header("access-token") String token3);
