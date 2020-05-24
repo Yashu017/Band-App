@@ -44,7 +44,9 @@
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
         <activity
             android:name=".LogIn"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
+
+        </activity>
         <activity
             android:name=".BleProfileServiceReadyActivity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />

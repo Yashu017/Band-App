@@ -106,6 +106,7 @@ public class TempActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
 
             case REQUEST_SELECT_DEVICE:

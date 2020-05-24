@@ -20,6 +20,7 @@ public class BottomNavActivity extends AppCompatActivity implements BottomNaviga
     SharedPreferences.Editor editor;
 
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

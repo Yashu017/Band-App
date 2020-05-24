@@ -10,6 +10,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -55,9 +57,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * A simple {@link Fragment} subclass.
  */
 public class FirstFragment extends Fragment {
-    TextView addresesHead;
+    Button addresesHead;
     Button button;
     View rootView;
+    String out;
     SharedPreferences sharedPrefs;
     SharedPreferences.Editor editor;
     TextView usernanme, latestUpd, originalAddress;
@@ -88,11 +91,19 @@ public class FirstFragment extends Fragment {
 
     String token3;
     String locReceived;
+    private CountDownTimer mCountDownTimer;
+    private boolean mTimerRunning;
+    private long mTimeLeftInMillis;
+    private long mEndTime;
+
 
 
     public FirstFragment() {
         // Required empty public constructor
+
     }
+
+
 
 
     @Override
@@ -100,6 +111,15 @@ public class FirstFragment extends Fragment {
                              Bundle savedInstanceState) {
         sharedPrefs = getActivity().getSharedPreferences("app", Context.MODE_PRIVATE);
         editor = sharedPrefs.edit();
+        rootView = inflater.inflate(R.layout.fragment_first, container, false);
+        button = rootView.findViewById(R.id.notificationBell);
+        latestUpd = rootView.findViewById(R.id.latestUpd);
+        originalAddress = rootView.findViewById(R.id.originalAddress);
+        addresesHead = rootView.findViewById(R.id.addressHead);
+        usernanme = rootView.findViewById(R.id.userNameFF);
+
+        setTemp = rootView.findViewById(R.id.tempOriginal);
+        tp = rootView.findViewById(R.id.tp);
 
         token = sharedPrefs.getString("token", "");
         temp = sharedPrefs.getInt("temperature", 0);
@@ -114,20 +134,65 @@ public class FirstFragment extends Fragment {
         date = sharedPrefs.getString("dateSelected", "");
 
 
+        SimpleDateFormat dateFormat= new SimpleDateFormat("hh");
+        SimpleDateFormat dt=new SimpleDateFormat("hh:mm:ss");
+        try {
+            Date date1 = dateFormat.parse(sharedPrefs.getString("time", " "));
+             out= dt.format(date1);
+            Log.e("Time", ""+out);
+
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            Log.e("Error", ""+e);
+        }
+
+        String[] units = out.split(":"); //will break the string up into an array
+        int minutes = Integer.parseInt(units[1]); //first element
+        int seconds = Integer.parseInt(units[2]); //second element
+        int hours=Integer.parseInt(units[0]);
+        int duration = (3600*hours+60 * minutes + seconds)*1000; //add up our values
+
+
+        mTimeLeftInMillis=duration;
+        Log.e("Time1", ""+duration);
+        if(sharedPrefs.getBoolean("firstTime",false) == true){
+            editor.putString("hqAddress","N/A");
+            editor.putBoolean("firstTime",false);
+            editor.commit();
+        }
+
+        if(!sharedPrefs.getString("hqAddress","").equals("N/A"))
+        {
+            addresesHead.setVisibility(View.GONE);
+            originalAddress.setText(sharedPrefs.getString("hqAddress",""));
+
+        }
+
+        if (!sharedPrefs.getString("time", "").equals("0")) {
+            addresesHead.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startTimer();
+                }
+            });
+        } else {
+            addresesHead.setVisibility(View.GONE);
+            originalAddress.setText(sharedPrefs.getString("address", ""));
+
+        }
+
+
+
+
+
+
+
 //         t=Integer.parseInt(timeToFetchAddress);
 //         Log.e("t",t+"");
         //  Toast.makeText(getContext(), ""+temp, Toast.LENGTH_SHORT).show();
 
         // Inflate the layout for this fragment
-        rootView = inflater.inflate(R.layout.fragment_first, container, false);
-        button = rootView.findViewById(R.id.notificationBell);
-        latestUpd = rootView.findViewById(R.id.latestUpd);
-        originalAddress = rootView.findViewById(R.id.originalAddress);
-        addresesHead = rootView.findViewById(R.id.addressHead);
-        usernanme = rootView.findViewById(R.id.userNameFF);
 
-        setTemp = rootView.findViewById(R.id.tempOriginal);
-        tp = rootView.findViewById(R.id.tp);
         /*
         tp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,22 +227,9 @@ public class FirstFragment extends Fragment {
 
 
 
-        if (!sharedPrefs.getString("time", "").equals("0")) {
-            new java.util.Timer().schedule(
-                    new java.util.TimerTask() {
-                        @Override
-                        public void run() {
 
-                            getGoogleApiClient();
 
-                        }
-                    }, 1000*60*60*timeToFetchAddress  );
-        } else {
-            addresesHead.setVisibility(View.GONE);
-            originalAddress.setText(sharedPrefs.getString("address", ""));
-
-        }
-        // SendNotification();
+               // SendNotification();
 /*
         final Handler handler = new Handler();
         TimerTask timerTask = new TimerTask() {
@@ -215,12 +267,41 @@ public class FirstFragment extends Fragment {
 
     }
 
+    private void startTimer() {
+        Toast.makeText(getContext(),"Timer has started ",Toast.LENGTH_LONG).show();
+
+        mEndTime = System.currentTimeMillis() + mTimeLeftInMillis;
+        mCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                mTimeLeftInMillis = millisUntilFinished;
+                int minutes = (int) (mTimeLeftInMillis / 1000) / 60;
+                int seconds = (int) (mTimeLeftInMillis / 1000) % 60;
+                String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
+                addresesHead.setVisibility(View.GONE);
+
+
+            }
+
+            @Override
+            public void onFinish() {
+                mTimerRunning = false;
+                addresesHead.setVisibility(View.GONE);
+                getGoogleApiClient();
+            }
+        }.start();
+        mTimerRunning = true;
+        addresesHead.setClickable(false);
+
+
+    }
+
     GoogleApiClient mGoogleApiClient;
 
     private void getGoogleApiClient() {
 
         if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+            mGoogleApiClient = new GoogleApiClient.Builder(getContext())
                     .addApi(LocationServices.API)
                     .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
                         @Override
@@ -229,6 +310,7 @@ public class FirstFragment extends Fragment {
 
                             if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                                 Log.e(getClass().getName(), "Location permission not granted");
+                                Toast.makeText(getContext(),"Location permission was not granted ",Toast.LENGTH_LONG).show();
                                 return;
                             }
 
@@ -254,6 +336,8 @@ public class FirstFragment extends Fragment {
                                             Log.e("location", "" + fulladdress);
                                             originalAddress.setText(fulladdress);
                                             addresesHead.setVisibility(View.GONE);
+                                            editor.putString("hqAddress",fulladdress);
+                                            editor.commit();
 
                                         } catch (Exception e) {
                                             e.printStackTrace();
@@ -486,6 +570,37 @@ public class FirstFragment extends Fragment {
             }
         });
 
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        mTimerRunning = sharedPrefs.getBoolean("timerRunning", false);
+        if (mTimerRunning) {
+            mEndTime = sharedPrefs.getLong("endTime", 0);
+            mTimeLeftInMillis = mEndTime - System.currentTimeMillis();
+            if (mTimeLeftInMillis < 0) {
+                mTimeLeftInMillis = 0;
+                mTimerRunning = false;
+                getGoogleApiClient();
+                addresesHead.setVisibility(View.GONE);
+            }
+            else
+            {
+                startTimer();
+            }
+        }
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        editor.putLong("millisLeft", mTimeLeftInMillis);
+        editor.putBoolean("timerRunning", mTimerRunning);
+        editor.putLong("endTime", mEndTime);
+        editor.apply();
+        if (mCountDownTimer != null) {
+            mCountDownTimer.cancel();
+        }
     }
 
 

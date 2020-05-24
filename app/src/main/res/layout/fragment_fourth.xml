@@ -40,7 +40,7 @@
                         android:layout_centerHorizontal="true"
                         android:padding="5dp"
                         android:text="About Us"
-                        android:textColor="#605196"
+                        android:textColor="#003663"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -77,7 +77,7 @@ This  cost effective product comes up with a solution to stop the spread of Coro
                 android:layout_gravity="center"
                 android:padding="5dp"
                 android:text="Help"
-                android:textColor="#605196"
+                android:textColor="#003663"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -220,7 +220,7 @@ android:background="#f5f5f5"
                 android:layout_gravity="center"
                 android:padding="5dp"
                 android:text="Information"
-                android:textColor="#605196"
+                android:textColor="#003663"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 

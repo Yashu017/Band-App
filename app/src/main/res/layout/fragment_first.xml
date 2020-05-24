@@ -146,15 +146,16 @@
                     android:src="@drawable/posblue" />
 
 
-                <TextView
+                <Button
                     android:id="@+id/addressHead"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/adr"
                     android:layout_marginTop="2dp"
                     android:gravity="center"
+                    android:layout_centerHorizontal="true"
                     android:text="Current Location:"
-                    android:textSize="20sp" />
+                    android:textSize="10sp" />
 
                 <TextView
                     android:id="@+id/originalAddress"

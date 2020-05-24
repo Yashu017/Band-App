@@ -241,7 +241,6 @@
                         android:layout_marginTop="6dp"
                         android:orientation="horizontal"
                         android:visibility="gone">
-
                         <EditText
                             android:id="@+id/startTime"
                             android:layout_width="match_parent"
