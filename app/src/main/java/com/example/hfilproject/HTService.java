@@ -100,13 +100,6 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
         final IntentFilter filter = new IntentFilter();
         filter.addAction(ACTION_DISCONNECT);
         registerReceiver(disconnectActionBroadcastReceiver, filter);
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                PostTemperature();
-            }
-        }, 0, 1 * 60000);
 
 
     }
@@ -196,6 +189,11 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
 
         tempData = TemperatureMeasurementCallback.toFahrenheit(temperature, unit);
 
+        // Toast.makeText(this, "temperature value"+ tempData, Toast.LENGTH_SHORT).show();
+
+
+        SendTemp(tempData);
+
 
         final Intent broadcast = new Intent(BROADCAST_HTS_MEASUREMENT);
         broadcast.putExtra(EXTRA_DEVICE, getBluetoothDevice());
@@ -210,9 +208,12 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
         }
     }
 
-    private void PostTemperature() {
+    private void SendTemp(float tempData) {
+        sharedPrefs = getSharedPreferences("app", Context.MODE_PRIVATE);
+        editor = sharedPrefs.edit();
 
-
+        token1 = sharedPrefs.getString("token", "");
+        Log.d("TAG", "" + token1);
         OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -226,38 +227,36 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
 
         for_login login = retrofit.create(for_login.class);
         Map<String, Object> params = new HashMap<>();
-        if (temp != null) {
-            params.put("temperature", temp);
 
-            Call<UserTemp> tempCall = login.userTemp(token1, params);
-            tempCall.enqueue(new Callback<UserTemp>() {
-                @Override
-                public void onResponse(Call<UserTemp> call, Response<UserTemp> response) {
-                    String error;
-                    if (response.isSuccessful() && response.code() == 200) {
-                        if (response.body().getErrorCode() != null) {
-                            error = response.body().getErrorCode();
-                            if (error.equals("2")) {
-                                Toast.makeText(HTService.this, "User not found.", Toast.LENGTH_SHORT).show();
-                            }
+        params.put("temperature", tempData);
+
+        Call<UserTemp> tempCall = login.userTemp(token1, params);
+        tempCall.enqueue(new Callback<UserTemp>() {
+            @Override
+            public void onResponse(Call<UserTemp> call, Response<UserTemp> response) {
+                String error;
+                if (response.isSuccessful() && response.code() == 200) {
+                    if (response.body().getErrorCode() != null) {
+                        error = response.body().getErrorCode();
+                        if (error.equals("2")) {
+                            Toast.makeText(HTService.this, "User not found.", Toast.LENGTH_SHORT).show();
                         }
-                        sendToken = response.body().getToken();
-                        Toast.makeText(HTService.this, "Temp sent to server.", Toast.LENGTH_SHORT).show();
-                        Log.e("Result", " Temp Sent to server.");
                     }
+                    sendToken = response.body().getToken();
+                    Toast.makeText(HTService.this, "Temp sent to server.", Toast.LENGTH_SHORT).show();
+                    Log.e("Result", " Temp Sent to server.");
                 }
+            }
 
-                @Override
-                public void onFailure(Call<UserTemp> call, Throwable t) {
-                    Toast.makeText(HTService.this, "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
-                    Log.e("error", "" + t.getMessage());
-                }
-            });
-
-        }
-
+            @Override
+            public void onFailure(Call<UserTemp> call, Throwable t) {
+                Toast.makeText(HTService.this, "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("error", "" + t.getMessage());
+            }
+        });
 
     }
+
 
     @Override
     public void onBatteryLevelChanged(@NonNull final BluetoothDevice device, final int batteryLevel) {
