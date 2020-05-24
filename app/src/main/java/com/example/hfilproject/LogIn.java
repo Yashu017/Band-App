@@ -15,7 +15,6 @@ import android.os.Looper;
 import android.os.ResultReceiver;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -148,30 +147,30 @@ public class LogIn extends AppCompatActivity {
                 editor.putBoolean("Isolation Ward ", true);
                 editor.commit();
                 hq.setChecked(false);
-
-
                 quarnType = "Government Place";
                 Toast.makeText(LogIn.this, quarnType, Toast.LENGTH_SHORT).show();
                 timeRl.setVisibility(View.GONE);
-                time.setText("a");
                 address.setText(address1 + ".");
+                temp=0;
+
             }
         });
-        if (temp == 1) {
-            editor.putString("time", (time.getText().toString()));
-            Log.e("time", time.getText().toString());
-            editor.commit();
-        } else {
-            editor.putString("time", "0");
-            Log.e("time", time.getText().toString());
-            editor.commit();
-        }
+
 
 
         submitProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 progressBar.setVisibility(View.VISIBLE);
+                if (temp == 1) {
+                    editor.putString("time", (time.getText().toString()));
+                    Log.e("time", time.getText().toString());
+                    editor.commit();
+                } else {
+                    editor.putString("time", "0");
+                    Log.e("time", time.getText().toString());
+                    editor.commit();
+                }
 
 
                 if (!name.getText().toString().isEmpty() && !address.getText().toString().isEmpty() && !phoneNumber.getText().toString().isEmpty()

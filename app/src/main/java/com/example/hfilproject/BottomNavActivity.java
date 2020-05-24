@@ -52,6 +52,7 @@ public class BottomNavActivity extends AppCompatActivity implements BottomNaviga
         else if (sharedPref.getBoolean("profileStatus", false) == false) {
             Intent i = new Intent(this, LogIn.class);
             editor.putBoolean("firstTime",true);
+            editor.putBoolean("firstTimeMap",true);
             editor.commit();
             startActivity(i);
             finish();

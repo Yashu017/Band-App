@@ -93,7 +93,7 @@ public class MapActivity extends AppCompatActivity
         sharedPrefs = getSharedPreferences("app", MODE_PRIVATE);
         editor = sharedPrefs.edit();
 
-        if(sharedPrefs.getBoolean("firstTime",false)==true) {
+        if(sharedPrefs.getBoolean("firstTimeMap",false)==true) {
 
             new AlertDialog.Builder(MapActivity.this)
                     .setTitle("How to use")
@@ -152,10 +152,10 @@ public class MapActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.geofence: {
-                if(sharedPrefs.getBoolean("firstTime",false) == true){
+                if(sharedPrefs.getBoolean("firstTimeMap",false) == true){
                     getCurrentLocation();
                     item.setEnabled(false);
-                    editor.putBoolean("firstTime",false);
+                    editor.putBoolean("firstTimeMap",false);
                     editor.commit();
                 }
                 else
@@ -574,7 +574,7 @@ public class MapActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        if (sharedPrefs.getBoolean("firstTime",false)==false) {
+        if (sharedPrefs.getBoolean("firstTimeMap",false)==false) {
             super.onBackPressed();
         } else {
             Toast.makeText(this,"Please select Create Geofence on Toolbar above",Toast.LENGTH_LONG).show();

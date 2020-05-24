@@ -251,7 +251,6 @@
                             android:textColorHint="#B0302F2F"
                             android:background="@drawable/dat"
                             android:hint="Estimated Time to reach home ,"
-                            android:clickable="true"
                             android:inputType="numberSigned"
                             android:textSize="18sp"/>
                     </RelativeLayout>

@@ -213,6 +213,7 @@ public class MainActivity extends AppCompatActivity {
                 editor.putString("firebaseId", user.getUid());
                 // editor.putString("time","0");
                 editor.putBoolean("firstTime", true);
+                editor.putBoolean("firstTimeMap",true);
                 editor.commit();
                 Log.d("phoneNumber", user.getPhoneNumber());
                 Log.d("UserId", user.getUid());
