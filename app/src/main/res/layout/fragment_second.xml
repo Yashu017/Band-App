@@ -30,25 +30,35 @@
             android:layout_marginBottom="25dp"
             android:layout_centerHorizontal="true"
             android:background="#ffffff">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Geofence"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="-7dp"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:id="@+id/geofence"/>
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/openMAp"
+            <ImageView
+                android:id="@+id/openMAp1"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
                 android:clickable="true"
                 android:src="@drawable/mapt" />
-
-            <TextView
-                android:layout_width="wrap_content"
+            <Button
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:text="Geofence"
-                android:layout_below="@id/openMAp"
+                android:id="@+id/openMAp"
+                android:layout_below="@+id/openMAp1"
+                android:text="Open Geofence"
                 android:layout_centerHorizontal="true"
-                android:textSize="25sp"
-                android:textStyle="bold"
-                android:id="@+id/geofence"/>
+                android:layout_marginTop="-25dp"
+                android:background="@drawable/dat"
+                android:backgroundTint="#EFE9E9"/>
+
 
 
 
@@ -103,65 +113,10 @@
     android:text="LocationUpdates"
     android:layout_centerHorizontal="true"
     android:id="@+id/locUp"/>
+
         </RelativeLayout>
 
 
-
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_margin="25dp"
-            android:background="@drawable/latest_update"
-            android:padding="20dp"
-            android:layout_below="@+id/layoutAddress"
-
-            >
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/latestUpd"
-                android:background="@drawable/gg"
-                android:paddingStart="8dp"
-                android:paddingTop="2dp"
-                android:paddingEnd="8dp"
-                android:paddingBottom="2dp"
-                android:text="Important"
-                android:textColor="#000000"
-                android:textSize="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_info_black_24dp"
-                android:tint="#ffffff"
-                app:layout_constraintBottom_toBottomOf="@id/latestUpd"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/latestUpd"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:ellipsize="end"
-                android:text="Please click on the image above to open map, which will show
-your location and your geofence location. \n You can check your location here ,which is updated after regular
-intervals. \n
-Stay at Home,Stay Safe."
-                android:textSize="14sp"
-                app:layout_constraintTop_toBottomOf="@id/latestUpd"
-                android:textColor="#ffffff"/>
-
-
-
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </RelativeLayout>

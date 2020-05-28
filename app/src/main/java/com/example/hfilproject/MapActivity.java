@@ -352,7 +352,7 @@ public class MapActivity extends AppCompatActivity
             if (locationMarker != null)
                 locationMarker.remove();
             locationMarker = map.addMarker(markerOptions);
-            float zoom = 14f;
+            float zoom = 16f;
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, zoom);
             map.animateCamera(cameraUpdate);
 

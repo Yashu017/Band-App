@@ -167,6 +167,7 @@ public class LogIn extends AppCompatActivity {
                     Log.e("time", time.getText().toString());
                     editor.commit();
                 } else {
+                    time.setText("0");
                     editor.putString("time", "0");
                     Log.e("time", time.getText().toString());
                     editor.commit();

@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -113,7 +112,6 @@ public class FirstFragment extends Fragment {
         editor = sharedPrefs.edit();
         rootView = inflater.inflate(R.layout.fragment_first, container, false);
         button = rootView.findViewById(R.id.notificationBell);
-        latestUpd = rootView.findViewById(R.id.latestUpd);
         originalAddress = rootView.findViewById(R.id.originalAddress);
         addresesHead = rootView.findViewById(R.id.addressHead);
         usernanme = rootView.findViewById(R.id.userNameFF);
@@ -214,22 +212,8 @@ public class FirstFragment extends Fragment {
             }
         });
 
-        latestUpd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent viewIntent =
-                        new Intent("android.intent.action.VIEW",
-                                Uri.parse("https://www.mohfw.gov.in/"));
-                startActivity(viewIntent);
-            }
-        });
 
-
-
-
-
-
-               // SendNotification();
+        // SendNotification();
 /*
         final Handler handler = new Handler();
         TimerTask timerTask = new TimerTask() {

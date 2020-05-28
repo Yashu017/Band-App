@@ -85,39 +85,39 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         getSupportActionBar().hide();
 
-      LocationRequest request=new LocationRequest().setFastestInterval(1500).setInterval(30000).setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-      LocationSettingsRequest.Builder builder;
-      builder=new  LocationSettingsRequest.Builder().addLocationRequest(request);
-      Task<LocationSettingsResponse> result = LocationServices.getSettingsClient(this).checkLocationSettings(builder.build());
-      result.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
-          @Override
-          public void onComplete(@NonNull Task<LocationSettingsResponse> task) {
+        LocationRequest request=new LocationRequest().setFastestInterval(1500).setInterval(30000).setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        LocationSettingsRequest.Builder builder;
+        builder=new  LocationSettingsRequest.Builder().addLocationRequest(request);
+        Task<LocationSettingsResponse> result = LocationServices.getSettingsClient(this).checkLocationSettings(builder.build());
+        result.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
+            @Override
+            public void onComplete(@NonNull Task<LocationSettingsResponse> task) {
 
-              try {
-                  task.getResult(ApiException.class);
-              } catch (ApiException e) {
-                  switch (e.getStatusCode())
-                  {
-                      case LocationSettingsStatusCodes
-                              .RESOLUTION_REQUIRED:
-                          ResolvableApiException Rexception=(ResolvableApiException) e;
-                          try {
-                              Rexception.startResolutionForResult(MainActivity.this,8989);
-                          } catch (IntentSender.SendIntentException ex) {
-                              ex.printStackTrace();
-                          }catch (ClassCastException ex)
-                          {
+                try {
+                    task.getResult(ApiException.class);
+                } catch (ApiException e) {
+                    switch (e.getStatusCode())
+                    {
+                        case LocationSettingsStatusCodes
+                                .RESOLUTION_REQUIRED:
+                            ResolvableApiException Rexception=(ResolvableApiException) e;
+                            try {
+                                Rexception.startResolutionForResult(MainActivity.this,8989);
+                            } catch (IntentSender.SendIntentException ex) {
+                                ex.printStackTrace();
+                            }catch (ClassCastException ex)
+                            {
 
-                          }
-                          break;
-                      case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                              break;
+                            }
+                            break;
+                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                            break;
 
-                  }
-              }
+                    }
+                }
 
-          }
-      });
+            }
+        });
 
         scan = findViewById(R.id.btnScan);
         scan.setOnClickListener(new View.OnClickListener() {

@@ -127,8 +127,7 @@ public class GeofenceTransitionService extends IntentService {
     private Notification createNotification(String msg, PendingIntent notificationPendingIntent) {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
         notificationBuilder
-                .setSmallIcon(R.drawable.ic_action_location)
-                .setColor(Color.RED)
+                .setSmallIcon(R.mipmap.bluelogo)
                 .setContentTitle(msg)
                 .setContentText("Geofence Notification!")
                 .setContentIntent(notificationPendingIntent)

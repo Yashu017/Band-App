@@ -284,7 +284,7 @@ public class UpdateBackgroundLocation extends Service {
                 //.setContentTitle(Common.getLocationTitle(this))
                 .setOngoing(true)
                 .setPriority(Notification.PRIORITY_MIN)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.mipmap.bluelogo)
                 .setTicker(text)
                 .setWhen(System.currentTimeMillis());
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,

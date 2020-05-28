@@ -43,7 +43,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -59,7 +58,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class SecondFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 
-    CircleImageView pass;
+    Button pass;
     private double lat1, long1;
     TextView address;
     UpdateBackgroundLocation service = null;

@@ -120,12 +120,12 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="0.5"
+                        android:layout_weight="0.8"
                         android:layout_marginTop="8dp"
                         android:textSize="18sp"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
-                        android:padding="4dp"
+                        android:padding="1dp"
                         android:textColor="#84000000"
                         android:text="Type of Quarantine" />
 

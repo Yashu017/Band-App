@@ -10,7 +10,7 @@
         android:icon="@mipmap/bluelogo"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/bluelogo"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
@@ -44,7 +44,8 @@
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
         <activity
             android:name=".LogIn"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+            android:windowSoftInputMode="adjustResize|stateHidden">
 
         </activity>
         <activity
