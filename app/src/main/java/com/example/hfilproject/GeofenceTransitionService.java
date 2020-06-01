@@ -46,6 +46,9 @@ public class GeofenceTransitionService extends IntentService {
     String token1;
     String sendTokenBle;
 
+    NotificationHelper notificationHelper;
+
+
     public GeofenceTransitionService() {
         super(TAG);
     }
@@ -70,13 +73,17 @@ public class GeofenceTransitionService extends IntentService {
             String geofenceTransitionDetails = getGeofenceTransitionDetails(geoFenceTransition, triggeringGeofences);
 
             // Send notification details as a String
-            sendNotification(geofenceTransitionDetails);
+            // sendNotification(geofenceTransitionDetails);
         }
         if (geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
             int geoStatus = 1;
             sharedPrefs = getSharedPreferences("app", MODE_PRIVATE);
             editor = sharedPrefs.edit();
             editor.putInt("geoStatus", geoStatus);
+
+            notificationHelper = new NotificationHelper(this);
+            notificationHelper.SendNotification("Alert", "You are exiting from geo fence.", MapActivity.class);
+
         }
     }
 
@@ -89,11 +96,17 @@ public class GeofenceTransitionService extends IntentService {
         }
 
         String status = null;
-        if (geoFenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER)
+        if (geoFenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
             status = "Entering ";
-        else if (geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
+            notificationHelper = new NotificationHelper(this);
+            notificationHelper.SendNotification("Notification", "You have entered in  geo fence.", MapActivity.class);
+
+
+        } else if (geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
             status = "Exiting ";
             PostNotification();
+            notificationHelper = new NotificationHelper(this);
+            notificationHelper.SendNotification("Alert", "You are exiting from geo fence", MapActivity.class);
         }
 
         return status + TextUtils.join(", ", triggeringGeofencesList);
@@ -114,12 +127,13 @@ public class GeofenceTransitionService extends IntentService {
         PendingIntent notificationPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
-        // Creating and sending Notification
+       /*
         NotificationManager notificatioMng =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificatioMng.notify(
                 GEOFENCE_NOTIFICATION_ID,
                 createNotification(msg, notificationPendingIntent));
+        */
 
     }
 

@@ -132,7 +132,7 @@ public class ScannerFragment extends DialogFragment {
         listview.setEmptyView(dialogView.findViewById(android.R.id.empty));
         listview.setAdapter(adapter = new DeviceListAdapter());
 
-        builder.setTitle(R.string.scanner_title);
+        builder.setTitle("Connect CWatch:");
         final AlertDialog dialog = builder.setView(dialogView).create();
         listview.setOnItemClickListener((parent, view, position, id) -> {
             stopScan();

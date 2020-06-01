@@ -9,7 +9,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public static final int SETTINGS_UNIT_C = 0; // [C]
     public static final int SETTINGS_UNIT_F = 1; // [F]
     public static final int SETTINGS_UNIT_K = 2; // [K]
-    public static final int SETTINGS_UNIT_DEFAULT = SETTINGS_UNIT_C;
+    public static final int SETTINGS_UNIT_DEFAULT = SETTINGS_UNIT_F;
 
     @Override
     public void onCreatePreferences(final Bundle savedInstanceState, final String rootKey) {

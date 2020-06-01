@@ -55,7 +55,7 @@ public class MapActivity extends AppCompatActivity
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener,
         OnMapReadyCallback,
-      //  GoogleMap.OnMapClickListener,
+        //  GoogleMap.OnMapClickListener,
         GoogleMap.OnMarkerClickListener,
         ResultCallback<Status> {
 
@@ -72,7 +72,7 @@ public class MapActivity extends AppCompatActivity
     private MapFragment mapFragment;
     Boolean check;
 
-    public double forNextLat,forNextLong;
+    public double forNextLat, forNextLong;
 
     private static final String NOTIFICATION_MSG = "NOTIFICATION MSG";
 
@@ -93,7 +93,7 @@ public class MapActivity extends AppCompatActivity
         sharedPrefs = getSharedPreferences("app", MODE_PRIVATE);
         editor = sharedPrefs.edit();
 
-        if(sharedPrefs.getBoolean("firstTimeMap",false)==true) {
+        if (sharedPrefs.getBoolean("firstTimeMap", false) == true) {
 
             new AlertDialog.Builder(MapActivity.this)
                     .setTitle("How to use")
@@ -152,18 +152,16 @@ public class MapActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.geofence: {
-                if(sharedPrefs.getBoolean("firstTimeMap",false) == true){
+                if (sharedPrefs.getBoolean("firstTimeMap", false) == true) {
                     getCurrentLocation();
                     item.setEnabled(false);
-                    editor.putBoolean("firstTimeMap",false);
+                    editor.putBoolean("firstTimeMap", false);
                     editor.commit();
-                }
-                else
-                {
+                } else {
                     item.setEnabled(false);
                 }
 
-             //   startGeofence();
+                //   startGeofence();
 
                 return true;
             }
@@ -181,10 +179,10 @@ public class MapActivity extends AppCompatActivity
     private boolean checkPermission() {
         Log.d(TAG, "checkPermission()");
         // Ask for permission if it wasn't granted yet
-        if(Build.VERSION.SDK_INT >= 21)
-        {
-        check= (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED);}
+        if (Build.VERSION.SDK_INT >= 21) {
+            check = (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED);
+        }
         return check;
     }
 
@@ -238,7 +236,7 @@ public class MapActivity extends AppCompatActivity
     public void onMapReady(GoogleMap googleMap) {
         Log.d(TAG, "onMapReady()");
         map = googleMap;
-      //  map.setOnMapClickListener(this);
+        //  map.setOnMapClickListener(this);
         map.setOnMarkerClickListener(this);
 
     }
@@ -314,7 +312,6 @@ public class MapActivity extends AppCompatActivity
                 startLocationUpdates();
 
 
-
             } else {
                 Log.w(TAG, "No location retrieved yet");
                 getCurrentLocation();
@@ -330,8 +327,6 @@ public class MapActivity extends AppCompatActivity
         textLong.setText("Long: " + location.getLongitude());
 
         markerLocation(new LatLng(location.getLatitude(), location.getLongitude()));
-
-
 
 
     }
@@ -362,48 +357,51 @@ public class MapActivity extends AppCompatActivity
     }
 
 
-    private double latitude,longitude;
+    private double latitude, longitude;
     LatLng l1;
 
-    public void getCurrentLocation()
-    {
+    public void getCurrentLocation() {
 
 
-        final LocationRequest locationRequest=new LocationRequest();
+        final LocationRequest locationRequest = new LocationRequest();
         locationRequest.setInterval(10000);
         locationRequest.setFastestInterval(3000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         LocationServices.getFusedLocationProviderClient(MapActivity.this)
-                .requestLocationUpdates(locationRequest,new LocationCallback(){
+                .requestLocationUpdates(locationRequest, new LocationCallback() {
 
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
                         super.onLocationResult(locationResult);
                         LocationServices.getFusedLocationProviderClient(MapActivity.this)
                                 .removeLocationUpdates(this);
-                        if(locationResult!=null && locationResult.getLocations().size()>0)
-                        {
-                            int latestLoc=locationResult.getLocations().size()-1;
+                        if (locationResult != null && locationResult.getLocations().size() > 0) {
+                            int latestLoc = locationResult.getLocations().size() - 1;
 
-                            latitude=locationResult.getLocations().get(latestLoc).getLatitude();
-                            longitude=locationResult.getLocations().get(latestLoc).getLongitude();
-
+                            latitude = locationResult.getLocations().get(latestLoc).getLatitude();
+                            longitude = locationResult.getLocations().get(latestLoc).getLongitude();
 
 
                         }
-                        l1= new LatLng(latitude,longitude);
+                        l1 = new LatLng(latitude, longitude);
 
-                         markerForGeofence(l1);
+                        markerForGeofence(l1);
 
 
                     }
                 }, Looper.getMainLooper());
     }
-
-
-
-
 
 
     private Marker geoFenceMarker;
@@ -436,7 +434,6 @@ public class MapActivity extends AppCompatActivity
             addGeofence(geofenceRequest);
 
 
-
         } else {
             Log.e(TAG, "Geofence marker is null");
         }
@@ -444,7 +441,7 @@ public class MapActivity extends AppCompatActivity
 
     private static final long GEO_DURATION = 60 * 60 * 1000;
     private static final String GEOFENCE_REQ_ID = "My Geofence";
-    private static final float GEOFENCE_RADIUS = 40.0f; // in meters
+    private static final float GEOFENCE_RADIUS = 50.0f; // in meters
 
     // Create a Geofence
     private Geofence createGeofence(LatLng latLng, float radius) {
@@ -574,10 +571,10 @@ public class MapActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        if (sharedPrefs.getBoolean("firstTimeMap",false)==false) {
+        if (sharedPrefs.getBoolean("firstTimeMap", false) == false) {
             super.onBackPressed();
         } else {
-            Toast.makeText(this,"Please select Create Geofence on Toolbar above",Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Please select Create Geofence on Toolbar above", Toast.LENGTH_LONG).show();
         }
     }
 

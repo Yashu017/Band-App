@@ -18,9 +18,15 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -192,7 +198,9 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
         // Toast.makeText(this, "temperature value"+ tempData, Toast.LENGTH_SHORT).show();
 
 
-        SendTemp(tempData);
+        SendTemp(tempData, temp);
+
+        SendData(temp,tempData);
 
 
         final Intent broadcast = new Intent(BROADCAST_HTS_MEASUREMENT);
@@ -208,9 +216,15 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
         }
     }
 
-    private void SendTemp(float tempData) {
+    private void SendData(Float temp, float tempData) {
+
+    }
+
+
+    private void SendTemp(float tempData, float temp) {
         sharedPrefs = getSharedPreferences("app", Context.MODE_PRIVATE);
         editor = sharedPrefs.edit();
+
 
         token1 = sharedPrefs.getString("token", "");
         Log.d("TAG", "" + token1);
@@ -242,8 +256,16 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
                             Toast.makeText(HTService.this, "User not found.", Toast.LENGTH_SHORT).show();
                         }
                     }
+                    Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT +5:30"));
+                    Date currentTime = cal.getTime();
+                    DateFormat dateFormat = new SimpleDateFormat("hh:mm a");
+                    String time = dateFormat.format(currentTime);
+
+
+
                     sendToken = response.body().getToken();
                     Toast.makeText(HTService.this, "Temp sent to server.", Toast.LENGTH_SHORT).show();
+
                     Log.e("Result", " Temp Sent to server.");
                 }
             }
@@ -254,6 +276,7 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
                 Log.e("error", "" + t.getMessage());
             }
         });
+
 
     }
 
