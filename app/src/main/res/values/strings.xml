@@ -91,5 +91,6 @@
     <string name="channel_proximity_warnings_title">Proximity warnings</string>
     <string name="channel_proximity_warnings_description">Shows notifications when a proximity device got out of range.</string>
     <string name="uart_notification_connected_message"><![CDATA[<string name=\"uart_notification_connected_message\">%s is connected.</string>]]></string>
+    <string name="title_activity_maps">Map</string>
 
 </resources>

@@ -308,6 +308,10 @@ public class FirstFragment extends Fragment {
                                         double latitude1 = location.getLatitude();
                                         double longitude1 = location.getLongitude();
 
+                                        editor.putFloat("lat",(float) latitude1);
+                                        editor.putFloat("long",(float) longitude1);
+                                        editor.commit();
+
                                         Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
                                         try {
                                             List<Address> addressList = geocoder.getFromLocation(latitude1, longitude1, 1);
@@ -321,6 +325,7 @@ public class FirstFragment extends Fragment {
                                             originalAddress.setText(fulladdress);
                                             addresesHead.setVisibility(View.GONE);
                                             editor.putString("hqAddress",fulladdress);
+                                            editor.putBoolean("done",true);
                                             editor.commit();
 
                                         } catch (Exception e) {
@@ -371,12 +376,13 @@ public class FirstFragment extends Fragment {
             public void onResponse(Call<GetTemp> call, Response<GetTemp> response) {
                 if (response.isSuccessful() && response.code() == 200) {
                     GetTemp getTemp = response.body();
+                    if(getTemp!=null)
+                    {
                     tempReceived = getTemp.getTemperature();
                     Log.e("Success", "" + response.code());
-
                     Toast.makeText(getContext(), "Temperature received from server.", Toast.LENGTH_SHORT).show();
                     setTemp.setText(String.format("%.2f", tempReceived));
-                }
+                }}
             }
 
             @Override

@@ -12,7 +12,6 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,19 +36,11 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.TimeZone;
 
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 
 /**
@@ -57,9 +48,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class SecondFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-
+    double latitude,longitude;
     Button pass;
-    private double lat1, long1;
+
     TextView address;
     UpdateBackgroundLocation service = null;
     boolean mbound = false;
@@ -116,7 +107,7 @@ public class SecondFragment extends Fragment implements SharedPreferences.OnShar
             public void onClick(View v) {
 
                 //sendLocation();
-                Intent intent = new Intent(getActivity(), MapActivity.class);
+                Intent intent = new Intent(getActivity(), MapsActivity.class);
                 startActivity(intent);
 
 
@@ -165,46 +156,7 @@ public class SecondFragment extends Fragment implements SharedPreferences.OnShar
     }
 
 
-    private void sendLocation() {
 
-        OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-        okhttpbuilder.addInterceptor(logging);
-
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
-                .addConverterFactory(GsonConverterFactory.create());
-
-        retrofit = builder.build();
-
-        for_login login = retrofit.create(for_login.class);
-        Map<String, Object> params = new HashMap<>();
-        params.put("location", "N/A");
-        Call<UserLocation> call = login.userLocation(token, params);
-        call.enqueue(new Callback<UserLocation>() {
-            @Override
-            public void onResponse(Call<UserLocation> call, Response<UserLocation> response) {
-                String error;
-                if (response.isSuccessful() && response.code() == 200) {
-                    if (response.body().getErrorCode() != null) {
-                        error = response.body().getErrorCode();
-                        if (error.equals("2")) {
-                            Toast.makeText(getContext(), "User not found.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    sendToken = response.body().getToken();
-                    Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UserLocation> call, Throwable t) {
-                Toast.makeText(getContext(), "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("error", "" + t.getMessage());
-            }
-        });
-    }
 
 
     @Override
@@ -250,14 +202,22 @@ public class SecondFragment extends Fragment implements SharedPreferences.OnShar
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onListenLocation(SendLocation event) {
         if (event != null) {
-            double latitude = event.getLocation().getLatitude();
-            double longitude = event.getLocation().getLongitude();
+             latitude = event.getLocation().getLatitude();
+             longitude = event.getLocation().getLongitude();
             String data = new StringBuilder()
                     .append(event.getLocation().getLatitude())
                     .append("/")
                     .append(event.getLocation().getLongitude()).toString();
 
             Toast.makeText(getContext(), data, Toast.LENGTH_LONG).show();
+            if (sharedPrefs.getBoolean("firstTimeMap", false) == true) {
+                editor.putFloat("lat", (float) latitude);
+                editor.putFloat("long", (float) longitude);
+                Toast.makeText(getContext(),latitude+"yes"+longitude,Toast.LENGTH_LONG).show();
+                editor.putBoolean("firstTimeMap", false);
+                editor.commit();
+
+            }
 
 
             Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());

@@ -130,6 +130,7 @@ public class LogIn extends AppCompatActivity {
             public void onClick(View v) {
                 editor.putBoolean("Home Quarantine", true);
                 editor.commit();
+                sharedPrefs.edit().remove("Isolation Ward").commit();
                 Toast.makeText(LogIn.this, "Your address will be fetched once you reach home", Toast.LENGTH_LONG).show();
                 address.setText("N/A");
                 quarnType = "Personal Place";
@@ -146,6 +147,7 @@ public class LogIn extends AppCompatActivity {
             public void onClick(View v) {
                 editor.putBoolean("Isolation Ward ", true);
                 editor.commit();
+                sharedPrefs.edit().remove("Home Quarantine").commit();
                 hq.setChecked(false);
                 quarnType = "Government Place";
                 Toast.makeText(LogIn.this, quarnType, Toast.LENGTH_SHORT).show();
@@ -246,6 +248,10 @@ public class LogIn extends AppCompatActivity {
 
                             latitude = locationResult.getLocations().get(latestLoc).getLatitude();
                             longitude = locationResult.getLocations().get(latestLoc).getLongitude();
+                            float lat,lon;
+                            editor.putFloat("lat",(float) latitude);
+                            editor.putFloat("long",(float) longitude);
+                            editor.commit();
 
                             locInWords();
                         }

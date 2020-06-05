@@ -58,12 +58,9 @@ public class UpdateBackgroundLocation extends Service {
     private static final String EXTRA_STARTED_FROM_NOTIFICATION = "com.example.hfilproject" + "started from notification";
     private static final String TAG = "Post Location";
     private final IBinder mBinder = new LocalBinder();
-    private static long UPDATE_INTERVAL_IN_MIL = 10000;
-    private static long FASTEST_UPDATE_INTERVAL = UPDATE_INTERVAL_IN_MIL / 2;
     private final int NOTI_ID = 1223;
     private boolean mChangingConfiguration = false;
     private NotificationManager mNotificationManager;
-
     private LocationRequest locationRequest;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private LocationCallback locationCallback;
@@ -254,8 +251,7 @@ public class UpdateBackgroundLocation extends Service {
 
     private void createLocationRequest() {
         locationRequest = new LocationRequest();
-        locationRequest.setInterval(UPDATE_INTERVAL_IN_MIL);
-        locationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL);
+        locationRequest.setSmallestDisplacement(50);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
@@ -284,7 +280,7 @@ public class UpdateBackgroundLocation extends Service {
                 //.setContentTitle(Common.getLocationTitle(this))
                 .setOngoing(true)
                 .setPriority(Notification.PRIORITY_MIN)
-                .setSmallIcon(R.mipmap.bluelogo)
+                .setSmallIcon(R.mipmap.sqlogo)
                 .setTicker(text)
                 .setWhen(System.currentTimeMillis());
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
