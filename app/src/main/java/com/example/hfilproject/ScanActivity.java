@@ -14,8 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.example.hfilproject.BLE.BLE_Activity;
-import com.example.hfilproject.BLE.ControllerActivity;
+
 
 import java.util.UUID;
 
