@@ -71,8 +71,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int PLAY_SERVICE_RESULATION_REQUEST = 300193;
     LatLng dangerous_area;
     private Location mLastLocaiton;
-    private static int UPDATE_INTERVAL = 5000;
-    private static int FATEST_INTERVAL = 3000;
+    private static int UPDATE_INTERVAL = 60*3000;
+    private static int FATEST_INTERVAL = 60*1500;
     private static int DISPLACEMENT = 10;
 
     SharedPreferences sharedPrefs;
@@ -367,7 +367,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (geoQuery!=null){
                 geoQuery.removeAllListeners();
             }
-            geoQuery = geoFire.queryAtLocation(new GeoLocation(latLng.latitude, latLng.longitude), 2f);
+            geoQuery = geoFire.queryAtLocation(new GeoLocation(latLng.latitude, latLng.longitude), 0.04f);
             geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
                 @Override
                 public void onKeyEntered(String key, GeoLocation location) {
