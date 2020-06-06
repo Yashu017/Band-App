@@ -2,6 +2,7 @@ package com.example.hfilproject;
 
 import android.Manifest;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -14,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -307,11 +309,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         private boolean isServiceRunning;
 
         // Foreground notification id
-        private static final int NOTIFICATION_ID = 1;
+        private static final int NOTIFICATION_ID = 1001;
 
         // Service binder
         private final IBinder serviceBinder = new RunServiceBinder();
         private GeoQuery geoQuery;
+
+        private NotificationManager notificationManager;
+        private static final String CHANNEL_ID = "geofencing_channel";
 
         public class RunServiceBinder extends Binder {
             GeoService getService() {
@@ -327,6 +332,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             ref = FirebaseDatabase.getInstance().getReference("MyLocation");
             geoFire = new GeoFire(ref);
             isServiceRunning = false;
+            notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
+                NotificationChannel channel = new NotificationChannel(CHANNEL_ID,getString(R.string.app_name),NotificationManager.IMPORTANCE_DEFAULT);
+                notificationManager.createNotificationChannel(channel);
+            }
+
         }
 
         @Override
@@ -471,8 +482,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         /**
          * Place the service into the foreground
          */
-        public void foreground() {
+        public void foreground()
+        {
             startForeground(NOTIFICATION_ID, createNotification());
+
         }
 
         /**
@@ -488,7 +501,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
          * @return a notification for interacting with the service when in the foreground
          */
         private Notification createNotification() {
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this,CHANNEL_ID)
                     .setContentTitle("Geofence is active")
                     .setContentText("Tap to return to the Map")
                     .setSmallIcon(R.mipmap.sqlogo);

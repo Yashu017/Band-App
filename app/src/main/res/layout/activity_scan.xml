@@ -18,7 +18,7 @@
         android:ellipsize="end"
         android:freezesText="true"
         android:maxLines="1"
-        android:text="Device Name:--"
+        android:text="@string/device_name"
         android:textAllCaps="true"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -29,7 +29,7 @@
         android:layout_below="@id/device_name"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
-        android:text="Bluetooth Id: --"
+        android:text="@string/bluetooth_id"
         android:textColor="#000"
         android:textSize="18sp" />
 

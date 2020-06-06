@@ -42,4 +42,6 @@ public class ToolboxApplication extends Application {
             notificationManager.createNotificationChannel(proximityChannel);
         }
     }
+
+
 }

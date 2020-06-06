@@ -52,7 +52,7 @@
             android:ellipsize="end"
             android:freezesText="true"
             android:maxLines="1"
-            android:text="Device Name:--"
+            android:text="@string/device_name"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
@@ -97,7 +97,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="32dp"
             android:onClick="onConnectClicked"
-            android:text="@string/action_connect" />
+            android:text="@string/action_connect"></com.google.android.material.button.MaterialButton>
 
     </RelativeLayout>
 

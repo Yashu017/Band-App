@@ -33,7 +33,7 @@
         android:background="@drawable/buttob"
         android:textSize="20sp"
         android:textColor="@color/white"
-        android:text="Scan Bluetooth"
+        android:text= "@string/scanBluetooth"
         android:id="@+id/btnScan"/>
 
 
@@ -46,7 +46,7 @@
         android:background="@drawable/buttob"
         android:textSize="20sp"
         android:textColor="@color/white"
-        android:text="LogIN"
+        android:text="@string/login"
         android:id="@+id/logInButton"/>
     <ProgressBar
         android:id="@+id/login_progress"

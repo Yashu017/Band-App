@@ -86,4 +86,7 @@ dependencies {
     // The BLE Common Library depends on BLE Library. It is enough to include the first one.
     implementation 'no.nordicsemi.android:ble-common:2.2.0-alpha06'
 
+    //paper library to save data in sharedpref
+    implementation 'io.paperdb:paperdb:2.7.1'
+
 }

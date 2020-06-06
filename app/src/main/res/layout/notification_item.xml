@@ -36,7 +36,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginTop="15dp"
         android:layout_toRightOf="@id/imageView"
-        android:text="Info"
+        android:text="@string/info"
         android:textSize="20sp" />
 
     <TextView
@@ -47,7 +47,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="7dp"
         android:layout_marginRight="10dp"
-        android:text="This device is not connected with C Watch. Please connect again." />
+        android:text="@string/notif_content" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>

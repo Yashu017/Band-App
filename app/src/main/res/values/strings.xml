@@ -91,6 +91,45 @@
     <string name="channel_proximity_warnings_title">Proximity warnings</string>
     <string name="channel_proximity_warnings_description">Shows notifications when a proximity device got out of range.</string>
     <string name="uart_notification_connected_message"><![CDATA[<string name=\"uart_notification_connected_message\">%s is connected.</string>]]></string>
+    <string name="scanBluetooth">Scan Bluetooth</string>
+    <string name="login">Login</string>
+    <string name="begin">Let\'s Begin !</string>
+    <string name="begin_title">We will guide you to use this app .</string>
+    <string name="begin_content">Please slide to the right for login and more details of getting interacted with us.</string>
+    <string name="connect_heading">Connect Your Band With Mobile\'s Bluetooth.</string>
+    <string name="connect_title">Tap on the button provided below and click on allow permission .</string>
+    <string name="connect_content">Please connect the your respective watch and enter the password provided to you</string>
+    <string name="mobile">Mobile Number Verification</string>
+    <string name="mobile_title">Please tap on the login button and enter your mobile number as well as verification code sent to you</string>
+    <string name="sign_content">You will be directed to signUp form then ,please enter all the asked details and then press on button provided there</string>
+    <string name="welcome">Welcome! Please enter your details.</string>
+    <string name="name">Name</string>
+    <string name="age">Age</string>
+    <string name="quarantine_type">Type of Quarantine</string>
+    <string name="home_quar">Home Quarantine/Self Isolation</string>
+    <string name="isolation_quar">Isolation centres /Govt. Quarantine</string>
+    <string name="address">Address</string>
+    <string name="enter_bluetooth">Enter bluetooth id</string>
+    <string name="submit">Submit</string>
+    <string name="recent_temp">Recent Temperature (F)</string>
+    <string name="current_location">Current Location:</string>
+    <string name="geofence">Geofence</string>
+    <string name="open_geofence">Open Geofence</string>
+    <string name="location_updates">LocationUpdates</string>
+    <string name="temp_history">Temperature History</string>
+    <string name="info">Info</string>
+    <string name="notif_content">This device is not connected with C Watch. Please connect again.</string>
+    <string name="notif">Notifications</string>
+    <string name="device_name">Device Name:--</string>
+    <string name="bluetooth_id">Bluetooth Id: --</string>
+    <string name="signup">SignUp Form</string>
+    <string name="home">Home</string>
+    <string name="map">Map</string>
+    <string name="history">History</string>
+    <string name="help">Help</string>
+    <string name="how_to_use">How To Use</string>
     <string name="title_activity_maps">Map</string>
+    <string name="geofence_dialog">You are being directed to geofence activity.If you find that your location shown with red pointer is not correct,then please wait for some time and move your phone a bit. As soon as your pointer is on correct location you can use one time feature to change your geofence location by using the create geofence button in your action bar on the top.</string>
+
 
 </resources>
