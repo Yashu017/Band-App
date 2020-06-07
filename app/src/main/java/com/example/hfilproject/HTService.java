@@ -20,15 +20,11 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import no.nordicsemi.android.ble.common.profile.ht.TemperatureMeasurementCallback;
 import no.nordicsemi.android.ble.common.profile.ht.TemperatureType;
@@ -264,7 +260,7 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
 
 
                     sendToken = response.body().getToken();
-                    Toast.makeText(HTService.this, "Temp sent to server.", Toast.LENGTH_SHORT).show();
+                 //   Toast.makeText(HTService.this, "Temp sent to server.", Toast.LENGTH_SHORT).show();
 
                     Log.e("Result", " Temp Sent to server.");
                 }

@@ -1,21 +1,28 @@
 package com.example.hfilproject;
 
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -95,14 +102,16 @@ public class FirstFragment extends Fragment {
     private long mTimeLeftInMillis;
     private long mEndTime;
 
+    private ImageView translate;
+    private RadioButton hindi, english;
+    private Button cancel;
+    private Locale locale;
 
 
     public FirstFragment() {
         // Required empty public constructor
 
     }
-
-
 
 
     @Override
@@ -119,6 +128,7 @@ public class FirstFragment extends Fragment {
         setTemp = rootView.findViewById(R.id.tempOriginal);
         tp = rootView.findViewById(R.id.tp);
 
+
         token = sharedPrefs.getString("token", "");
         temp = sharedPrefs.getInt("temperature", 0);
         connected = sharedPrefs.getInt("Connection Status", 0);
@@ -132,37 +142,36 @@ public class FirstFragment extends Fragment {
         date = sharedPrefs.getString("dateSelected", "");
 
 
-        SimpleDateFormat dateFormat= new SimpleDateFormat("hh");
-        SimpleDateFormat dt=new SimpleDateFormat("hh:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("hh");
+        SimpleDateFormat dt = new SimpleDateFormat("hh:mm:ss");
         try {
             Date date1 = dateFormat.parse(sharedPrefs.getString("time", " "));
-             out= dt.format(date1);
-            Log.e("Time", ""+out);
+            out = dt.format(date1);
+            Log.e("Time", "" + out);
 
         } catch (ParseException e) {
             // TODO Auto-generated catch block
-            Log.e("Error", ""+e);
+            Log.e("Error", "" + e);
         }
 
         String[] units = out.split(":"); //will break the string up into an array
         int minutes = Integer.parseInt(units[1]); //first element
         int seconds = Integer.parseInt(units[2]); //second element
-        int hours=Integer.parseInt(units[0]);
-        int duration = (3600*hours+60 * minutes + seconds)*1000; //add up our values
+        int hours = Integer.parseInt(units[0]);
+        int duration = (3600 * hours + 60 * minutes + seconds) * 1000; //add up our values
 
 
-        mTimeLeftInMillis=duration;
-        Log.e("Time1", ""+duration);
-        if(sharedPrefs.getBoolean("firstTime",false) == true){
-            editor.putString("hqAddress","N/A");
-            editor.putBoolean("firstTime",false);
+        mTimeLeftInMillis = duration;
+        Log.e("Time1", "" + duration);
+        if (sharedPrefs.getBoolean("firstTime", false) == true) {
+            editor.putString("hqAddress", "N/A");
+            editor.putBoolean("firstTime", false);
             editor.commit();
         }
 
-        if(!sharedPrefs.getString("hqAddress","").equals("N/A"))
-        {
+        if (!sharedPrefs.getString("hqAddress", "").equals("N/A")) {
             addresesHead.setVisibility(View.GONE);
-            originalAddress.setText(sharedPrefs.getString("hqAddress",""));
+            originalAddress.setText(sharedPrefs.getString("hqAddress", ""));
 
         }
 
@@ -178,11 +187,6 @@ public class FirstFragment extends Fragment {
             originalAddress.setText(sharedPrefs.getString("address", ""));
 
         }
-
-
-
-
-
 
 
 //         t=Integer.parseInt(timeToFetchAddress);
@@ -246,13 +250,78 @@ public class FirstFragment extends Fragment {
 
         GetTemperature();
 
+        translate = rootView.findViewById(R.id.translate);
+        translate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OpenDialog();
+            }
+        });
+
         return rootView;
 
 
     }
 
+
+    private void OpenDialog() {
+        Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.language_dialog);
+
+        hindi = dialog.findViewById(R.id.radioButtonHindi);
+        english = dialog.findViewById(R.id.radioButtonEnglish);
+        cancel = dialog.findViewById(R.id.buttonCancel);
+
+        hindi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                english.setChecked(false);
+                setLocale("hi");
+                editor.putString("locale", "hi");
+                editor.putBoolean("hindiSelected", true);
+                editor.commit();
+
+
+            }
+
+        });
+
+        english.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hindi.setChecked(false);
+                setLocale("en");
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+    }
+
+    private void setLocale(String lang) {
+        locale = new Locale(lang);
+        Resources resources = getResources();
+        DisplayMetrics dm = resources.getDisplayMetrics();
+        Configuration conf = resources.getConfiguration();
+        conf.locale = locale;
+        resources.updateConfiguration(conf, dm);
+        Fragment fragment = new FirstFragment();
+
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
     private void startTimer() {
-        Toast.makeText(getContext(),"Timer has started ",Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), "Your location will be fetched now ", Toast.LENGTH_LONG).show();
 
         mEndTime = System.currentTimeMillis() + mTimeLeftInMillis;
         mCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
@@ -294,7 +363,7 @@ public class FirstFragment extends Fragment {
 
                             if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                                 Log.e(getClass().getName(), "Location permission not granted");
-                                Toast.makeText(getContext(),"Location permission was not granted ",Toast.LENGTH_LONG).show();
+                                Toast.makeText(getContext(), "Location permission was not granted ", Toast.LENGTH_LONG).show();
                                 return;
                             }
 
@@ -308,10 +377,6 @@ public class FirstFragment extends Fragment {
                                         double latitude1 = location.getLatitude();
                                         double longitude1 = location.getLongitude();
 
-                                        editor.putFloat("lat",(float) latitude1);
-                                        editor.putFloat("long",(float) longitude1);
-                                        editor.commit();
-
                                         Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
                                         try {
                                             List<Address> addressList = geocoder.getFromLocation(latitude1, longitude1, 1);
@@ -324,7 +389,9 @@ public class FirstFragment extends Fragment {
                                             Log.e("location", "" + fulladdress);
                                             originalAddress.setText(fulladdress);
                                             addresesHead.setVisibility(View.GONE);
+
                                             editor.putString("hqAddress",fulladdress);
+
                                             editor.commit();
 
                                         } catch (Exception e) {
@@ -357,7 +424,7 @@ public class FirstFragment extends Fragment {
 
 
     private void GetTemperature() {
-        token= sharedPrefs.getString("token", "");
+        token = sharedPrefs.getString("token", "");
 
         OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
@@ -375,13 +442,12 @@ public class FirstFragment extends Fragment {
             public void onResponse(Call<GetTemp> call, Response<GetTemp> response) {
                 if (response.isSuccessful() && response.code() == 200) {
                     GetTemp getTemp = response.body();
-                    if(getTemp!=null)
-                    {
                     tempReceived = getTemp.getTemperature();
                     Log.e("Success", "" + response.code());
-                    Toast.makeText(getContext(), "Temperature received from server.", Toast.LENGTH_SHORT).show();
+
+                //    Toast.makeText(getContext(), "Temperature received from server.", Toast.LENGTH_SHORT).show();
                     setTemp.setText(String.format("%.2f", tempReceived));
-                }}
+                }
             }
 
             @Override
@@ -403,7 +469,7 @@ public class FirstFragment extends Fragment {
         if (date == currentDate) {
             if (hours == hour && minutes == min) {
 
-                Toast.makeText(getContext(), "" + hour, Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(getContext(), "" + hour, Toast.LENGTH_SHORT).show();
 
                 /*
                 Intent i = new Intent(getContext(), FirstFragment.class);
@@ -466,7 +532,7 @@ public class FirstFragment extends Fragment {
                             }
                         }
                         sendTokenBle = response.body().getToken();
-                        Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -506,7 +572,7 @@ public class FirstFragment extends Fragment {
                             }
                         }
                         sendTokenBle = response.body().getToken();
-                        Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -550,7 +616,7 @@ public class FirstFragment extends Fragment {
                         }
                     }
                     sendToken = response.body().getToken();
-                    Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+                //    Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -562,6 +628,7 @@ public class FirstFragment extends Fragment {
         });
 
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -574,13 +641,12 @@ public class FirstFragment extends Fragment {
                 mTimerRunning = false;
                 getGoogleApiClient();
                 addresesHead.setVisibility(View.GONE);
-            }
-            else
-            {
+            } else {
                 startTimer();
             }
         }
     }
+
     @Override
     public void onStop() {
         super.onStop();

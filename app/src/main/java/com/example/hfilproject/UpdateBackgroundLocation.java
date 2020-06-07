@@ -81,8 +81,12 @@ public class UpdateBackgroundLocation extends Service {
     String sendToken;
     String location;
     int geoStatus;
-    long  time=15*60000;;
+    long  time=1*30000;;
     String fullAddress;
+    public static final int notify = 300000;  //interval between two services(Here Service run every 5 Minute)
+    private Handler mHandler = new Handler();   //run on another Thread to avoid crash
+    private Timer mTimer = null;    //timer handling
+
 
     public UpdateBackgroundLocation() {
 
@@ -97,6 +101,11 @@ public class UpdateBackgroundLocation extends Service {
         token = sharedPrefs.getString("token", "");
         geoStatus = sharedPrefs.getInt("geoStatus", 0);
 
+        if (mTimer != null) // Cancel if already existed
+            mTimer.cancel();
+        else
+            mTimer = new Timer();   //recreate new
+        mTimer.scheduleAtFixedRate(new TimeDisplay(), 0, notify);   //Schedule task
 
         locationCallback = new LocationCallback() {
             @Override
@@ -141,10 +150,11 @@ public class UpdateBackgroundLocation extends Service {
                 @Override
                 public void run() {
                     // Do something here on the main thread
-                    comparedifference(mLocation.getLatitude(),mLocation.getLongitude());
+                    if(mLocation!=null) {
+                        comparedifference(mLocation.getLatitude(), mLocation.getLongitude());
+                    }
                     // Repeat this the same runnable code block again another 2 seconds
                     // 'this' is referencing the Runnable object
-
                     handler.postDelayed(this, time);
                 }
             };
@@ -259,14 +269,14 @@ public class UpdateBackgroundLocation extends Service {
             String exit="You exited your geofence";
            putNotificationGeofence(exit);
            sendLocation();
-           Toast.makeText(this,"exit",Toast.LENGTH_LONG).show();
+           Toast.makeText(this,"You exited geofence",Toast.LENGTH_LONG).show();
            postNotificationToServer();
-           time=60000*5;
+           time=30000*1;
         }
         else
         {
             Toast.makeText(this,"enter",Toast.LENGTH_LONG).show();
-            time=60000*15;
+            time=60000*1;
         }
 
 
@@ -309,7 +319,7 @@ public class UpdateBackgroundLocation extends Service {
                         }
                     }
                     sendTokenBle = response.body().getToken();
-                    Toast.makeText(UpdateBackgroundLocation.this, "Success", Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(UpdateBackgroundLocation.this, "Success", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -354,7 +364,7 @@ public class UpdateBackgroundLocation extends Service {
                                 }
                             }
                             sendToken = response.body().getToken();
-                            Toast.makeText(UpdateBackgroundLocation.this, "Location sent to server.", Toast.LENGTH_SHORT).show();
+                         //   Toast.makeText(UpdateBackgroundLocation.this, "Location sent to server.", Toast.LENGTH_SHORT).show();
                             Log.e("Location Posted", "Success");
                         }
                     }
@@ -419,7 +429,6 @@ public class UpdateBackgroundLocation extends Service {
 
     private void createLocationRequest() {
         locationRequest = new LocationRequest();
-        locationRequest.setSmallestDisplacement(10);
         locationRequest.setFastestInterval(5000);
         locationRequest.setFastestInterval(10000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -516,4 +525,18 @@ public class UpdateBackgroundLocation extends Service {
         mServiceHandler.removeCallbacks(null);
         super.onDestroy();
     }
-}
+
+    private class TimeDisplay extends TimerTask {
+
+        @Override
+        public void run() {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d("service is ","running");
+                }
+            });
+        }
+        }
+    }
+

@@ -12,12 +12,11 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="60dp"
         android:overScrollMode="never"
-        android:scrollbars="none"
-        >
+        android:scrollbars="none">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -63,26 +62,33 @@
                     android:id="@+id/notificationBell"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    app:layout_constraintRight_toRightOf="@id/layoutHeader"
                     android:layout_marginRight="50dp"
+                    android:background="@drawable/ic_notifications_active_white_24dp"
 
                     android:clickable="true"
-                    android:background="@drawable/ic_notifications_active_white_24dp"
                     app:layout_constraintBottom_toBottomOf="@+id/hello"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintRight_toRightOf="@id/layoutHeader"
                     app:layout_constraintTop_toTopOf="@+id/hello" />
+
+                <ImageView
+                    android:id="@+id/translate"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginEnd="15dp"
+                    android:src="@drawable/baseline_translate_white_36dp"
+                    app:layout_constraintEnd_toStartOf="@+id/notificationBell"
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 
             <RelativeLayout
                 android:id="@+id/typeTemp"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                app:layout_constraintVertical_weight="1"
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="150dp"
                 android:layout_marginEnd="35dp"
@@ -91,7 +97,8 @@
                 android:gravity="center"
                 android:padding="10dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_weight="1">
 
                 <ImageView
                     android:id="@+id/tp"
@@ -105,7 +112,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tp"
                     android:gravity="center"
-                    android:text="Recent Temperature (F)"
+                    android:text="@string/recent_temp"
                     android:textSize="20sp" />
 
                 <TextView
@@ -142,8 +149,8 @@
                     android:id="@+id/adr"
                     android:layout_width="130dp"
                     android:layout_height="100dp"
-                    android:layout_marginTop="-5dp"
                     android:layout_centerHorizontal="true"
+                    android:layout_marginTop="-5dp"
                     android:src="@drawable/posblue" />
 
 
@@ -152,10 +159,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/adr"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="2dp"
                     android:gravity="center"
-                    android:layout_centerHorizontal="true"
-                    android:text="Current Location:"
+                    android:text="@string/current_location"
                     android:textSize="10sp" />
 
                 <TextView
@@ -163,38 +170,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/addressHead"
-                    android:layout_marginTop="3dp"
                     android:layout_marginStart="8dp"
+                    android:layout_marginTop="3dp"
                     android:text="N/A"
                     android:textSize="20sp" />
 
 
             </RelativeLayout>
 
-
-
-
-
-
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 </FrameLayout>

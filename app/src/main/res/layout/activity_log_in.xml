@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
-    xmlns:card_view="http://schemas.android.com/tools"
     tools:context=".LogIn">
 
 
@@ -15,26 +15,24 @@
         android:background="@drawable/backlog">
 
         <ImageView
+            android:id="@+id/logo"
             android:layout_width="210dp"
             android:layout_height="150dp"
-            android:id="@+id/logo"
-            android:src="@drawable/logo"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="13dp"
-            />
+            android:src="@drawable/logo" />
 
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/logo"
-            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"
             android:layout_marginStart="28dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="40dp"
             android:background="@drawable/white_rectangle_backgrounf"
-            android:layout_centerHorizontal="true"
-            android:padding="8dp"
-            >
+            android:padding="8dp">
 
 
             <ScrollView
@@ -42,8 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:overScrollMode="never"
-                android:scrollbars="none"
-                >
+                android:scrollbars="none">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -55,19 +52,18 @@
                         android:layout_width="240dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="5dp"
-                        >
+                        android:layout_marginTop="5dp">
 
                         <TextView
                             android:id="@+id/title"
-                            android:padding="4dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:textColor="#B0302F2F"
-                            android:text="Welcome! Please enter your details."
-                            android:textSize="20sp"
                             android:gravity="center"
+                            android:padding="4dp"
+                            android:text="@string/welcome"
+                            android:textColor="#B0302F2F"
+                            android:textSize="20sp"
                             android:textStyle="bold" />
                     </RelativeLayout>
 
@@ -75,8 +71,8 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="1"
                         android:layout_marginTop="6dp"
+                        android:layout_weight="1"
                         android:orientation="horizontal">
 
                         <EditText
@@ -84,21 +80,21 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            android:singleLine="true"
-                            android:padding="6dp"
-                            android:textColor="#B0302F2F"
                             android:background="@drawable/dat"
-                            android:hint="Name"
-                            android:textColorHint="#B0302F2F"
+                            android:hint="@string/name"
                             android:inputType="text"
-                            android:textSize="18sp"/>
+                            android:padding="6dp"
+                            android:singleLine="true"
+                            android:textColor="#B0302F2F"
+                            android:textColorHint="#B0302F2F"
+                            android:textSize="18sp" />
                     </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="1"
                         android:layout_marginTop="6dp"
+                        android:layout_weight="1"
                         android:orientation="horizontal">
 
                         <EditText
@@ -106,28 +102,28 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            android:padding="6dp"
                             android:background="@drawable/dat"
+                            android:hint="@string/age"
                             android:inputType="number"
+                            android:padding="6dp"
                             android:singleLine="true"
-                            android:hint="Age"
                             android:textColor="#B0302F2F"
                             android:textColorHint="#B0302F2F"
-                            android:textSize="18sp"/>
+                            android:textSize="18sp" />
                     </RelativeLayout>
 
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="0.8"
-                        android:layout_marginTop="8dp"
-                        android:textSize="18sp"
                         android:layout_marginStart="10dp"
+                        android:layout_marginTop="8dp"
                         android:layout_marginEnd="10dp"
+                        android:layout_weight="0.8"
                         android:padding="1dp"
+                        android:text="@string/quarantine_type"
                         android:textColor="#84000000"
-                        android:text="Type of Quarantine" />
+                        android:textSize="18sp" />
 
 
                     <LinearLayout
@@ -142,9 +138,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center"
+                            android:text="@string/home_quar"
                             android:textColor="#B0302F2F"
-                            android:textSize="15sp"
-                            android:text="Home Quarantine/Self Isolation" />
+                            android:textSize="15sp" />
 
 
                         <RadioButton
@@ -170,9 +166,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center"
-                            android:textSize="15sp"
+                            android:text="@string/isolation_quar"
                             android:textColor="#B0302F2F"
-                            android:text="Isolation centres /Govt. Quarantine" />
+                            android:textSize="15sp" />
 
 
                         <RadioButton
@@ -189,32 +185,32 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="1"
                         android:layout_marginTop="6dp"
+                        android:layout_weight="1"
                         android:orientation="horizontal">
 
                         <EditText
                             android:id="@+id/addressL"
-                            android:textColorHint="#B0302F2F"
-                            android:textColor="#B0302F2F"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            android:padding="6dp"
                             android:background="@drawable/dat"
-                            android:hint="Address"
                             android:ellipsize="start"
-                            android:maxLines="10"
+                            android:hint="@string/address"
                             android:inputType="text"
-                            android:textSize="18sp"/>
+                            android:maxLines="10"
+                            android:padding="6dp"
+                            android:textColor="#B0302F2F"
+                            android:textColorHint="#B0302F2F"
+                            android:textSize="18sp" />
                     </RelativeLayout>
 
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="1"
                         android:layout_marginTop="6dp"
+                        android:layout_weight="1"
                         android:orientation="horizontal">
 
                         <EditText
@@ -222,58 +218,58 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
+                            android:background="@drawable/dat"
+                            android:hint="@string/bluetooth_id"
+                            android:inputType="number"
                             android:padding="6dp"
                             android:textColor="#B0302F2F"
                             android:textColorHint="#B0302F2F"
-                            android:background="@drawable/dat"
-                            android:hint="Enter bluetooth id"
-                            android:inputType="number"
-                            android:textSize="18sp"/>
+                            android:textSize="18sp" />
                     </RelativeLayout>
-
 
 
                     <RelativeLayout
                         android:id="@+id/timeRL"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="1"
                         android:layout_marginTop="6dp"
+                        android:layout_weight="1"
                         android:orientation="horizontal"
                         android:visibility="gone">
+
                         <EditText
                             android:id="@+id/startTime"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            android:padding="6dp"
-                            android:textColor="#B0302F2F"
-                            android:textColorHint="#B0302F2F"
                             android:background="@drawable/dat"
                             android:hint="Estimated Time to reach home(in Hrs)"
                             android:inputType="numberSigned"
-                            android:textSize="18sp"/>
+                            android:padding="6dp"
+                            android:textColor="#B0302F2F"
+                            android:textColorHint="#B0302F2F"
+                            android:textSize="18sp" />
                     </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="1"
                         android:layout_marginTop="6dp"
+                        android:layout_weight="1"
                         android:orientation="horizontal"
                         android:visibility="gone">
 
                         <EditText
                             android:id="@+id/mobileL"
-                            android:textColor="#B0302F2F"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColorHint="#B0302F2F"
                             android:layout_margin="10dp"
-                            android:padding="6dp"
                             android:background="@drawable/dat"
                             android:inputType="number"
-                            android:textSize="18sp"/>
+                            android:padding="6dp"
+                            android:textColor="#B0302F2F"
+                            android:textColorHint="#B0302F2F"
+                            android:textSize="18sp" />
                     </RelativeLayout>
 
 
@@ -287,7 +283,7 @@
                         android:layout_marginEnd="24dp"
                         android:background="@drawable/buttob"
                         android:foreground="?android:attr/selectableItemBackground"
-                        android:text="Submit"
+                        android:text="@string/submit"
                         android:textColor="#fff" />
 
                 </LinearLayout>
@@ -295,13 +291,13 @@
 
         </RelativeLayout>
 
-    <ProgressBar
-        android:id="@+id/profile_progress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="20dp"
-        android:elevation="2dp"
-        android:visibility="gone" />
-</RelativeLayout>
+        <ProgressBar
+            android:id="@+id/profile_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="20dp"
+            android:elevation="2dp"
+            android:visibility="gone" />
+    </RelativeLayout>
 </RelativeLayout>

@@ -132,15 +132,22 @@ public class SecondFragment extends Fragment implements SharedPreferences.OnShar
             @Override
             public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
                 locUpdates = view.findViewById(R.id.locUp);
-                locUpdates.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        service.requestLocationUpdates();
-                    }
-                });
+                if(sharedPrefs.getBoolean("firstTimeMap",false)!=true) {
+                    locUpdates.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            service.requestLocationUpdates();
+                        }
+                    });
+                    startService(Common.requestLoctionUpdates(getContext()));
+                    getActivity().bindService(new Intent(getContext(), UpdateBackgroundLocation.class), mServiceConnection, Context.BIND_AUTO_CREATE);
+                }
+                else
+                {
+                    Toast.makeText(getContext(),"please create your geofence first",Toast.LENGTH_LONG).show();
+                }
 
-                startService(Common.requestLoctionUpdates(getContext()));
-                getActivity().bindService(new Intent(getContext(), UpdateBackgroundLocation.class), mServiceConnection, Context.BIND_AUTO_CREATE);
+
 
 
             }
@@ -209,7 +216,7 @@ public class SecondFragment extends Fragment implements SharedPreferences.OnShar
                     .append("/")
                     .append(event.getLocation().getLongitude()).toString();
 
-            Toast.makeText(getContext(), data, Toast.LENGTH_LONG).show();
+          //  Toast.makeText(getContext(), data, Toast.LENGTH_LONG).show();
 
 
             Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());

@@ -96,7 +96,7 @@ public class GeofenceTransitionService extends IntentService {
             status = "Entering ";
         else if (geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
             status = "Exiting ";
-            Toast.makeText(this,status,Toast.LENGTH_LONG).show();
+          //  Toast.makeText(this,status,Toast.LENGTH_LONG).show();
             PostNotification();
         }
 

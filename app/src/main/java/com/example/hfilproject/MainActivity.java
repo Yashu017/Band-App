@@ -1,14 +1,22 @@
 package com.example.hfilproject;
 
 import android.animation.ArgbEvaluator;
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -39,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import okhttp3.OkHttpClient;
@@ -76,18 +85,25 @@ public class MainActivity extends AppCompatActivity {
     //retrofit
     Retrofit retrofit;
 
+    //Select Language Dialog
+    RadioButton hindi, english;
+    Button cancel;
+    Boolean hindiSelected = false;
+    Locale locale;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
+        setContentView(R.layout.activity_main);
+        // loadLocale();
         ActionBar actionBar = getSupportActionBar();
         getSupportActionBar().hide();
 
-        LocationRequest request=new LocationRequest().setFastestInterval(1500).setInterval(30000).setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        LocationRequest request = new LocationRequest().setFastestInterval(1500).setInterval(30000).setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         LocationSettingsRequest.Builder builder;
-        builder=new  LocationSettingsRequest.Builder().addLocationRequest(request);
+        builder = new LocationSettingsRequest.Builder().addLocationRequest(request);
         Task<LocationSettingsResponse> result = LocationServices.getSettingsClient(this).checkLocationSettings(builder.build());
         result.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
             @Override
@@ -96,17 +112,15 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     task.getResult(ApiException.class);
                 } catch (ApiException e) {
-                    switch (e.getStatusCode())
-                    {
+                    switch (e.getStatusCode()) {
                         case LocationSettingsStatusCodes
                                 .RESOLUTION_REQUIRED:
-                            ResolvableApiException Rexception=(ResolvableApiException) e;
+                            ResolvableApiException Rexception = (ResolvableApiException) e;
                             try {
-                                Rexception.startResolutionForResult(MainActivity.this,8989);
+                                Rexception.startResolutionForResult(MainActivity.this, 8989);
                             } catch (IntentSender.SendIntentException ex) {
                                 ex.printStackTrace();
-                            }catch (ClassCastException ex)
-                            {
+                            } catch (ClassCastException ex) {
 
                             }
                             break;
@@ -131,14 +145,11 @@ public class MainActivity extends AppCompatActivity {
 
 //startScreen
         modelBegin = new ArrayList<>();
-        modelBegin.add(new ModelBegin(R.drawable.tlk, "Let's Begin ", " We will guide you to use this app . " +
-                "Please slide to the right for login and more details of getting interacted with us."));
-        modelBegin.add(new ModelBegin(R.drawable.bt1, " Connect Your Band With Mobile's Bluetooth.", "Tap on the button provided below and click on allow permission ." +
-                "Please connect the your respective watch and enter the password provided to you "));
-        modelBegin.add(new ModelBegin(R.drawable.phonr, "Mobile Number Verification",
-                "Please tap on the login button and enter your mobile number as well as verification code sent to you"));
-        modelBegin.add(new ModelBegin(R.drawable.ph1, "SignUp Form", "You will be directed to signUp form then ,please enter all the asked details and then press on but" +
-                "ton provided there"));
+        modelBegin.add(new ModelBegin(R.drawable.tlk, getResources().getString(R.string.begin), getResources().getString(R.string.begin_title) + getResources().getString(R.string.begin_content)));
+        modelBegin.add(new ModelBegin(R.drawable.bt1, getResources().getString(R.string.connect_heading), getResources().getString(R.string.connect_title) +
+                getResources().getString(R.string.connect_content)));
+        modelBegin.add(new ModelBegin(R.drawable.phonr, getResources().getString(R.string.mobile), getResources().getString(R.string.mobile_title)));
+        modelBegin.add(new ModelBegin(R.drawable.ph1, getResources().getString(R.string.signup), getResources().getString(R.string.sign_content)));
 
         adapter = new AdapterBegin(modelBegin, this);
         viewPager = findViewById(R.id.Pager);
@@ -196,7 +207,75 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        scan.setText(getResources().getString(R.string.scanBluetooth));
+        OpenDialog();
+
+
     }
+
+    private void OpenDialog() {
+        Dialog dialog = new Dialog(MainActivity.this);
+        dialog.setContentView(R.layout.language_dialog);
+
+        hindi = dialog.findViewById(R.id.radioButtonHindi);
+        english = dialog.findViewById(R.id.radioButtonEnglish);
+        cancel = dialog.findViewById(R.id.buttonCancel);
+
+        hindi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                english.setChecked(false);
+                setLocale("hi");
+                editor.putString("locale", "hi");
+                editor.putBoolean("hindiSelected", true);
+                editor.commit();
+
+
+            }
+
+        });
+
+        english.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hindi.setChecked(false);
+                setLocale("en");
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+    }
+
+    private void setLocale(String lang) {
+        locale = new Locale(lang);
+        Resources resources = getResources();
+        DisplayMetrics dm = resources.getDisplayMetrics();
+        Configuration conf = resources.getConfiguration();
+        conf.locale = locale;
+        resources.updateConfiguration(conf, dm);
+        Intent refresh = new Intent(this, MainActivity.class);
+        startActivity(refresh);
+        //  getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        //  SharedPreferences.Editor editor = getSharedPreferences("app", MODE_PRIVATE).edit();
+        //  editor.putString("My Language", lang);
+        //   editor.apply();
+    }
+
+    private void loadLocale() {
+        SharedPreferences preferences = getSharedPreferences("app", Activity.MODE_PRIVATE);
+        String language = preferences.getString("My Language", "");
+        setLocale(language);
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -213,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
                 editor.putString("firebaseId", user.getUid());
                 // editor.putString("time","0");
                 editor.putBoolean("firstTime", true);
-                editor.putBoolean("firstTimeMap",true);
+                editor.putBoolean("firstTimeMap", true);
                 editor.commit();
                 Log.d("phoneNumber", user.getPhoneNumber());
                 Log.d("UserId", user.getUid());
@@ -288,9 +367,9 @@ public class MainActivity extends AppCompatActivity {
                         editor.putString("token", token + "");
                         editor.putBoolean("profileStatus", true);
                         editor.commit();
-                       Intent intent = new Intent(MainActivity.this, BottomNavActivity.class);
+                        Intent intent = new Intent(MainActivity.this, BottomNavActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                      startActivity(intent);
+                        startActivity(intent);
                         finish();
                     }
                 }
@@ -304,6 +383,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+
 }
 
 

@@ -3,7 +3,13 @@ package com.example.hfilproject;
 
 
 import android.Manifest;
+
 import android.app.AlertDialog;
+
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,6 +18,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+
+import android.os.Binder;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
@@ -384,9 +393,6 @@ public class MapsActivity extends AppCompatActivity
 
         markerLocation(new LatLng(location.getLatitude(), location.getLongitude()));
 
-
-
-
     }
 
     private void writeLastLocation() {
@@ -442,14 +448,6 @@ public class MapsActivity extends AppCompatActivity
                             latitude=locationResult.getLocations().get(latestLoc).getLatitude();
                             longitude=locationResult.getLocations().get(latestLoc).getLongitude();
 
-                          //  String l=Double.toString(latitude);
-
-
-
-
-
-
-
                         }
                         l1= new LatLng(latitude,longitude);
 
@@ -462,14 +460,12 @@ public class MapsActivity extends AppCompatActivity
 
 
 
-
-
-
     private Marker geoFenceMarker;
 
     private void markerForGeofence(LatLng latLng) {
         Log.i(TAG, "markerForGeofence(" + latLng + ")");
         String title = latLng.latitude + ", " + latLng.longitude;
+
 
         // Define marker options
         MarkerOptions markerOptions = new MarkerOptions()
@@ -480,11 +476,10 @@ public class MapsActivity extends AppCompatActivity
             // Remove last geoFenceMarker
             if (geoFenceMarker != null)//ye h taakk jb change ho to pichla remove ho jaae
                 geoFenceMarker.remove();
-
             geoFenceMarker = map.addMarker(markerOptions);
             editor.putString("latGeo",Double.toString(latLng.latitude));
             editor.putString("longGeo",Double.toString(latLng.longitude));
-            Toast.makeText(this,latLng.latitude+"a",Toast.LENGTH_LONG).show();
+          //  Toast.makeText(this,latLng.latitude+"a",Toast.LENGTH_LONG).show();
 
             editor.commit();
 
@@ -621,7 +616,7 @@ public class MapsActivity extends AppCompatActivity
         if (sharedPrefs.getBoolean("firstTimeMap",false)==false) {
             super.onBackPressed();
         } else {
-            Toast.makeText(this,"Please select Create Geofence on Toolbar above",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Please click on create geofence",Toast.LENGTH_LONG).show();
         }
     }
 

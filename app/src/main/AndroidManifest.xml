@@ -32,13 +32,9 @@
 
             android:name=".MapsActivity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
-
-
-
             <meta-data
                 android:name="com.google.android.gms.version"
                 android:value="@integer/google_play_services_version" />
-
         </activity>
 
         <!--
@@ -78,6 +74,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
             android:name=".MainActivity"
@@ -98,16 +95,7 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <receiver android:name=".IntentReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name=".IntentReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
+
 
         <service
             android:name=".BLETemperatureService"
@@ -125,15 +113,9 @@
             android:name=".HTService"
             android:enabled="true"
             android:label="HTM" />
-        <service
-            android:name=".LocationService"
-            android:enabled="true" />
-        <service android:name=".LocationIntentService" />
-        <service
-            android:name=".LocationService"
-            android:enabled="true" />
       <service android:name=".GeofenceTransitionService"
           android:enabled="true"/>
+
     </application>
 
 

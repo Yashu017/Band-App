@@ -134,7 +134,7 @@ public class LogIn extends AppCompatActivity {
                 Toast.makeText(LogIn.this, "Your address will be fetched once you reach home", Toast.LENGTH_LONG).show();
                 address.setText("N/A");
                 quarnType = "Personal Place";
-                Toast.makeText(LogIn.this, quarnType, Toast.LENGTH_SHORT).show();
+               // Toast.makeText(LogIn.this, quarnType, Toast.LENGTH_SHORT).show();
                 iw.setChecked(false);
                 timeRl.setVisibility(View.VISIBLE);
                 temp = 1;
@@ -150,7 +150,7 @@ public class LogIn extends AppCompatActivity {
                 sharedPrefs.edit().remove("Home Quarantine").commit();
                 hq.setChecked(false);
                 quarnType = "Government Place";
-                Toast.makeText(LogIn.this, quarnType, Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(LogIn.this, quarnType, Toast.LENGTH_SHORT).show();
                 timeRl.setVisibility(View.GONE);
                 address.setText(address1 + ".");
                 temp=0;
@@ -329,7 +329,7 @@ public class LogIn extends AppCompatActivity {
                             }
                         } else {
                             ok = true;
-                            Toast.makeText(LogIn.this, res + "", Toast.LENGTH_LONG).show();
+                           // Toast.makeText(LogIn.this, res + "", Toast.LENGTH_LONG).show();
                             Log.e("response", res + "");
                             sendToken = response.body().gettoken();
                             Log.e("tk", sendToken);
@@ -347,7 +347,7 @@ public class LogIn extends AppCompatActivity {
                                 editor.putBoolean("profileStatus", true);
                                 editor.commit();
                                 progressBar.setVisibility(View.GONE);
-                                Toast.makeText(LogIn.this, "ok_pref", Toast.LENGTH_SHORT).show();
+                             //   Toast.makeText(LogIn.this, "ok_pref", Toast.LENGTH_SHORT).show();
                                 if (editProfile) {
                                     finish();
                                 } else {
@@ -355,14 +355,14 @@ public class LogIn extends AppCompatActivity {
                                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                     startActivity(i);
                                     progressBar.setVisibility(View.GONE);
-                                    Toast.makeText(LogIn.this, "activity passed", Toast.LENGTH_SHORT).show();
+                                  //  Toast.makeText(LogIn.this, "activity passed", Toast.LENGTH_SHORT).show();
                                     finish();
                                 }
                             }
                         }
                     } else {
                         res = response.errorBody().string();
-                        Toast.makeText(LogIn.this, res, Toast.LENGTH_LONG).show();
+                     //   Toast.makeText(LogIn.this, res, Toast.LENGTH_LONG).show();
                         Log.e("res", res);
                     }
                 } catch (IOException e) {

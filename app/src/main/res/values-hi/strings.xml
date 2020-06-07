@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="scanning">उपकरणों के लिए स्कैनिंग...</string>
+    <string name="app_name">CWatch</string>
+
+    <string name="CLIENT_CHARACTERISTIC_CONFIG">00002902-0000-1000-8000-00805f9b34fb"</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="shortcut_dfu_short">DFU</string>
+    <string name="shortcut_dfu_long">Device Firmware Update</string>
+    <string name="shortcut_uart_short">UART</string>
+    <string name="shortcut_uart_long">Nordic UART Service</string>
+
+    <string name="ok">ठीक</string>
+    <string name="yes">हाँ</string>
+    <string name="no">नहीं</string>
+    <string name="cancel">रद्द करना</string>
+
+    <string name="action_about">के बारे में</string>
+    <string name="action_settings">समायोजन</string>
+    <string name="action_connect">जुडिये</string>
+    <string name="action_select">डिवाइस का चयन करें</string>
+    <string name="action_add_device">डिवाइस जोडे</string>
+    <string name="action_connecting">कनेक्ट ...</string>
+    <string name="action_disconnect">डिस्कनेक्ट</string>
+    <string name="action_disconnecting">डिस्कनेक्ट कर रहा है ...</string>
+
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="drawer_plugins">PLUGINS</string>
+    <string name="drawer_plugin_nrf_connect">nRF Connect</string>
+
+    <string name="battery">%d%%</string>
+    <string name="not_available">n/a</string>
+    <string name="not_available_value">" - "</string>
+    <string name="no_ble">Device doesn\'t have BLE support!</string>
+    <string name="no_apps">No profiles found.</string>
+    <string name="not_supported">The device does not have required services.</string>
+    <string name="no_application">Web Browser application is not available.</string>
+    <string name="no_uri_application">There is no application that can open this URI.</string>
+    <string name="no_application_play">Google Play not installed.</string>
+    <string name="no_required_permission">Permission denied.</string>
+    <string name="scanner_title">डिवाइस का चयन करें:</string>
+    <string name="scanner_empty">कोई उपकरण नहीं मिला</string>
+    <string name="scanner_action_scan">स्कैन</string>
+    <string name="scanner_action_cancel">रद्द करना</string>
+    <string name="scanner_subtitle_bonded">बांड किए गए उपकरण:</string>
+    <string name="scanner_subtitle_not_bonded">उपलब्ध CWATCH:</string>
+    <string name="scanner_permission_rationale">Since Android 6.0 Marshmallow system requires granting access to device\'s location in order to scan for Bluetooth LE devices. Bluetooth beacons may be used to determine the phone\'s and user\'s location.</string>
+
+    <string name="log" formatted="false">%1$tR:%1$tS.%1$tL</string>
+
+    <string name="baseUrl">http://api-c19.ap-south-1.elasticbeanstalk.com/
+</string>
+
+    <string name="connected">जुड़े हुए</string>
+    <string name="disconnect">डिस्कनेक्ट</string>
+
+    <string name="ble_not_supported">ब्लूटूथ कम ऊर्जा समर्थित नहीं है</string>
+    <string name="scan">स्कैन</string>
+    <string name="paired">बनती</string>
+    <string name="select_device">एक उपकरण का चयन करें</string>
+
+    <string name="permission_denied">अनुमति नहीं मिली</string>
+    <string name="connect">जुडिये</string>
+    <string name="not_connected">जुड़े नहीं हैं</string>
+    <string name="temperature_unknown">---°C</string>
+    <string name="bluetooth_is_not_available">ब्लूटूथ उपलब्ध नहीं है</string>
+    <string name="device_connected" formatted="false">%s - ready</string>
+    <string name="notification_temperature">Temperature: </string>
+    <string name="temperature_template">%.1f°C</string>
+    <string name="temperature_service_not_found">Temperature Service not found! Disconnecting.</string>
+    <string name="no_name_device">NoName device</string>
+    <string name="rssi_value">Rssi = </string>
+    <string name="device_connecting" formatted="false">%s - connecting</string>
+    <string name="about_version">\\n\\nVersion: %s</string>
+
+
+    <string name="about_title">About</string>
+
+    <string name="about_text">The nRF Toolbox is a container application that stores your Nordic Semiconductor apps in one location.</string>
+    <string name="bonding">Bonding with the device&#8230;</string>
+    <string name="bonded">The device is now bonded.</string>
+    <string name="bonding_failed">Bonding failed.</string>
+
+    <string name="channel_connected_devices_title">Background connections</string>
+    <string name="channel_connected_devices_description">Shows a notification when a device is connected in background.</string>
+    <string name="channel_files_title">Files</string>
+    <string name="channel_files_description">Shows notifications when new files has been saved.</string>
+    <string name="channel_proximity_warnings_title">Proximity warnings</string>
+    <string name="channel_proximity_warnings_description">Shows notifications when a proximity device got out of range.</string>
+    <string name="uart_notification_connected_message"><![CDATA[<string name=\"uart_notification_connected_message\">%s is connected.</string>]]></string>
+    <string name="scanBluetooth">ब्लूटूथ स्कैन करें</string>
+    <string name="login">लॉग इन करें</string>
+
+    <string name="begin">चलो शुरू करें</string>
+    <string name="begin_title">हम आपको इस ऐप का उपयोग करने के लिए मार्गदर्शन करेंगे</string>
+    <string name="begin_content">कृपया लॉगिन के लिए दाईं ओर स्लाइड करें और हमारे साथ बातचीत करने के अधिक विवरण।</string>
+    <string name="connect_heading">अपने बैंड को मोबाइल के ब्लूटूथ से कनेक्ट करें।</string>
+    <string name="connect_title">नीचे दिए गए बटन पर टैप करें और अनुमति अनुमति पर क्लिक करें।</string>
+    <string name="connect_content">कृपया अपनी संबंधित घड़ी कनेक्ट करें और आपको प्रदान किया गया पासवर्ड डालें।</string>
+    <string name="mobile">मोबाइल नंबर का सत्यापन</string>
+    <string name="mobile_title">कृपया लॉगिन बटन पर टैप करें और अपने मोबाइल नंबर के साथ-साथ आपको भेजा गया सत्यापन कोड भी दर्ज करें।</string>
+    <string name="signup">साइनअप फॉर्म</string>
+    <string name="sign_content">फिर आपको साइनअप फॉर्म के लिए निर्देशित किया जाएगा, कृपया सभी पूछे गए विवरण दर्ज करें और फिर वहां दिए गए बटन को दबाएं</string>
+    <string name="welcome">स्वागत हे! कृपया अपना विवरण दर्ज करें।</string>
+    <string name="name">नाम</string>
+    <string name="age">आयु</string>
+    <string name="quarantine_type">संगरोध का प्रकार</string>
+    <string name="home_quar">होम संगरोध / स्व अलगाव</string>
+    <string name="isolation_quar">अलगाव केंद्र / सरकारी संगरोध</string>
+    <string name="address">पता</string>
+    <string name="enter_bluetooth">ब्लूटूथ आईडी दर्ज करें</string>
+    <string name="submit">प्रस्तुत</string>
+    <string name="recent_temp">हाल के तापमान (एफ)</string>
+    <string name="current_location">वर्तमान स्थान:</string>
+    <string name="geofence">Geofence</string>
+    <string name="open_geofence">ओपन जियोफेंस</string>
+    <string name="location_updates">स्थान अपडेट</string>
+    <string name="temp_history">तापमान इतिहास</string>
+    <string name="info">जानकारी</string>
+    <string name="notif_content">यह डिवाइस C वॉच से कनेक्ट नहीं है। कृपया फिर से कनेक्ट करें।</string>
+    <string name="notif">सूचनाएं</string>
+    <string name="device_name">यन्त्र का नाम:--</string>
+    <string name="bluetooth_id">ब्लूटूथ आईडी: -</string>
+
+    <string name="hts_feature_title">HTM</string>
+    <string name="hts_settings_title">HTM Settings</string>
+
+    <string name="hts_feature_title_long"></string>
+    <dimen name="hts_feature_title_long_margin">-236dp</dimen>
+
+    <string name="hts_default_name">DEFAULT HTM</string>
+    <string name="hts_unit_celsius">°C</string>
+    <string name="hts_unit_fahrenheit">°F</string>
+    <string name="hts_unit_kelvin">°K</string>
+    <string name="hts_value">%.2f</string>
+
+    <string name="hts_notification_action_disconnect">डिस्कनेक्ट</string>
+    <string name="hts_notification_connected_message">%s जुड़ा हुआ है।</string>
+
+    <string name="hts_settings_units_title">इकाइयों</string>
+    <string name="hts_settings_units_summary">%s</string>
+    <string-array name="hts_settings_units">
+        <item>सेल्सीयस</item>
+        <item>फारेनहाइट</item>
+        <item>केल्विन</item>
+    </string-array>
+    <string-array name="hts_settings_units_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string name="hts_about_text">HTM (स्वास्थ्य थर्मामीटर मॉनिटर) प्रोफ़ाइल आपको अपने स्वास्थ्य थर्मामीटर सेंसर से कनेक्ट करने की अनुमति देता है।
+यह आपको सेल्सियस में तापमान मान दिखाता है।</string>
+    <string name="home">घर</string>
+    <string name="map">नक्शा</string>
+    <string name="history">इतिहास</string>
+    <string name="help">मदद</string>
+    <string name="how_to_use">कैसे इस्तेमाल करे</string>
+    <string name="geofence_dialog">आपको जियोफ़ेंस गतिविधि के लिए निर्देशित किया जा रहा है। यदि आप पाते हैं कि लाल सूचक के साथ दिखाया गया आपका स्थान सही नहीं है, तो कृपया कुछ समय प्रतीक्षा करें और अपने फ़ोन को थोड़ा स्थानांतरित करें। जैसे ही आपका पॉइंटर सही स्थान पर होता है आप शीर्ष पर अपने एक्शन बार में जियोफेंस बटन का उपयोग करके अपने भू-स्थान को बदलने के लिए एक समय सुविधा का उपयोग कर सकते हैं।</string>
+    <string name="title_activity_maps">नक्शा</string>
+</resources>
