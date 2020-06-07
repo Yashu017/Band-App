@@ -1,34 +1,42 @@
 {
   "project_info": {
-    "project_number": "11266305352",
-    "firebase_url": "https://hfil-project.firebaseio.com",
-    "project_id": "hfil-project",
-    "storage_bucket": "hfil-project.appspot.com"
+    "project_number": "684066855794",
+    "firebase_url": "https://cwatch-c5398.firebaseio.com",
+    "project_id": "cwatch-c5398",
+    "storage_bucket": "cwatch-c5398.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:11266305352:android:31818a4bed14c9a5b4177d",
+        "mobilesdk_app_id": "1:684066855794:android:fdd7fdcb86b9e10a6edbeb",
         "android_client_info": {
           "package_name": "com.example.hfilproject"
         }
       },
       "oauth_client": [
         {
-          "client_id": "11266305352-d8n1heaudvaflj3kc7u6d4ljr8tlspf0.apps.googleusercontent.com",
+          "client_id": "684066855794-m70ncite48la55itodtmofhs3cjqae0l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.hfilproject",
+            "certificate_hash": "aea6b2fb1daadfdf6f27f7059e8f7d4ed014ffe1"
+          }
+        },
+        {
+          "client_id": "684066855794-dikdjf0c0q4fj1h71k6hgcblbapqtbog.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAXM7ZLuxlpc3Igbqe2oHRqZcGYcZ8MLek"
+          "current_key": "AIzaSyBfn3lu7QKJnPe6eEEPjiwoR0nrTgRZ1yY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "11266305352-d8n1heaudvaflj3kc7u6d4ljr8tlspf0.apps.googleusercontent.com",
+              "client_id": "684066855794-dikdjf0c0q4fj1h71k6hgcblbapqtbog.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

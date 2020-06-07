@@ -1,6 +1,5 @@
 package com.example.hfilproject;
 
-import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
@@ -41,10 +40,10 @@ public class BottomNavActivity extends AppCompatActivity implements BottomNaviga
         ActionBar actionBar = getSupportActionBar();
         getSupportActionBar().hide();
 
-        BluetoothAdapter mBtAdapter=BluetoothAdapter.getDefaultAdapter();
-        if(!mBtAdapter.isEnabled()) {
-            mBtAdapter.enable();
-        }
+//        BluetoothAdapter mBtAdapter=BluetoothAdapter.getDefaultAdapter();
+//        if(!mBtAdapter.isEnabled()) {
+//            mBtAdapter.enable();
+//        }
 
 
         sharedPref = getSharedPreferences("app", MODE_PRIVATE);

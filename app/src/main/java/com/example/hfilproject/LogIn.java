@@ -248,10 +248,6 @@ public class LogIn extends AppCompatActivity {
 
                             latitude = locationResult.getLocations().get(latestLoc).getLatitude();
                             longitude = locationResult.getLocations().get(latestLoc).getLongitude();
-                            float lat,lon;
-                            editor.putFloat("lat",(float) latitude);
-                            editor.putFloat("long",(float) longitude);
-                            editor.commit();
 
                             locInWords();
                         }

@@ -210,14 +210,6 @@ public class SecondFragment extends Fragment implements SharedPreferences.OnShar
                     .append(event.getLocation().getLongitude()).toString();
 
             Toast.makeText(getContext(), data, Toast.LENGTH_LONG).show();
-            if (sharedPrefs.getBoolean("firstTimeMap", false) == true) {
-                editor.putFloat("lat", (float) latitude);
-                editor.putFloat("long", (float) longitude);
-                Toast.makeText(getContext(),latitude+"yes"+longitude,Toast.LENGTH_LONG).show();
-                editor.putBoolean("firstTimeMap", false);
-                editor.commit();
-
-            }
 
 
             Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());

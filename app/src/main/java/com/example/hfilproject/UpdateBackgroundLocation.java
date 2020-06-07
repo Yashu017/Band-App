@@ -36,6 +36,7 @@ import com.google.android.gms.tasks.Task;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -62,10 +63,15 @@ public class UpdateBackgroundLocation extends Service {
     private boolean mChangingConfiguration = false;
     private NotificationManager mNotificationManager;
     private LocationRequest locationRequest;
+    Retrofit retrofit;
+    String token1;
+    String sendTokenBle;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private LocationCallback locationCallback;
     private Handler mServiceHandler;
+   double distaceGeo;
     private Location mLocation;
+
 
     private SharedPreferences sharedPrefs;
     private SharedPreferences.Editor editor;
@@ -74,9 +80,8 @@ public class UpdateBackgroundLocation extends Service {
     int temp;
     String sendToken;
     String location;
-    Retrofit retrofit;
     int geoStatus;
-
+    long  time=15*60000;;
     String fullAddress;
 
     public UpdateBackgroundLocation() {
@@ -117,9 +122,7 @@ public class UpdateBackgroundLocation extends Service {
 
     }
 
-    Timer timer = new Timer();
 
-    Timer timer2 = new Timer();
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -127,15 +130,29 @@ public class UpdateBackgroundLocation extends Service {
         if (startedFromNotification) {
             removeLocationUpdates();
             stopSelf();
+
         }
 
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                SendLocation();
-            }
-        }, 0, 1 * 60000);
+        if(sharedPrefs.getBoolean("firstTimeMap",false)!=true) {
 
+            Handler handler = new Handler();
+// Define the code block to be executed
+            Runnable runnableCode = new Runnable() {
+                @Override
+                public void run() {
+                    // Do something here on the main thread
+                    comparedifference(mLocation.getLatitude(),mLocation.getLongitude());
+                    // Repeat this the same runnable code block again another 2 seconds
+                    // 'this' is referencing the Runnable object
+
+                    handler.postDelayed(this, time);
+                }
+            };
+// Start the initial runnable task by posting through the handler
+            handler.post(runnableCode);
+
+
+        }
 
         sendNotification();
         return START_NOT_STICKY;
@@ -145,53 +162,7 @@ public class UpdateBackgroundLocation extends Service {
 
     }
 
-    private void SendLocation() {
 
-        location = sharedPrefs.getString("updated Location", "");
-        if (location != null) {
-            Log.e("token", "" + location);
-            OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-            okhttpbuilder.addInterceptor(logging);
-
-            Retrofit.Builder builder = new Retrofit.Builder()
-                    .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
-                    .addConverterFactory(GsonConverterFactory.create());
-
-            retrofit = builder.build();
-
-            for_login login = retrofit.create(for_login.class);
-            Map<String, Object> params = new HashMap<>();
-            params.put("location", fullAddress);
-            Call<UserLocation> call = login.userLocation(token, params);
-            call.enqueue(new Callback<UserLocation>() {
-                @Override
-                public void onResponse(Call<UserLocation> call, Response<UserLocation> response) {
-                    String error;
-                    if (response.isSuccessful() && response.code() == 200) {
-                        if (response.body().getErrorCode() != null) {
-                            error = response.body().getErrorCode();
-                            if (error.equals("2")) {
-                                Toast.makeText(UpdateBackgroundLocation.this, "User not found.", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                        sendToken = response.body().getToken();
-                        Toast.makeText(UpdateBackgroundLocation.this, "Location sent to server.", Toast.LENGTH_SHORT).show();
-                        Log.e("Location Posted", "Success");
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<UserLocation> call, Throwable t) {
-                    Toast.makeText(UpdateBackgroundLocation.this, "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
-                    Log.e("error", "" + t.getMessage());
-                }
-            });
-
-        }
-
-    }
 
 
     @Override
@@ -223,6 +194,9 @@ public class UpdateBackgroundLocation extends Service {
                                 mLocation = task.getResult();
                                 double latitude = mLocation.getLatitude();
                                 double longitude = mLocation.getLongitude();
+                                Log.e("getM",latitude+""+longitude);
+
+
                                 Geocoder geocoder = new Geocoder(UpdateBackgroundLocation.this, Locale.getDefault());
                                 try {
                                     List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 3);
@@ -249,16 +223,210 @@ public class UpdateBackgroundLocation extends Service {
         }
     }
 
+    private void comparedifference(double latii, double longii) {
+
+        double lat1=latii;//end
+        double lon1=longii;//start
+        double lat2=Double.parseDouble(sharedPrefs.getString("latGeo",""));
+        double lon2=Double.parseDouble(sharedPrefs.getString("longGeo",""));
+               // Haversine formula
+       double dlon =Math.toRadians( lon1 - lon2);
+        double dlat = Math.toRadians(lat1 - lat2);
+        double a = Math.sin(dlat / 2) * Math.sin(dlat / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(dlon / 2) * Math.sin(dlon / 2);
+
+        double c = 2 * Math.asin(Math.sqrt(a));
+
+        // Radius of earth in kilometers. Use 3956
+        // for miles
+        float r = 6371;
+
+        // calculate the result
+        distaceGeo=c*r;
+        double kmres=distaceGeo/1;
+        DecimalFormat newFormat = new DecimalFormat("####");
+        int kmInDec = Integer.valueOf(newFormat.format(kmres));
+        double meter = distaceGeo % 1000;
+        int meterInDec = Integer.valueOf(newFormat.format(meter));
+
+        Log.i("Radius Value", "" + distaceGeo + "   KM  " + kmInDec
+                + " Meter   " + meterInDec);
+
+        if(meterInDec>40)
+        {
+
+            String exit="You exited your geofence";
+           putNotificationGeofence(exit);
+           sendLocation();
+           Toast.makeText(this,"exit",Toast.LENGTH_LONG).show();
+           postNotificationToServer();
+           time=60000*5;
+        }
+        else
+        {
+            Toast.makeText(this,"enter",Toast.LENGTH_LONG).show();
+            time=60000*15;
+        }
+
+
+    }
+
+    private void postNotificationToServer() {
+
+        int categoryType = 0;
+        sharedPrefs = getSharedPreferences("app", Context.MODE_PRIVATE);
+        editor = sharedPrefs.edit();
+
+        token1 = sharedPrefs.getString("token", "");
+
+
+        String geofenceStatus = "Geo fence breached.";
+        OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        okhttpbuilder.addInterceptor(logging);
+
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
+                .addConverterFactory(GsonConverterFactory.create());
+
+        retrofit = builder.build();
+        for_login login = retrofit.create(for_login.class);
+        Map<String, Object> params = new HashMap<>();
+        params.put("notification", geofenceStatus);
+        params.put("category", categoryType);
+        Call<UserNotification> call = login.userNotify(token1, params);
+        call.enqueue(new Callback<UserNotification>() {
+            @Override
+            public void onResponse(Call<UserNotification> call, Response<UserNotification> response) {
+                String error;
+                if (response.isSuccessful() && response.code() == 200) {
+                    if (response.body().getErrorCode() != null) {
+                        error = response.body().getErrorCode();
+                        if (error.equals("2")) {
+                            Toast.makeText(UpdateBackgroundLocation.this, "User not found.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    sendTokenBle = response.body().getToken();
+                    Toast.makeText(UpdateBackgroundLocation.this, "Success", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserNotification> call, Throwable t) {
+                Toast.makeText(UpdateBackgroundLocation.this, "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("GeofenceTransition", "" + t.getMessage());
+            }
+        });
+
+
+    }
+
+    private void sendLocation() {
+            location = sharedPrefs.getString("updated Location", "");
+            if (location != null) {
+                Log.e("token", "" + location);
+                OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
+                HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+                logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+                okhttpbuilder.addInterceptor(logging);
+
+                Retrofit.Builder builder = new Retrofit.Builder()
+                        .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
+                        .addConverterFactory(GsonConverterFactory.create());
+
+                retrofit = builder.build();
+
+                for_login login = retrofit.create(for_login.class);
+                Map<String, Object> params = new HashMap<>();
+                params.put("location", fullAddress);
+                Call<UserLocation> call = login.userLocation(token, params);
+                call.enqueue(new Callback<UserLocation>() {
+                    @Override
+                    public void onResponse(Call<UserLocation> call, Response<UserLocation> response) {
+                        String error;
+                        if (response.isSuccessful() && response.code() == 200) {
+                            if (response.body().getErrorCode() != null) {
+                                error = response.body().getErrorCode();
+                                if (error.equals("2")) {
+                                    Toast.makeText(UpdateBackgroundLocation.this, "User not found.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            sendToken = response.body().getToken();
+                            Toast.makeText(UpdateBackgroundLocation.this, "Location sent to server.", Toast.LENGTH_SHORT).show();
+                            Log.e("Location Posted", "Success");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserLocation> call, Throwable t) {
+                        Toast.makeText(UpdateBackgroundLocation.this, "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e("error", "" + t.getMessage());
+                    }
+                });
+
+            }
+
+        }
+
+
+    private Notification putNotificationGeofence(String exit) {
+
+
+        Intent intent = new Intent(this, UpdateBackgroundLocation.class);
+       // String text = Common.getLocationText(mLocation);
+        intent.putExtra(EXTRA_STARTED_FROM_NOTIFICATION, true);
+
+        PendingIntent servicePendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+       // PendingIntent activityPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, SecondFragment.class), 0);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                // .setContentText(text)
+                .setContentText(exit)
+                .setContentTitle("Alert")
+                .setOngoing(true)
+                .setPriority(Notification.PRIORITY_MIN)
+                .setSmallIcon(R.mipmap.sqlogo)
+               // .setTicker(text)
+                .setWhen(System.currentTimeMillis());
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                new Intent(this, BottomNavActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(contentIntent);
+
+
+
+        mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+// === Removed some obsoletes
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+            String channelId = "Your_channel_id";
+            NotificationChannel channel = new NotificationChannel(
+                    channelId,
+                    "Channel human readable title",
+                    NotificationManager.IMPORTANCE_HIGH);
+            mNotificationManager.createNotificationChannel(channel);
+            builder.setChannelId(channelId);
+        }
+
+        mNotificationManager.notify(0, builder.build());
+       // builder.setChannelId(CHANNEL_ID);
+        return builder.build();
+    }
+
+
+
     private void createLocationRequest() {
         locationRequest = new LocationRequest();
-        locationRequest.setSmallestDisplacement(50);
+        locationRequest.setSmallestDisplacement(10);
+        locationRequest.setFastestInterval(5000);
+        locationRequest.setFastestInterval(10000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
     private void onNewLocation(Location lastLocation) {
         mLocation = lastLocation;
-
-
         EventBus.getDefault().postSticky(new SendLocation(mLocation));
         if (serviceIsRunningINForeground(this)) {
             mNotificationManager.notify(NOTI_ID, getNotification());

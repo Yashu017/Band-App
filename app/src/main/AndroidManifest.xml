@@ -31,13 +31,13 @@
         <activity
 
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps">
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+
+
 
             <meta-data
                 android:name="com.google.android.gms.version"
                 android:value="@integer/google_play_services_version" />
-
-
 
         </activity>
 
@@ -132,7 +132,8 @@
         <service
             android:name=".LocationService"
             android:enabled="true" />
-        <service android:name=".MapsActivity$GeoService" />
+      <service android:name=".GeofenceTransitionService"
+          android:enabled="true"/>
     </application>
 
 

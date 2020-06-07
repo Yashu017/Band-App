@@ -325,7 +325,6 @@ public class FirstFragment extends Fragment {
                                             originalAddress.setText(fulladdress);
                                             addresesHead.setVisibility(View.GONE);
                                             editor.putString("hqAddress",fulladdress);
-                                            editor.putBoolean("done",true);
                                             editor.commit();
 
                                         } catch (Exception e) {
