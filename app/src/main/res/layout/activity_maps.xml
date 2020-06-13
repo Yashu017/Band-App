@@ -55,7 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginTop="-40dp"
-        android:text="Create Feofence"
+        android:text="Create Geofence"
         android:padding="4dp" />
 
 

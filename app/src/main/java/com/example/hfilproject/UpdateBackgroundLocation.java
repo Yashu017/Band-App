@@ -60,6 +60,7 @@ public class UpdateBackgroundLocation extends Service {
     private static final String TAG = "Post Location";
     private final IBinder mBinder = new LocalBinder();
     private final int NOTI_ID = 1223;
+    public static final long NOTIFY_INTERVAL = 10 * 1000; // 10 seconds
     private boolean mChangingConfiguration = false;
     private NotificationManager mNotificationManager;
     private LocationRequest locationRequest;
@@ -81,7 +82,7 @@ public class UpdateBackgroundLocation extends Service {
     String sendToken;
     String location;
     int geoStatus;
-    long  time=1*30000;;
+    long  time=3000;;
     String fullAddress;
     public static final int notify = 300000;  //interval between two services(Here Service run every 5 Minute)
     private Handler mHandler = new Handler();   //run on another Thread to avoid crash
@@ -101,11 +102,6 @@ public class UpdateBackgroundLocation extends Service {
         token = sharedPrefs.getString("token", "");
         geoStatus = sharedPrefs.getInt("geoStatus", 0);
 
-        if (mTimer != null) // Cancel if already existed
-            mTimer.cancel();
-        else
-            mTimer = new Timer();   //recreate new
-        mTimer.scheduleAtFixedRate(new TimeDisplay(), 0, notify);   //Schedule task
 
         locationCallback = new LocationCallback() {
             @Override
@@ -129,9 +125,15 @@ public class UpdateBackgroundLocation extends Service {
             mNotificationManager.createNotificationChannel(mChannel);
         }
 
+        if(mTimer != null) {
+            mTimer.cancel();
+        } else {
+            // recreate new
+            mTimer = new Timer();
+        }
+        // schedule task
+        mTimer.scheduleAtFixedRate(new TimeDisplayTimerTask(), 0, NOTIFY_INTERVAL);
     }
-
-
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -141,29 +143,6 @@ public class UpdateBackgroundLocation extends Service {
             stopSelf();
 
         }
-
-        if(sharedPrefs.getBoolean("firstTimeMap",false)!=true) {
-
-            Handler handler = new Handler();
-// Define the code block to be executed
-            Runnable runnableCode = new Runnable() {
-                @Override
-                public void run() {
-                    // Do something here on the main thread
-                    if(mLocation!=null) {
-                        comparedifference(mLocation.getLatitude(), mLocation.getLongitude());
-                    }
-                    // Repeat this the same runnable code block again another 2 seconds
-                    // 'this' is referencing the Runnable object
-                    handler.postDelayed(this, time);
-                }
-            };
-// Start the initial runnable task by posting through the handler
-            handler.post(runnableCode);
-
-
-        }
-
         sendNotification();
         return START_NOT_STICKY;
     }
@@ -233,105 +212,9 @@ public class UpdateBackgroundLocation extends Service {
         }
     }
 
-    private void comparedifference(double latii, double longii) {
-
-        double lat1=latii;//end
-        double lon1=longii;//start
-        double lat2=Double.parseDouble(sharedPrefs.getString("latGeo",""));
-        double lon2=Double.parseDouble(sharedPrefs.getString("longGeo",""));
-               // Haversine formula
-       double dlon =Math.toRadians( lon1 - lon2);
-        double dlat = Math.toRadians(lat1 - lat2);
-        double a = Math.sin(dlat / 2) * Math.sin(dlat / 2)
-                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
-                * Math.sin(dlon / 2) * Math.sin(dlon / 2);
-
-        double c = 2 * Math.asin(Math.sqrt(a));
-
-        // Radius of earth in kilometers. Use 3956
-        // for miles
-        float r = 6371;
-
-        // calculate the result
-        distaceGeo=c*r;
-        double kmres=distaceGeo/1;
-        DecimalFormat newFormat = new DecimalFormat("####");
-        int kmInDec = Integer.valueOf(newFormat.format(kmres));
-        double meter = distaceGeo % 1000;
-        int meterInDec = Integer.valueOf(newFormat.format(meter));
-
-        Log.i("Radius Value", "" + distaceGeo + "   KM  " + kmInDec
-                + " Meter   " + meterInDec);
-
-        if(meterInDec>40)
-        {
-
-            String exit="You exited your geofence";
-           putNotificationGeofence(exit);
-           sendLocation();
-           Toast.makeText(this,"You exited geofence",Toast.LENGTH_LONG).show();
-           postNotificationToServer();
-           time=30000*1;
-        }
-        else
-        {
-            Toast.makeText(this,"enter",Toast.LENGTH_LONG).show();
-            time=60000*1;
-        }
 
 
-    }
 
-    private void postNotificationToServer() {
-
-        int categoryType = 0;
-        sharedPrefs = getSharedPreferences("app", Context.MODE_PRIVATE);
-        editor = sharedPrefs.edit();
-
-        token1 = sharedPrefs.getString("token", "");
-
-
-        String geofenceStatus = "Geo fence breached.";
-        OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-        okhttpbuilder.addInterceptor(logging);
-
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
-                .addConverterFactory(GsonConverterFactory.create());
-
-        retrofit = builder.build();
-        for_login login = retrofit.create(for_login.class);
-        Map<String, Object> params = new HashMap<>();
-        params.put("notification", geofenceStatus);
-        params.put("category", categoryType);
-        Call<UserNotification> call = login.userNotify(token1, params);
-        call.enqueue(new Callback<UserNotification>() {
-            @Override
-            public void onResponse(Call<UserNotification> call, Response<UserNotification> response) {
-                String error;
-                if (response.isSuccessful() && response.code() == 200) {
-                    if (response.body().getErrorCode() != null) {
-                        error = response.body().getErrorCode();
-                        if (error.equals("2")) {
-                            Toast.makeText(UpdateBackgroundLocation.this, "User not found.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    sendTokenBle = response.body().getToken();
-                  //  Toast.makeText(UpdateBackgroundLocation.this, "Success", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UserNotification> call, Throwable t) {
-                Toast.makeText(UpdateBackgroundLocation.this, "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("GeofenceTransition", "" + t.getMessage());
-            }
-        });
-
-
-    }
 
     private void sendLocation() {
             location = sharedPrefs.getString("updated Location", "");
@@ -381,49 +264,6 @@ public class UpdateBackgroundLocation extends Service {
         }
 
 
-    private Notification putNotificationGeofence(String exit) {
-
-
-        Intent intent = new Intent(this, UpdateBackgroundLocation.class);
-       // String text = Common.getLocationText(mLocation);
-        intent.putExtra(EXTRA_STARTED_FROM_NOTIFICATION, true);
-
-        PendingIntent servicePendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-       // PendingIntent activityPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, SecondFragment.class), 0);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                // .setContentText(text)
-                .setContentText(exit)
-                .setContentTitle("Alert")
-                .setOngoing(true)
-                .setPriority(Notification.PRIORITY_MIN)
-                .setSmallIcon(R.mipmap.sqlogo)
-               // .setTicker(text)
-                .setWhen(System.currentTimeMillis());
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, BottomNavActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(contentIntent);
-
-
-
-        mNotificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-// === Removed some obsoletes
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-        {
-            String channelId = "Your_channel_id";
-            NotificationChannel channel = new NotificationChannel(
-                    channelId,
-                    "Channel human readable title",
-                    NotificationManager.IMPORTANCE_HIGH);
-            mNotificationManager.createNotificationChannel(channel);
-            builder.setChannelId(channelId);
-        }
-
-        mNotificationManager.notify(0, builder.build());
-       // builder.setChannelId(CHANNEL_ID);
-        return builder.build();
-    }
 
 
 
@@ -526,17 +366,30 @@ public class UpdateBackgroundLocation extends Service {
         super.onDestroy();
     }
 
-    private class TimeDisplay extends TimerTask {
 
+    private class TimeDisplayTimerTask extends TimerTask {
         @Override
         public void run() {
+            // run on another thread
             mHandler.post(new Runnable() {
+
                 @Override
                 public void run() {
-                    Log.d("service is ","running");
+                    // display toast
+                 if(sharedPrefs.getInt("geoStatus",0)==1)
+                 {
+                    sendLocation();
+                    // Toast.makeText(UpdateBackgroundLocation.this,"yesIn",Toast.LENGTH_LONG).show();
                 }
+                 else if(sharedPrefs.getInt("geoStatus",0)==2)
+                 {
+                 //   Toast.makeText(UpdateBackgroundLocation.this,"yes",Toast.LENGTH_LONG).show();
+                 }
+                }
+
             });
         }
-        }
     }
+}
+
 

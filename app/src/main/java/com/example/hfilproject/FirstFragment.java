@@ -452,7 +452,7 @@ public class FirstFragment extends Fragment {
 
             @Override
             public void onFailure(Call<GetTemp> call, Throwable t) {
-                Toast.makeText(getContext(), "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Failed" + t.getMessage()+"", Toast.LENGTH_SHORT).show();
                 Log.e("error", "" + t.getMessage());
             }
         });

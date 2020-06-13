@@ -3,13 +3,7 @@ package com.example.hfilproject;
 
 
 import android.Manifest;
-
 import android.app.AlertDialog;
-
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,9 +12,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
-
-import android.os.Binder;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
@@ -115,6 +106,7 @@ public class MapsActivity extends AppCompatActivity
         }
 
 
+
         if(sharedPrefs.getBoolean("firstTimeMap",false)==true) {
 
             new AlertDialog.Builder(MapsActivity.this)
@@ -130,6 +122,7 @@ public class MapsActivity extends AppCompatActivity
 
         // create GoogleApiClient
         createGoogleApi();
+
 
         createG=findViewById(R.id.createG);
         createG.setOnClickListener(new View.OnClickListener() {
@@ -170,6 +163,10 @@ public class MapsActivity extends AppCompatActivity
                 }
 
             }});
+        if (!sharedPrefs.getBoolean("firstTimeMap", false)) {
+            createG.setVisibility(View.GONE);
+        }
+
 
     }
     // Create GoogleApiClient instance
@@ -411,7 +408,7 @@ public class MapsActivity extends AppCompatActivity
             if (locationMarker != null)
                 locationMarker.remove();
             locationMarker = map.addMarker(markerOptions);
-            float zoom = 16.f;
+            float zoom = 18.77f;
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, zoom);
             map.animateCamera(cameraUpdate);
 
@@ -477,11 +474,7 @@ public class MapsActivity extends AppCompatActivity
             if (geoFenceMarker != null)//ye h taakk jb change ho to pichla remove ho jaae
                 geoFenceMarker.remove();
             geoFenceMarker = map.addMarker(markerOptions);
-            editor.putString("latGeo",Double.toString(latLng.latitude));
-            editor.putString("longGeo",Double.toString(latLng.longitude));
           //  Toast.makeText(this,latLng.latitude+"a",Toast.LENGTH_LONG).show();
-
-            editor.commit();
 
         }
         startGeofence();
@@ -576,8 +569,8 @@ public class MapsActivity extends AppCompatActivity
 
         CircleOptions circleOptions = new CircleOptions()
                 .center(geoFenceMarker.getPosition())
-                .strokeColor(Color.argb(50, 70, 70, 70))
-                .fillColor(Color.argb(100, 150, 150, 150))
+                .strokeColor(Color.argb(50, 0, 0, 150))
+                .fillColor(Color.argb(100, 0, 0, 100))
                 .radius(GEOFENCE_RADIUS);
         geoFenceLimits = map.addCircle(circleOptions);
     }

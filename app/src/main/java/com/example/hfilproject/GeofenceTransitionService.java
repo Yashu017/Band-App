@@ -2,6 +2,7 @@ package com.example.hfilproject;
 
 import android.app.IntentService;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
@@ -12,7 +13,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
@@ -75,12 +75,7 @@ public class GeofenceTransitionService extends IntentService {
             // Send notification details as a String
             sendNotification(geofenceTransitionDetails);
         }
-        if (geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
-            int geoStatus = 1;
-            sharedPrefs = getSharedPreferences("app", MODE_PRIVATE);
-            editor = sharedPrefs.edit();
-            editor.putInt("geoStatus", geoStatus);
-        }
+
     }
 
 
@@ -97,7 +92,7 @@ public class GeofenceTransitionService extends IntentService {
         else if (geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
             status = "Exiting ";
           //  Toast.makeText(this,status,Toast.LENGTH_LONG).show();
-            PostNotification();
+
         }
 
         return status + TextUtils.join(", ", triggeringGeofencesList);
@@ -121,10 +116,45 @@ public class GeofenceTransitionService extends IntentService {
         // Creating and sending Notification
          notificatioMng =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificatioMng.notify(
-                GEOFENCE_NOTIFICATION_ID,
-                createNotification(msg, notificationPendingIntent));
-
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("YOUR_CHANNEL_ID",
+                    "YOUR_CHANNEL_NAME",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription("YOUR_NOTIFICATION_CHANNEL_DESCRIPTION");
+           notificatioMng.createNotificationChannel(channel);
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "YOUR_CHANNEL_ID")
+                    .setSmallIcon(R.mipmap.sqlogo) // notification icon
+                    .setContentTitle(msg) // title for notification
+                    .setContentIntent(notificationPendingIntent)
+                    .setContentText("Geofence Notification!")// message for notification
+                    .setAutoCancel(true); // clear notification after click
+            PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                    new Intent(this, BottomNavActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+            mBuilder.setContentIntent(contentIntent);
+            if(msg.equals("Exiting My Geofence"))
+            {
+                PostNotification();
+                int geoStatus = 1;
+                sharedPrefs = getSharedPreferences("app", MODE_PRIVATE);
+                editor = sharedPrefs.edit();
+                editor.putInt("geoStatus", geoStatus);
+                editor.commit();
+            }
+            else
+            {
+                int geoStatus = 2;
+                sharedPrefs = getSharedPreferences("app", MODE_PRIVATE);
+                editor = sharedPrefs.edit();
+                editor.putInt("geoStatus", geoStatus);
+                editor.commit();
+            }
+           notificatioMng.notify(GEOFENCE_NOTIFICATION_ID, mBuilder.build());
+        }
+        else {
+            notificatioMng.notify(
+                    GEOFENCE_NOTIFICATION_ID,
+                    createNotification(msg, notificationPendingIntent));
+        }
 
     }
 
@@ -143,8 +173,23 @@ public class GeofenceTransitionService extends IntentService {
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, BottomNavActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
         notificationBuilder.setContentIntent(contentIntent);
-
-
+        if(msg.equals("Exiting My Geofence"))
+        {
+            PostNotification();
+                int geoStatus = 1;
+                sharedPrefs = getSharedPreferences("app", MODE_PRIVATE);
+                editor = sharedPrefs.edit();
+                editor.putInt("geoStatus", geoStatus);
+                editor.commit();
+                   }
+        else
+        {
+            int geoStatus = 2;
+            sharedPrefs = getSharedPreferences("app", MODE_PRIVATE);
+            editor = sharedPrefs.edit();
+            editor.putInt("geoStatus", geoStatus);
+            editor.commit();
+        }
         return notificationBuilder.build();
     }
 
