@@ -1,7 +1,5 @@
 package com.example.hfilproject;
 
-import android.media.Image;
-
 public class BandDetail {
     String description;
     private int imageResource;

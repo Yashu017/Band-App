@@ -14,13 +14,6 @@
             android:layout_height="match_parent">
 
 
-            <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/BarChart"
-                android:layout_width="300dp"
-                android:layout_height="300dp"
-
-                android:layout_centerHorizontal="true" />
-
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>

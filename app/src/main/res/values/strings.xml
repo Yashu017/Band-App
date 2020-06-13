@@ -130,6 +130,9 @@
     <string name="how_to_use">How To Use</string>
     <string name="title_activity_maps">Map</string>
     <string name="geofence_dialog">You are being directed to geofence activity.If you find that your location shown with red pointer is not correct,then please wait for some time and move your phone a bit. As soon as your pointer is on correct location you can use one time feature to change your geofence location by using the create geofence button in your action bar on the top.</string>
+    <string name="btn_enter">Enter</string>
+    <string name="verify_code_content">Enter the six digit verification code sent to your mobile.</string>
+    <string name="verify_code">Verification Code</string>
 
 
 </resources>

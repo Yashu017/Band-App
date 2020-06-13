@@ -70,9 +70,10 @@ public class UpdateBackgroundLocation extends Service {
     private FusedLocationProviderClient fusedLocationProviderClient;
     private LocationCallback locationCallback;
     private Handler mServiceHandler;
-   double distaceGeo;
+    double distaceGeo;
     private Location mLocation;
 
+    NotificationHelper notificationHelper;
 
     private SharedPreferences sharedPrefs;
     private SharedPreferences.Editor editor;
@@ -82,7 +83,7 @@ public class UpdateBackgroundLocation extends Service {
     String sendToken;
     String location;
     int geoStatus;
-    long  time=3000;;
+    long  time=3000;
     String fullAddress;
     public static final int notify = 300000;  //interval between two services(Here Service run every 5 Minute)
     private Handler mHandler = new Handler();   //run on another Thread to avoid crash
@@ -101,6 +102,9 @@ public class UpdateBackgroundLocation extends Service {
 
         token = sharedPrefs.getString("token", "");
         geoStatus = sharedPrefs.getInt("geoStatus", 0);
+
+
+        notificationHelper = new NotificationHelper(this);
 
 
         locationCallback = new LocationCallback() {
@@ -143,6 +147,7 @@ public class UpdateBackgroundLocation extends Service {
             stopSelf();
 
         }
+
         sendNotification();
         return START_NOT_STICKY;
     }
@@ -150,8 +155,6 @@ public class UpdateBackgroundLocation extends Service {
     private void sendNotification() {
 
     }
-
-
 
 
     @Override
@@ -183,7 +186,7 @@ public class UpdateBackgroundLocation extends Service {
                                 mLocation = task.getResult();
                                 double latitude = mLocation.getLatitude();
                                 double longitude = mLocation.getLongitude();
-                                Log.e("getM",latitude+""+longitude);
+                                Log.e("getM", latitude + "" + longitude);
 
 
                                 Geocoder geocoder = new Geocoder(UpdateBackgroundLocation.this, Locale.getDefault());
@@ -212,59 +215,52 @@ public class UpdateBackgroundLocation extends Service {
         }
     }
 
-
-
-
-
     private void sendLocation() {
-            location = sharedPrefs.getString("updated Location", "");
-            if (location != null) {
-                Log.e("token", "" + location);
-                OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
-                HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-                logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-                okhttpbuilder.addInterceptor(logging);
+        location = sharedPrefs.getString("updated Location", "");
+        if (location != null) {
+            Log.e("token", "" + location);
+            OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+            okhttpbuilder.addInterceptor(logging);
 
-                Retrofit.Builder builder = new Retrofit.Builder()
-                        .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
-                        .addConverterFactory(GsonConverterFactory.create());
+            Retrofit.Builder builder = new Retrofit.Builder()
+                    .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
+                    .addConverterFactory(GsonConverterFactory.create());
 
-                retrofit = builder.build();
+            retrofit = builder.build();
 
-                for_login login = retrofit.create(for_login.class);
-                Map<String, Object> params = new HashMap<>();
-                params.put("location", fullAddress);
-                Call<UserLocation> call = login.userLocation(token, params);
-                call.enqueue(new Callback<UserLocation>() {
-                    @Override
-                    public void onResponse(Call<UserLocation> call, Response<UserLocation> response) {
-                        String error;
-                        if (response.isSuccessful() && response.code() == 200) {
-                            if (response.body().getErrorCode() != null) {
-                                error = response.body().getErrorCode();
-                                if (error.equals("2")) {
-                                    Toast.makeText(UpdateBackgroundLocation.this, "User not found.", Toast.LENGTH_SHORT).show();
-                                }
+            for_login login = retrofit.create(for_login.class);
+            Map<String, Object> params = new HashMap<>();
+            params.put("location", fullAddress);
+            Call<UserLocation> call = login.userLocation(token, params);
+            call.enqueue(new Callback<UserLocation>() {
+                @Override
+                public void onResponse(Call<UserLocation> call, Response<UserLocation> response) {
+                    String error;
+                    if (response.isSuccessful() && response.code() == 200) {
+                        if (response.body().getErrorCode() != null) {
+                            error = response.body().getErrorCode();
+                            if (error.equals("2")) {
+                                Toast.makeText(UpdateBackgroundLocation.this, "User not found.", Toast.LENGTH_SHORT).show();
                             }
-                            sendToken = response.body().getToken();
-                         //   Toast.makeText(UpdateBackgroundLocation.this, "Location sent to server.", Toast.LENGTH_SHORT).show();
-                            Log.e("Location Posted", "Success");
                         }
+                        sendToken = response.body().getToken();
+                        //   Toast.makeText(UpdateBackgroundLocation.this, "Location sent to server.", Toast.LENGTH_SHORT).show();
+                        Log.e("Location Posted", "Success");
                     }
+                }
 
-                    @Override
-                    public void onFailure(Call<UserLocation> call, Throwable t) {
-                        Toast.makeText(UpdateBackgroundLocation.this, "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
-                        Log.e("error", "" + t.getMessage());
-                    }
-                });
-
-            }
+                @Override
+                public void onFailure(Call<UserLocation> call, Throwable t) {
+                    Toast.makeText(UpdateBackgroundLocation.this, "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.e("error", "" + t.getMessage());
+                }
+            });
 
         }
 
-
-
+    }
 
 
     private void createLocationRequest() {
@@ -292,7 +288,7 @@ public class UpdateBackgroundLocation extends Service {
         PendingIntent servicePendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent activityPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, SecondFragment.class), 0);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-               // .setContentText(text)
+                // .setContentText(text)
                 .setContentText("Your own KAWACH in your protection.")
                 //.setContentTitle(Common.getLocationTitle(this))
                 .setOngoing(true)
@@ -375,6 +371,7 @@ public class UpdateBackgroundLocation extends Service {
 
                 @Override
                 public void run() {
+
                     // display toast
                  if(sharedPrefs.getInt("geoStatus",0)==1)
                  {
@@ -385,11 +382,13 @@ public class UpdateBackgroundLocation extends Service {
                  {
                  //   Toast.makeText(UpdateBackgroundLocation.this,"yes",Toast.LENGTH_LONG).show();
                  }
+
+                    Log.d("service is ", "running");
+
                 }
 
             });
         }
     }
 }
-
 

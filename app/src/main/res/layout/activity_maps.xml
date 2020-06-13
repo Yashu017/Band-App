@@ -4,21 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="16dp"
+    android:orientation="vertical"
     android:paddingLeft="16dp"
-    android:paddingRight="16dp"
     android:paddingTop="16dp"
-    tools:context=".MapsActivity"
-    android:orientation="vertical">
+    android:paddingRight="16dp"
+    android:paddingBottom="16dp"
+    tools:context=".MapsActivity">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:background="@color/colorPrimaryDark"
-        android:paddingTop="5dp"
+        android:orientation="horizontal"
         android:paddingLeft="15dp"
+        android:paddingTop="5dp"
         android:paddingRight="15dp"
         android:paddingBottom="5dp">
 
@@ -28,28 +28,28 @@
             android:id="@+id/lat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
             android:layout_weight="0.5"
-            android:text="Lat: " />
+            android:text="Lat: "
+            android:textColor="@color/white" />
 
         <!--Longitude-->
         <TextView
             android:id="@+id/lon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
             android:layout_weight="0.5"
-            android:text="Long: " />
+            android:text="Long: "
+            android:textColor="@color/white" />
     </LinearLayout>
 
 
-    <fragment
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:name="com.google.android.gms.maps.MapFragment"
-        android:layout_marginBottom="40dp"
-        android:id="@+id/map"/>
+        android:layout_marginBottom="40dp" />
+
     <Button
         android:id="@+id/createG"
         android:layout_width="match_parent"
@@ -57,9 +57,6 @@
         android:layout_marginTop="-40dp"
         android:text="Create Geofence"
         android:padding="4dp" />
-
-
-
 
 
 </LinearLayout>

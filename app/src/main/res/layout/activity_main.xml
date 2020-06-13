@@ -8,46 +8,44 @@
 
 
     <androidx.viewpager.widget.ViewPager
+        android:id="@+id/Pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/Pager"
         android:layout_centerInParent="true"
-        android:overScrollMode="never"
         android:clipToPadding="false"
-        android:foregroundGravity="center">
-
+        android:foregroundGravity="center"
+        android:overScrollMode="never">
 
 
     </androidx.viewpager.widget.ViewPager>
 
 
-
-
-
     <Button
+        android:id="@+id/btnScan"
         android:layout_width="330dp"
         android:layout_height="56dp"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="99dp"
-        android:layout_centerHorizontal="true"
         android:background="@drawable/buttob"
-        android:textSize="20sp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:text="@string/scanBluetooth"
         android:textColor="@color/white"
-        android:text= "@string/scanBluetooth"
-        android:id="@+id/btnScan"/>
+        android:textSize="20sp" />
 
 
     <Button
+        android:id="@+id/logInButton"
         android:layout_width="330dp"
         android:layout_height="56dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="29dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="29dp"
         android:background="@drawable/buttob"
-        android:textSize="20sp"
-        android:textColor="@color/white"
         android:text="@string/login"
-        android:id="@+id/logInButton"/>
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
     <ProgressBar
         android:id="@+id/login_progress"
         android:layout_width="wrap_content"
@@ -58,8 +56,14 @@
         android:theme="@style/AppTheme"
         android:visibility="gone" />
 
-
-
-
+    <ImageView
+        android:id="@+id/languageChange"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="40dp"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/ic_language_change" />
 
 </RelativeLayout>

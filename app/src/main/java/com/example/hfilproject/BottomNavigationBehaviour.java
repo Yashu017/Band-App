@@ -1,6 +1,5 @@
 package com.example.hfilproject;
 
-import android.view.Gravity;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -8,8 +7,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.ViewCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.util.Spliterator;
 
 public class BottomNavigationBehaviour extends CoordinatorLayout.Behavior {
 

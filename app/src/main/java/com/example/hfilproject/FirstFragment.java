@@ -119,6 +119,8 @@ public class FirstFragment extends Fragment {
                              Bundle savedInstanceState) {
         sharedPrefs = getActivity().getSharedPreferences("app", Context.MODE_PRIVATE);
         editor = sharedPrefs.edit();
+
+        loadLocale();
         rootView = inflater.inflate(R.layout.fragment_first, container, false);
         button = rootView.findViewById(R.id.notificationBell);
         originalAddress = rootView.findViewById(R.id.originalAddress);
@@ -280,7 +282,7 @@ public class FirstFragment extends Fragment {
                 editor.putString("locale", "hi");
                 editor.putBoolean("hindiSelected", true);
                 editor.commit();
-
+                dialog.dismiss();
 
             }
 
@@ -291,6 +293,10 @@ public class FirstFragment extends Fragment {
             public void onClick(View v) {
                 hindi.setChecked(false);
                 setLocale("en");
+                editor.putString("locale", "hi");
+                editor.putBoolean("hindiSelected", true);
+                editor.commit();
+                dialog.dismiss();
             }
         });
 
@@ -312,12 +318,33 @@ public class FirstFragment extends Fragment {
         Configuration conf = resources.getConfiguration();
         conf.locale = locale;
         resources.updateConfiguration(conf, dm);
+        editor.putString("My Language", lang);
+        editor.apply();
         Fragment fragment = new FirstFragment();
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+
+
+    }
+
+
+    private void loadLocale() {
+        SharedPreferences preferences = getActivity().getSharedPreferences("app", Context.MODE_PRIVATE);
+        String language = preferences.getString("My Language", "");
+        setLanguage(language);
+    }
+
+
+    private void setLanguage(String language) {
+
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getContext().getResources().updateConfiguration(config, getContext().getResources().getDisplayMetrics());
     }
 
     private void startTimer() {
@@ -390,7 +417,7 @@ public class FirstFragment extends Fragment {
                                             originalAddress.setText(fulladdress);
                                             addresesHead.setVisibility(View.GONE);
 
-                                            editor.putString("hqAddress",fulladdress);
+                                            editor.putString("hqAddress", fulladdress);
 
                                             editor.commit();
 
@@ -445,7 +472,7 @@ public class FirstFragment extends Fragment {
                     tempReceived = getTemp.getTemperature();
                     Log.e("Success", "" + response.code());
 
-                //    Toast.makeText(getContext(), "Temperature received from server.", Toast.LENGTH_SHORT).show();
+                    //    Toast.makeText(getContext(), "Temperature received from server.", Toast.LENGTH_SHORT).show();
                     setTemp.setText(String.format("%.2f", tempReceived));
                 }
             }
@@ -469,7 +496,7 @@ public class FirstFragment extends Fragment {
         if (date == currentDate) {
             if (hours == hour && minutes == min) {
 
-              //  Toast.makeText(getContext(), "" + hour, Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(getContext(), "" + hour, Toast.LENGTH_SHORT).show();
 
                 /*
                 Intent i = new Intent(getContext(), FirstFragment.class);
@@ -532,7 +559,7 @@ public class FirstFragment extends Fragment {
                             }
                         }
                         sendTokenBle = response.body().getToken();
-                      //  Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+                        //  Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -572,7 +599,7 @@ public class FirstFragment extends Fragment {
                             }
                         }
                         sendTokenBle = response.body().getToken();
-                      //  Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+                        //  Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -616,7 +643,7 @@ public class FirstFragment extends Fragment {
                         }
                     }
                     sendToken = response.body().getToken();
-                //    Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+                    //    Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
                 }
             }
 

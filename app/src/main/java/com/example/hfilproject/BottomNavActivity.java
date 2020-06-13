@@ -1,6 +1,5 @@
 package com.example.hfilproject;
 
-import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
