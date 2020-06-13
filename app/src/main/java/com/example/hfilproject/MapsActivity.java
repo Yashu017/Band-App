@@ -1,14 +1,9 @@
-
 package com.example.hfilproject;
 
 
 import android.Manifest;
 
 import android.app.AlertDialog;
-
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -18,8 +13,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
-
-import android.os.Binder;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -88,7 +81,7 @@ public class MapsActivity extends AppCompatActivity
     private MapFragment mapFragment;
     Boolean check;
 
-    public double forNextLat,forNextLong;
+    public double forNextLat, forNextLong;
 
     private static final String NOTIFICATION_MSG = "NOTIFICATION MSG";
 
@@ -109,13 +102,13 @@ public class MapsActivity extends AppCompatActivity
         sharedPrefs = getSharedPreferences("app", MODE_PRIVATE);
         editor = sharedPrefs.edit();
 
-        if (getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
 
-        if(sharedPrefs.getBoolean("firstTimeMap",false)==true) {
+        if (sharedPrefs.getBoolean("firstTimeMap", false) == true) {
 
             new AlertDialog.Builder(MapsActivity.this)
                     .setTitle("How to use")
@@ -131,7 +124,7 @@ public class MapsActivity extends AppCompatActivity
         // create GoogleApiClient
         createGoogleApi();
 
-        createG=findViewById(R.id.createG);
+        createG = findViewById(R.id.createG);
         createG.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,7 +147,7 @@ public class MapsActivity extends AppCompatActivity
                             }
                     );
                     builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id){
+                        public void onClick(DialogInterface dialog, int id) {
                             //  Action for 'NO' Button
                             Toast.makeText(MapsActivity.this, "You can wait for one - two minutes more to get get your red pointer on correct position.", Toast.LENGTH_LONG).show();
                             dialog.cancel();
@@ -163,15 +156,16 @@ public class MapsActivity extends AppCompatActivity
 
                     AlertDialog alert = builder.create();
                     alert.show();
-                }
-                else {
+                } else {
                     createG.setEnabled(false);
                     createG.setVisibility(View.GONE);
                 }
 
-            }});
+            }
+        });
 
     }
+
     // Create GoogleApiClient instance
     private void createGoogleApi() {
         Log.d(TAG, "createGoogleApi()");
@@ -211,14 +205,12 @@ public class MapsActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.geofence: {
-                if(sharedPrefs.getBoolean("firstTimeMap",false) == true){
+                if (sharedPrefs.getBoolean("firstTimeMap", false) == true) {
                     getCurrentLocation();
                     item.setEnabled(false);
-                    editor.putBoolean("firstTimeMap",false);
+                    editor.putBoolean("firstTimeMap", false);
                     editor.commit();
-                }
-                else
-                {
+                } else {
                     item.setEnabled(false);
                 }
 
@@ -244,10 +236,10 @@ public class MapsActivity extends AppCompatActivity
     private boolean checkPermission() {
         Log.d(TAG, "checkPermission()");
         // Ask for permission if it wasn't granted yet
-        if(Build.VERSION.SDK_INT >= 21)
-        {
-            check= (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED);}
+        if (Build.VERSION.SDK_INT >= 21) {
+            check = (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED);
+        }
         return check;
     }
 
@@ -377,7 +369,6 @@ public class MapsActivity extends AppCompatActivity
                 startLocationUpdates();
 
 
-
             } else {
                 Log.w(TAG, "No location retrieved yet");
                 startLocationUpdates();
@@ -421,35 +412,43 @@ public class MapsActivity extends AppCompatActivity
     }
 
 
-    private double latitude,longitude;
+    private double latitude, longitude;
     LatLng l1;
 
-    public void getCurrentLocation()
-    {
+    public void getCurrentLocation() {
 
 
-        final LocationRequest locationRequest=new LocationRequest();
+        final LocationRequest locationRequest = new LocationRequest();
         locationRequest.setInterval(10000);
         locationRequest.setFastestInterval(3000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         LocationServices.getFusedLocationProviderClient(MapsActivity.this)
-                .requestLocationUpdates(locationRequest,new LocationCallback(){
+                .requestLocationUpdates(locationRequest, new LocationCallback() {
 
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
                         super.onLocationResult(locationResult);
                         LocationServices.getFusedLocationProviderClient(MapsActivity.this)
                                 .removeLocationUpdates(this);
-                        if(locationResult!=null && locationResult.getLocations().size()>0)
-                        {
-                            int latestLoc=locationResult.getLocations().size()-1;
+                        if (locationResult != null && locationResult.getLocations().size() > 0) {
+                            int latestLoc = locationResult.getLocations().size() - 1;
 
-                            latitude=locationResult.getLocations().get(latestLoc).getLatitude();
-                            longitude=locationResult.getLocations().get(latestLoc).getLongitude();
+                            latitude = locationResult.getLocations().get(latestLoc).getLatitude();
+                            longitude = locationResult.getLocations().get(latestLoc).getLongitude();
 
                         }
-                        l1= new LatLng(latitude,longitude);
+                        l1 = new LatLng(latitude, longitude);
 
                         markerForGeofence(l1);
 

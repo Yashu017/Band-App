@@ -1,24 +1,10 @@
 package com.example.hfilproject;
 
-import android.bluetooth.BluetoothDevice;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toolbar;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
 
 
 import java.util.UUID;
-
-import no.nordicsemi.android.log.Logger;
 
 public class ScanActivity extends BleProfileServiceReadyActivity<HTService.HTSBinder> {
 
@@ -86,4 +72,9 @@ public class ScanActivity extends BleProfileServiceReadyActivity<HTService.HTSBi
         return true;
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.push_down_in, R.anim.push_down_out);
+    }
 }

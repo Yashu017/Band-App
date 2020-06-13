@@ -153,4 +153,10 @@
         <item name="colorPrimaryDark">@android:color/transparent</item>
     </style>
 
+    <style name="Theme.App.Base" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorControlNormal">#003663</item>
+        <item name="colorControlActivated">#003663</item>
+        <item name="colorControlHighlight">#003663</item>
+    </style>
+
 </resources>

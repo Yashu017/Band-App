@@ -1,9 +1,7 @@
 package com.example.hfilproject;
 
 import com.example.hfilproject.Model.User;
-import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;

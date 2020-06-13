@@ -15,6 +15,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Toast;
@@ -90,14 +91,18 @@ public class MainActivity extends AppCompatActivity {
     Button cancel;
     Boolean hindiSelected = false;
     Locale locale;
+    private ImageView chngLang;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+        loadLocale();
         setContentView(R.layout.activity_main);
-        // loadLocale();
+
+
         ActionBar actionBar = getSupportActionBar();
         getSupportActionBar().hide();
 
@@ -134,11 +139,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
         scan = findViewById(R.id.btnScan);
+
+
         scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intenti = new Intent(MainActivity.this, ScanActivity.class);
-                startActivity(intenti);
+
+                Intent i = new Intent(MainActivity.this, ScanActivity.class);
+                startActivity(i);
+                overridePendingTransition(R.anim.push_up_in, R.anim.push_up_out);
+
             }
         });
 
@@ -197,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 startActivityForResult(AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers)
@@ -205,11 +216,20 @@ public class MainActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
                 loginButton.setVisibility(View.GONE);
 
+
+
             }
         });
 
         scan.setText(getResources().getString(R.string.scanBluetooth));
-        OpenDialog();
+
+        chngLang = findViewById(R.id.languageChange);
+        chngLang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OpenDialog();
+            }
+        });
 
 
     }
@@ -230,7 +250,8 @@ public class MainActivity extends AppCompatActivity {
                 editor.putString("locale", "hi");
                 editor.putBoolean("hindiSelected", true);
                 editor.commit();
-
+                editor.putBoolean("FirstTime", true);
+                dialog.dismiss();
 
             }
 
@@ -241,6 +262,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 hindi.setChecked(false);
                 setLocale("en");
+                editor.putString("locale", "en");
+
+                editor.commit();
+                editor.putBoolean("FirstTime", true);
+                dialog.dismiss();
             }
         });
 
@@ -262,18 +288,28 @@ public class MainActivity extends AppCompatActivity {
         Configuration conf = resources.getConfiguration();
         conf.locale = locale;
         resources.updateConfiguration(conf, dm);
+
         Intent refresh = new Intent(this, MainActivity.class);
         startActivity(refresh);
-        //  getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-        //  SharedPreferences.Editor editor = getSharedPreferences("app", MODE_PRIVATE).edit();
-        //  editor.putString("My Language", lang);
-        //   editor.apply();
+
+        //
+
     }
 
     private void loadLocale() {
+
         SharedPreferences preferences = getSharedPreferences("app", Activity.MODE_PRIVATE);
-        String language = preferences.getString("My Language", "");
-        setLocale(language);
+        String language = preferences.getString("locale", "");
+        setLanguage(language);
+    }
+
+    private void setLanguage(String language) {
+
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
     }
 
 
