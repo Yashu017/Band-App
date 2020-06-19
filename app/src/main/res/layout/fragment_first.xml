@@ -64,7 +64,6 @@
                     android:layout_height="30dp"
                     android:layout_marginRight="50dp"
                     android:background="@drawable/ic_notifications_active_white_24dp"
-
                     android:clickable="true"
                     app:layout_constraintBottom_toBottomOf="@+id/hello"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -162,7 +161,9 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="2dp"
                     android:gravity="center"
-                    android:text="@string/current_location"
+                    android:background="@drawable/dat"
+                    android:padding="5dp"
+                    android:text="@string/Start_Timer"
                     android:textSize="10sp" />
 
                 <TextView

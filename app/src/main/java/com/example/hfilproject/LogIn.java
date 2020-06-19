@@ -68,7 +68,6 @@ public class LogIn extends AppCompatActivity {
     private int REQUEST_CODE_LOCATION_PERMISSION = 1;
     private ResultReceiver resultReceiver;
     private double latitude, longitude;
-    String t;
     List<Address> addressList;
     Geocoder geocoder;
 
@@ -99,11 +98,6 @@ public class LogIn extends AppCompatActivity {
         sharedPrefs = getSharedPreferences("app", MODE_PRIVATE);
         editor = sharedPrefs.edit();
 
-
-//        String date_n = new SimpleDateFormat("yyyy.MM.dd  'at' HH:mm:ss z", Locale.getDefault()).format(new Date());
-//        dateS=findViewById(R.id.startDate);
-//        dateS.setText(date_n );
-//        dateS.setEnabled(false);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getUI();
@@ -138,6 +132,7 @@ public class LogIn extends AppCompatActivity {
                 iw.setChecked(false);
                 timeRl.setVisibility(View.VISIBLE);
                 temp = 1;
+                status="0";
 
 
             }
@@ -154,6 +149,7 @@ public class LogIn extends AppCompatActivity {
                 timeRl.setVisibility(View.GONE);
                 address.setText(address1 + ".");
                 temp=0;
+                status="1";
 
             }
         });

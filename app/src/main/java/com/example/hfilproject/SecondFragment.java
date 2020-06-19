@@ -9,9 +9,12 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +22,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.DexterError;
 import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import org.greenrobot.eventbus.EventBus;
@@ -38,6 +44,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
 
 import retrofit2.Retrofit;
@@ -88,6 +95,7 @@ public class SecondFragment extends Fragment implements SharedPreferences.OnShar
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -123,15 +131,23 @@ public class SecondFragment extends Fragment implements SharedPreferences.OnShar
         fence = view.findViewById(R.id.geofence);
 
 
+
+
+
+
         Dexter.withActivity(getActivity())
-                .withPermissions(Arrays.asList(
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                )).withListener(new MultiplePermissionsListener() {
+                .withPermissions
+//                        (Arrays.asList(
+//                        Manifest.permission.ACCESS_FINE_LOCATION,
+//                        Manifest.permission.ACCESS_COARSE_LOCATION,
+//                        Manifest.permission.ACCESS_BACKGROUND_LOCATION
+//                ))
+        (callPermission())
+                .withListener(new MultiplePermissionsListener() {
             @Override
             public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
-                locUpdates = view.findViewById(R.id.locUp);
+                if(multiplePermissionsReport.areAllPermissionsGranted()) {
+                    locUpdates = view.findViewById(R.id.locUp);
                     locUpdates.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -139,8 +155,16 @@ public class SecondFragment extends Fragment implements SharedPreferences.OnShar
                         }
                     });
                     startService(Common.requestLoctionUpdates(getContext()));
-                    getActivity().bindService(new Intent(getContext(), UpdateBackgroundLocation.class), mServiceConnection, Context.BIND_AUTO_CREATE);
-
+                    requireActivity().bindService(new Intent(getContext(), UpdateBackgroundLocation.class), mServiceConnection, Context.BIND_AUTO_CREATE);
+                }
+                if(multiplePermissionsReport.isAnyPermissionPermanentlyDenied())
+                {
+                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    Uri uri = Uri.fromParts("package", "com.example.hfilproject", null);
+                    intent.setData(uri);
+                    startActivity(intent);
+                    Toast.makeText(getContext(),"Please give us location permission that you denied",Toast.LENGTH_LONG).show();
+                }
 
 
 
@@ -148,16 +172,38 @@ public class SecondFragment extends Fragment implements SharedPreferences.OnShar
 
             @Override
             public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
-
+                permissionToken.continuePermissionRequest();
             }
-        }).check();
+        }).withErrorListener(new PermissionRequestErrorListener() {
+            @Override
+            public void onError(DexterError dexterError) {
+                Toast.makeText(getContext(),dexterError.toString()+"",Toast.LENGTH_LONG).show();
+            }
+        }).
+                onSameThread()
+                .check();
 
 
         return view;
     }
 
+    private List<String> callPermission() {
 
-
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                return  (Arrays.asList(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                ));
+            }
+            else
+            {
+                return  (Arrays.asList(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                ));
+            }
+    }
 
 
     @Override

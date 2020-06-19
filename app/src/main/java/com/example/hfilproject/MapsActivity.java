@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -60,7 +59,6 @@ public class MapsActivity extends AppCompatActivity
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener,
         OnMapReadyCallback,
-        //  GoogleMap.OnMapClickListener,
         GoogleMap.OnMarkerClickListener,
         ResultCallback<Status> {
 
@@ -78,7 +76,6 @@ public class MapsActivity extends AppCompatActivity
     private MapFragment mapFragment;
     Boolean check;
 
-    public double forNextLat, forNextLong;
 
     private static final String NOTIFICATION_MSG = "NOTIFICATION MSG";
 
@@ -109,8 +106,8 @@ public class MapsActivity extends AppCompatActivity
         if (sharedPrefs.getBoolean("firstTimeMap", false) == true) {
             new AlertDialog.Builder(MapsActivity.this)
                     .setTitle("How to use")
-                    .setMessage("You are being directed to geofence activity.If you find that your location shown with red pointer is not correct,then please wait for some time and move your phone a bit. As soon as your pointer is on correct location you can use one time " +
-                            "feature to change your geofence location by using the CREATE GEOFENCE button in your action bar on the top or at the bottom of this activity.")
+                    .setMessage("You are moving towards geofence activity . Please check your current location shown by red pointer and if it is correct please click on" +
+                            "CREATE GEOFENCE button .")
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .setNeutralButton("OK", null)
                     .show();
@@ -197,8 +194,6 @@ public class MapsActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        //inflater.inflate(R.menu.main_menu, menu);
         return true;
     }
 
@@ -214,19 +209,17 @@ public class MapsActivity extends AppCompatActivity
                 } else {
                     item.setEnabled(false);
                 }
-
-                //   startGeofence();
-
                 return true;
             }
-//            case R.id.clear: {
-//                clearGeofence();
-//                return true;
-            //}
+
         }
 
         if (item.getItemId() == android.R.id.home) {
-            finish(); // close this activity and return to preview activity (if there is any)
+            if (sharedPrefs.getBoolean("firstTimeMap", false) == false) {
+                finish(); // close this activity and return to preview activity (if there is any)
+            } else {
+                Toast.makeText(this,"Please click on create geofence",Toast.LENGTH_LONG).show();
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -299,11 +292,6 @@ public class MapsActivity extends AppCompatActivity
 
     }
 
-//    @Override
-//    public void onMapClick(LatLng latLng) {
-//        Log.d(TAG, "onMapClick(" + latLng + ")");
-//        markerForGeofence(latLng);
-//    }
 
     @Override
     public boolean onMarkerClick(Marker marker) {
@@ -398,7 +386,7 @@ public class MapsActivity extends AppCompatActivity
         String title = latLng.latitude + ", " + latLng.longitude;
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(latLng)
-                .title(title);
+                .title("Your current location");
         if (map != null) {
             if (locationMarker != null)
                 locationMarker.remove();
@@ -471,13 +459,13 @@ public class MapsActivity extends AppCompatActivity
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(latLng)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
-                .title(title);
+                .title("Your Geofence pointer");
         if (map != null) {
             // Remove last geoFenceMarker
             if (geoFenceMarker != null)//ye h taakk jb change ho to pichla remove ho jaae
                 geoFenceMarker.remove();
             geoFenceMarker = map.addMarker(markerOptions);
-          //  Toast.makeText(this,latLng.latitude+"a",Toast.LENGTH_LONG).show();
+
 
         }
         startGeofence();

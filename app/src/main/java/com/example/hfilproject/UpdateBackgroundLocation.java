@@ -65,27 +65,24 @@ public class UpdateBackgroundLocation extends Service {
     private NotificationManager mNotificationManager;
     private LocationRequest locationRequest;
     Retrofit retrofit;
-    String token1;
-    String sendTokenBle;
+
     private FusedLocationProviderClient fusedLocationProviderClient;
     private LocationCallback locationCallback;
     private Handler mServiceHandler;
-    double distaceGeo;
+
     private Location mLocation;
 
     NotificationHelper notificationHelper;
 
     private SharedPreferences sharedPrefs;
-    private SharedPreferences.Editor editor;
+
 
     String token;
-    int temp;
+
     String sendToken;
     String location;
     int geoStatus;
-    long  time=3000;
     String fullAddress;
-    public static final int notify = 300000;  //interval between two services(Here Service run every 5 Minute)
     private Handler mHandler = new Handler();   //run on another Thread to avoid crash
     private Timer mTimer = null;    //timer handling
 
@@ -187,8 +184,6 @@ public class UpdateBackgroundLocation extends Service {
                                 double latitude = mLocation.getLatitude();
                                 double longitude = mLocation.getLongitude();
                                 Log.e("getM", latitude + "" + longitude);
-
-
                                 Geocoder geocoder = new Geocoder(UpdateBackgroundLocation.this, Locale.getDefault());
                                 try {
                                     List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 3);
@@ -246,7 +241,6 @@ public class UpdateBackgroundLocation extends Service {
                             }
                         }
                         sendToken = response.body().getToken();
-                        //   Toast.makeText(UpdateBackgroundLocation.this, "Location sent to server.", Toast.LENGTH_SHORT).show();
                         Log.e("Location Posted", "Success");
                     }
                 }

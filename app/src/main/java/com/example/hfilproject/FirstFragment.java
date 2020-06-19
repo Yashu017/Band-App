@@ -43,12 +43,9 @@ import com.google.android.gms.tasks.Task;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -70,33 +67,21 @@ public class FirstFragment extends Fragment {
     SharedPreferences sharedPrefs;
     SharedPreferences.Editor editor;
     TextView usernanme, latestUpd, originalAddress;
-    Double latitude, longitude;
     ImageView tp;
     String token;
-    int temp;
+
     Retrofit retrofit;
 
-    String sendToken;
-
-    int status;
-    String sendTokenBle;
-    String token1;
-    int geoStatus;
-
-    int connected;
-
     int timeToFetchAddress;
-    int t;
+
 
     RelativeLayout typeTemp;
     int hours, minutes;
     String date;
-    String token2;
+
     float tempReceived;
     TextView setTemp;
 
-    String token3;
-    String locReceived;
     private CountDownTimer mCountDownTimer;
     private boolean mTimerRunning;
     private long mTimeLeftInMillis;
@@ -112,6 +97,7 @@ public class FirstFragment extends Fragment {
         // Required empty public constructor
 
     }
+
 
 
     @Override
@@ -132,13 +118,12 @@ public class FirstFragment extends Fragment {
 
 
         token = sharedPrefs.getString("token", "");
-        temp = sharedPrefs.getInt("temperature", 0);
-        connected = sharedPrefs.getInt("Connection Status", 0);
-        geoStatus = sharedPrefs.getInt("geoStatus", 0);
-
+try{
         timeToFetchAddress = Integer.parseInt(sharedPrefs.getString("time", " "));
         Log.e("tt", timeToFetchAddress + "");
-
+    } catch (NumberFormatException e) {
+        Toast.makeText(getContext(),"error in f1",Toast.LENGTH_LONG).show();
+    }
         hours = sharedPrefs.getInt("hours", 0);
         minutes = sharedPrefs.getInt("minutes", 0);
         date = sharedPrefs.getString("dateSelected", "");
@@ -176,11 +161,16 @@ public class FirstFragment extends Fragment {
             originalAddress.setText(sharedPrefs.getString("hqAddress", ""));
 
         }
+        if (sharedPrefs.getBoolean("pressed", false)==true) {
+            addresesHead.setVisibility(View.GONE);
+        }
 
         if (!sharedPrefs.getString("time", "").equals("0")) {
             addresesHead.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    editor.putBoolean("pressed",true);
+                    editor.commit();
                     startTimer();
                 }
             });
@@ -191,20 +181,6 @@ public class FirstFragment extends Fragment {
         }
 
 
-//         t=Integer.parseInt(timeToFetchAddress);
-//         Log.e("t",t+"");
-        //  Toast.makeText(getContext(), ""+temp, Toast.LENGTH_SHORT).show();
-
-        // Inflate the layout for this fragment
-
-        /*
-        tp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SendTemperature();
-            }
-        });
-         */
         usernanme.setText(sharedPrefs.getString("name", ""));
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -219,25 +195,6 @@ public class FirstFragment extends Fragment {
         });
 
 
-        // SendNotification();
-/*
-        final Handler handler = new Handler();
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Intent serviceIntent = new Intent(getContext(), LocationIntentService.class);
-                        serviceIntent.putExtra("inputExtra", "Temperature");
-                        ContextCompat.startForegroundService(getContext(), serviceIntent);
-                    }
-                });
-            }
-        };
-        Timer timer = new Timer();
-        timer.schedule(timerTask, 0, 20 * 1000);
-*/
 
         typeTemp = rootView.findViewById(R.id.typeTemp);
         typeTemp.setOnClickListener(new View.OnClickListener() {
@@ -348,7 +305,7 @@ public class FirstFragment extends Fragment {
     }
 
     private void startTimer() {
-        Toast.makeText(getContext(), "Your location will be fetched now ", Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), "Your location will be fetched in "+out+"hr", Toast.LENGTH_LONG).show();
 
         mEndTime = System.currentTimeMillis() + mTimeLeftInMillis;
         mCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
@@ -485,194 +442,7 @@ public class FirstFragment extends Fragment {
         });
     }
 
-    private void SendReminder() {
 
-        Calendar c = Calendar.getInstance();
-        int hour = c.get(Calendar.HOUR_OF_DAY);
-        int min = c.get(Calendar.MINUTE);
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
-        String currentDate = sdf.format(new Date());
-        if (date == currentDate) {
-            if (hours == hour && minutes == min) {
-
-                //  Toast.makeText(getContext(), "" + hour, Toast.LENGTH_SHORT).show();
-
-                /*
-                Intent i = new Intent(getContext(), FirstFragment.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                PendingIntent pd = PendingIntent.getActivity(getContext(), 2, i, 0);
-                NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), CHANNEL_ID)
-                        .setContentTitle("Reminder")
-                        .setSmallIcon(R.drawable.ic_alarm)
-                        .setPriority(NotificationManagerCompat.IMPORTANCE_HIGH)
-                        .setContentText("Please update your current location.")
-                        .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
-                        .setContentIntent(pd)
-                        .setAutoCancel(true);
-                NotificationManagerCompat manager = NotificationManagerCompat.from(getContext());
-                manager.notify(1, builder.build());
-                */
-            }
-        }
-
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
-
-    private void SendNotification() {
-        int categoryType = 0;
-        String connectionStatus = "Bluetooth Disconnected";
-        String geofenceStatus = "Geo fence breached.";
-        token1 = sharedPrefs.getString("token", "");
-
-        if (connected != 1) {
-            OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-            okhttpbuilder.addInterceptor(logging);
-
-            Retrofit.Builder builder = new Retrofit.Builder()
-                    .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
-                    .addConverterFactory(GsonConverterFactory.create());
-
-            retrofit = builder.build();
-            for_login login = retrofit.create(for_login.class);
-            Map<String, Object> params = new HashMap<>();
-            params.put("notification", connectionStatus);
-            params.put("category", categoryType);
-            Call<UserNotification> call = login.userNotify(token1, params);
-            call.enqueue(new Callback<UserNotification>() {
-                @Override
-                public void onResponse(Call<UserNotification> call, Response<UserNotification> response) {
-                    String error;
-                    if (response.isSuccessful() && response.code() == 200) {
-                        if (response.body().getErrorCode() != null) {
-                            error = response.body().getErrorCode();
-                            if (error.equals("2")) {
-                                Toast.makeText(getContext(), "User not found.", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                        sendTokenBle = response.body().getToken();
-                        //  Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<UserNotification> call, Throwable t) {
-                    Toast.makeText(getContext(), "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
-                    Log.e("error", "" + t.getMessage());
-                }
-            });
-        }
-
-        if (geoStatus != 1) {
-            OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-            okhttpbuilder.addInterceptor(logging);
-
-            Retrofit.Builder builder = new Retrofit.Builder()
-                    .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
-                    .addConverterFactory(GsonConverterFactory.create());
-
-            retrofit = builder.build();
-            for_login login = retrofit.create(for_login.class);
-            Map<String, Object> params = new HashMap<>();
-            params.put("notification", geofenceStatus);
-            params.put("category", categoryType);
-            Call<UserNotification> call = login.userNotify(token1, params);
-            call.enqueue(new Callback<UserNotification>() {
-                @Override
-                public void onResponse(Call<UserNotification> call, Response<UserNotification> response) {
-                    String error;
-                    if (response.isSuccessful() && response.code() == 200) {
-                        if (response.body().getErrorCode() != null) {
-                            error = response.body().getErrorCode();
-                            if (error.equals("2")) {
-                                Toast.makeText(getContext(), "User not found.", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                        sendTokenBle = response.body().getToken();
-                        //  Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<UserNotification> call, Throwable t) {
-                    Toast.makeText(getContext(), "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
-                    Log.e("error", "" + t.getMessage());
-                }
-            });
-        }
-
-
-    }
-
-    private void SendTemperature() {
-        OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-        okhttpbuilder.addInterceptor(logging);
-
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
-                .addConverterFactory(GsonConverterFactory.create());
-
-        retrofit = builder.build();
-
-        for_login login = retrofit.create(for_login.class);
-        Map<String, Object> params = new HashMap<>();
-        params.put("temperature", temp);
-
-        Call<UserTemp> tempCall = login.userTemp(token, params);
-        tempCall.enqueue(new Callback<UserTemp>() {
-            @Override
-            public void onResponse(Call<UserTemp> call, Response<UserTemp> response) {
-                String error;
-                if (response.isSuccessful() && response.code() == 200) {
-                    if (response.body().getErrorCode() != null) {
-                        error = response.body().getErrorCode();
-                        if (error.equals("2")) {
-                            Toast.makeText(getContext(), "User not found.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    sendToken = response.body().getToken();
-                    //    Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UserTemp> call, Throwable t) {
-                Toast.makeText(getContext(), "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("error", "" + t.getMessage());
-            }
-        });
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        mTimerRunning = sharedPrefs.getBoolean("timerRunning", false);
-        if (mTimerRunning) {
-            mEndTime = sharedPrefs.getLong("endTime", 0);
-            mTimeLeftInMillis = mEndTime - System.currentTimeMillis();
-            if (mTimeLeftInMillis < 0) {
-                mTimeLeftInMillis = 0;
-                mTimerRunning = false;
-                getGoogleApiClient();
-                addresesHead.setVisibility(View.GONE);
-            } else {
-                startTimer();
-            }
-        }
-    }
 
     @Override
     public void onStop() {

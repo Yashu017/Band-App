@@ -112,10 +112,11 @@
     <string name="enter_bluetooth">Enter bluetooth id</string>
     <string name="submit">Submit</string>
     <string name="recent_temp">Recent Temperature (F)</string>
-    <string name="current_location">Current Location:</string>
+    <string name="Start_Timer">Start timer to fetch my location</string>
+    <string name="current_location">Current Location</string>
     <string name="geofence">Geofence</string>
     <string name="open_geofence">Open Geofence</string>
-    <string name="location_updates">LocationUpdates</string>
+    <string name="location_updates">Update my location</string>
     <string name="temp_history">Temperature History</string>
     <string name="info">Info</string>
     <string name="notif_content">This device is not connected with C Watch. Please connect again.</string>

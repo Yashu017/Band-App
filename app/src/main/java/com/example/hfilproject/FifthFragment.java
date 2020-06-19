@@ -46,10 +46,7 @@ public class FifthFragment extends Fragment {
     SharedPreferences.Editor editor;
     String token4;
     Retrofit retrofit;
-    String notif;
     TextView tv2;
-    GetNotification getNotification;
-    NotificationItem item;
     Button back;
 
     private ArrayList<NotificationItem> arrayList = null;
@@ -112,9 +109,6 @@ public class FifthFragment extends Fragment {
 
                     arrayList = notification.getNotification();
 
-                    // notificationList.add(new Notification("Warning", "11:00 AM", "" + notif));
-                    //   notificationList.add(new Notification("Warning", "1:00 PM", "You have breached geo-fencing.Please stay in your quarantine place."));
-                    // notificationList.add(new Notification("Warning", "3:00 PM", "This device is not connected with C Watch. Please connect again."));
 
                     if (arrayList != null) {
 
@@ -144,15 +138,6 @@ public class FifthFragment extends Fragment {
                     }
 
 
-                   /*
-                    NotificationItem item = arrayList.get(0);
-                    String noti = item.getNotification();
-                    long time = item.getTime();
-                    int category = item.getCategory();
-                    Log.e("TAG", "" + noti + time + category);
-
-                    */
-
                 }
 
 
@@ -172,11 +157,6 @@ public class FifthFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         notificationList = new ArrayList<>();
-
-
-        ////  notificationList.add(new Notification("Warning", "11:00 AM", "" + notif));
-        // notificationList.add(new Notification("Warning", "1:00 PM", "You have breached geo-fencing.Please stay in your quarantine place."));
-        //notificationList.add(new Notification("Warning", "3:00 PM", "This device is not connected with C Watch. Please connect again."));
 
     }
 
