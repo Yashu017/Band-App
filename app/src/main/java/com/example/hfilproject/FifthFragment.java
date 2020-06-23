@@ -20,8 +20,11 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -62,13 +65,13 @@ public class FifthFragment extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_fifth, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.notificationRecycler);
-        back=rootView.findViewById(R.id.backNoti);
+        back = rootView.findViewById(R.id.backNoti);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                FirstFragment name=new FirstFragment();
+                FirstFragment name = new FirstFragment();
                 fragmentTransaction.replace(R.id.fragment_container, name);
                 fragmentTransaction.commit();
             }
@@ -117,19 +120,24 @@ public class FifthFragment extends Fragment {
                         for (NotificationItem item : arrayList) {
 
                             String msg = item.getNotification();
+                            long time = item.getTime();
+                            Date date = new Date(time);
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("h:mm a");
+                            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+                            String formattedTime = simpleDateFormat.format(date);
                             Log.e("Msg", "" + msg);
-                            notificationList.add(new Notification("", "", "" + msg));
+                            notificationList.add(new Notification("", "" + formattedTime, "" + msg));
+
                         }
 
-
+                        // Collections.reverse(notificationList);
                         NotificationAdapter adapter = new NotificationAdapter(getContext(), notificationList);
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
 
                         recyclerView.setLayoutManager(layoutManager);
                         recyclerView.setAdapter(adapter);
-                    }
-                    else {
-                        notificationList.add(new Notification("Info", "00:00", "" + "No new Notification"));
+                    } else {
+                        notificationList.add(new Notification("Info", "00::00", "" + "No new Notification"));
                         NotificationAdapter adapter = new NotificationAdapter(getContext(), notificationList);
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
 

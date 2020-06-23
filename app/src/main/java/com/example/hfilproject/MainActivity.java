@@ -102,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
         loadLocale();
         setContentView(R.layout.activity_main);
 
-
         ActionBar actionBar = getSupportActionBar();
         getSupportActionBar().hide();
 
@@ -208,6 +207,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+
+
                 startActivityForResult(AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers)
@@ -217,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
                 loginButton.setVisibility(View.GONE);
 
 
+                //  Intent intent = new Intent(MainActivity.this, Bottt)
 
             }
         });

@@ -304,7 +304,7 @@ public abstract class BleProfileService extends Service implements BleManagerCal
      * @return true to use autoConnect feature, false (default) otherwise.
      */
     protected boolean shouldAutoConnect() {
-        return false;
+        return true;
     }
 
     @Override

@@ -17,6 +17,7 @@
         android:largeHeap="true"
         android:roundIcon="@mipmap/rlogo"
         android:supportsRtl="true"
+        android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
 
@@ -70,6 +71,10 @@
             android:name="com.example.hfilproject.BottomNavActivity"
             android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+
+        </activity>
+        <activity android:name="com.example.hfilproject.SplashScreen"
+          android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
