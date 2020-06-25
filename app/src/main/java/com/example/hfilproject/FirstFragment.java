@@ -133,9 +133,10 @@ try{
         SimpleDateFormat dt = new SimpleDateFormat("hh:mm:ss");
         try {
             Date date1 = dateFormat.parse(sharedPrefs.getString("time", " "));
-            out = dt.format(date1);
-            Log.e("Time", "" + out);
-
+            if(date1!=null) {
+                out = dt.format(date1);
+                Log.e("Time", "" + out);
+            }
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             Log.e("Error", "" + e);

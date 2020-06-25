@@ -119,7 +119,7 @@
     <string name="location_updates">Update my location</string>
     <string name="temp_history">Temperature History</string>
     <string name="info">Info</string>
-    <string name="notif_content">This device is not connected with C Watch. Please connect again.</string>
+    <string name="notif_content">No Notification for now.</string>
     <string name="notif">Notifications</string>
     <string name="device_name">Device Name:--</string>
     <string name="bluetooth_id">Bluetooth Id: --</string>
