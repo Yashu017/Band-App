@@ -328,7 +328,7 @@ public abstract class BleProfileService extends Service implements BleManagerCal
                 .useAutoConnect(shouldAutoConnect())
                 .retry(3, 100)
                 .enqueue();
-        return START_REDELIVER_INTENT;
+        return START_STICKY;
     }
 
     /**
@@ -345,7 +345,14 @@ public abstract class BleProfileService extends Service implements BleManagerCal
         // This method is called when user removed the app from Recents.
         // By default, the service will be killed and recreated immediately after that.
         // However, all managed devices will be lost and devices will be disconnected.
-        stopSelf();
+        /*
+        Intent restartService = new Intent(getApplicationContext(),this.getClass());
+        restartService.setPackage(getPackageName());
+        startService(restartService);
+        super.onTaskRemoved(rootIntent);
+
+         */
+      //  stopSelf();
     }
 
     @Override
@@ -435,6 +442,7 @@ public abstract class BleProfileService extends Service implements BleManagerCal
 
     protected void stopService() {
         // user requested disconnection. We must stop the service
+
         Logger.v(logSession, "Stopping service...");
         stopSelf();
     }

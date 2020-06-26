@@ -67,6 +67,7 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
     String token1;
     Retrofit retrofit;
     String sendTokenBle;
+    NotificationHelper notificationHelper;
 
 
     private final LocalBinder minder = new HTSBinder();
@@ -103,7 +104,7 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
         filter.addAction(ACTION_DISCONNECT);
         registerReceiver(disconnectActionBroadcastReceiver, filter);
 
-
+        notificationHelper = new NotificationHelper(this);
     }
 
     @Override
@@ -117,7 +118,9 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
 
     @Override
     protected void onRebind() {
+
         stopForegroundService();
+
     }
 
     @Override
@@ -130,6 +133,7 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
         super.onDeviceDisconnected(device);
         temp = null;
         SendNotification();
+        notificationHelper.SendNotification("Alert", "Device is disconnected.", HTActivity.class);
 
     }
 
@@ -196,7 +200,7 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
 
         SendTemp(tempData, temp);
 
-        SendData(temp,tempData);
+        SendData(temp, tempData);
 
 
         final Intent broadcast = new Intent(BROADCAST_HTS_MEASUREMENT);
@@ -258,9 +262,8 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
                     String time = dateFormat.format(currentTime);
 
 
-
                     sendToken = response.body().getToken();
-                 //   Toast.makeText(HTService.this, "Temp sent to server.", Toast.LENGTH_SHORT).show();
+                    //   Toast.makeText(HTService.this, "Temp sent to server.", Toast.LENGTH_SHORT).show();
 
                     Log.e("Result", " Temp Sent to server.");
                 }
