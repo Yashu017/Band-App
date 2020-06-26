@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -111,6 +112,7 @@ public class FifthFragment extends Fragment {
                     GetNotification notification = response.body();
 
                     arrayList = notification.getNotification();
+                    Collections.reverse(arrayList);
 
 
                     if (arrayList != null) {
@@ -121,8 +123,8 @@ public class FifthFragment extends Fragment {
 
                             String msg = item.getNotification();
                             long time = item.getTime();
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE, MMMM d, h:mm a");
                             Date date = new Date(time);
-                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("h:mm a");
                             simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
                             String formattedTime = simpleDateFormat.format(date);
                             Log.e("Msg", "" + msg);
@@ -130,7 +132,6 @@ public class FifthFragment extends Fragment {
 
                         }
 
-                        // Collections.reverse(notificationList);
                         NotificationAdapter adapter = new NotificationAdapter(getContext(), notificationList);
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
 

@@ -103,7 +103,6 @@ public class BottomNavActivity extends AppCompatActivity implements BottomNaviga
             editor.commit();
             startActivity(i);
             finish();
-
         }
 
 
