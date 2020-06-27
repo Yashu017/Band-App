@@ -48,8 +48,8 @@
         android:layout_height="match_parent">
 
     <com.airbnb.lottie.LottieAnimationView
-        android:layout_height="390dp"
-        android:layout_width="320dp"
+        android:layout_height="250dp"
+        android:layout_width="240dp"
         android:id="@+id/animation_view"
         android:scaleType="fitCenter"
         app:lottie_rawRes="@raw/home"
@@ -61,6 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/wait"
+            android:layout_marginTop="-33dp"
             android:layout_below="@+id/animation_view"
             android:text="Loading,Please Wait...."
             android:layout_centerInParent="true"

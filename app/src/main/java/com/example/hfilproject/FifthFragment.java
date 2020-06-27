@@ -22,8 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -137,32 +135,17 @@ animationView.playAnimation();
 
                             String msg = item.getNotification();
                             long time = item.getTime();
-                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE, MMMM d");
+                            time=time+(5*60*60*1000)+(30*60*1000);
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE, MMMM d, hh:mma");
                             Date date = new Date(time);
                             simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
                             String formattedTime = simpleDateFormat.format(date);
                             Log.e("Msg", "" + msg);
-                            long minute = (time / (1000 * 60)) % 60+30;
-                            long hour = (time / (1000 * 60 * 60)) % 24+5;
-                            String finalT = String.format("%02d:%02d", hour, minute);
-                            DateFormat f1 = new SimpleDateFormat("HH:mm"); //HH for hour of the day (0 - 23)
-                            Date d = null;
-                            try {
-                                 d = f1.parse(finalT);
-                            } catch (ParseException e) {
-
-                            }
-                            DateFormat f2 = new SimpleDateFormat("h:mma");
-                            if (d != null) {
-                                notificationList.add(new Notification("", "" + formattedTime + ", "+ f2.format(d).toLowerCase(), "" + msg));
-                            }
-
+                                notificationList.add(new Notification("", "" + formattedTime , "" + msg));
                         }
 
                         NotificationAdapter adapter = new NotificationAdapter(getContext(), notificationList);
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-
-
                         wait.setVisibility(View.GONE);
                         animationView.pauseAnimation();
                         animationView.setVisibility(View.GONE);
@@ -176,11 +159,7 @@ animationView.playAnimation();
                         recyclerView.setLayoutManager(layoutManager);
                         recyclerView.setAdapter(adapter);
                     }
-
-
                 }
-
-
             }
 
             @Override
