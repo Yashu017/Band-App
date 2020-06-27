@@ -20,6 +20,10 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
+
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,12 +40,14 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class FifthFragment extends Fragment {
 
     private RecyclerView recyclerView;
+    private LottieAnimationView animationView;
     private List<Notification> notificationList;
     View rootView;
     private OnFragmentInteractionListener listener;
@@ -52,8 +58,11 @@ public class FifthFragment extends Fragment {
     Retrofit retrofit;
     TextView tv2;
     Button back;
+    TextView wait;
 
     private ArrayList<NotificationItem> arrayList = null;
+
+
 
     public FifthFragment() {
         // Required empty public constructor
@@ -65,7 +74,9 @@ public class FifthFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_fifth, container, false);
+        animationView = (LottieAnimationView) rootView.findViewById(R.id.animation_view);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.notificationRecycler);
+        wait=rootView.findViewById(R.id.wait);
         back = rootView.findViewById(R.id.backNoti);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,9 +88,11 @@ public class FifthFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
+getNotification();
 
 
-        getNotification();
+
+
 
         tv2 = rootView.findViewById(R.id.textView2);
         return rootView;
@@ -87,6 +100,7 @@ public class FifthFragment extends Fragment {
 
 
     private void getNotification() {
+animationView.playAnimation();
         sharedPrefs = getActivity().getSharedPreferences("app", Context.MODE_PRIVATE);
         editor = sharedPrefs.edit();
         token4 = sharedPrefs.getString("token", "");
@@ -123,18 +137,35 @@ public class FifthFragment extends Fragment {
 
                             String msg = item.getNotification();
                             long time = item.getTime();
-                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE, MMMM d, h:mm a");
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE, MMMM d");
                             Date date = new Date(time);
                             simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
                             String formattedTime = simpleDateFormat.format(date);
                             Log.e("Msg", "" + msg);
-                            notificationList.add(new Notification("", "" + formattedTime, "" + msg));
+                            long minute = (time / (1000 * 60)) % 60+30;
+                            long hour = (time / (1000 * 60 * 60)) % 24+5;
+                            String finalT = String.format("%02d:%02d", hour, minute);
+                            DateFormat f1 = new SimpleDateFormat("HH:mm"); //HH for hour of the day (0 - 23)
+                            Date d = null;
+                            try {
+                                 d = f1.parse(finalT);
+                            } catch (ParseException e) {
+
+                            }
+                            DateFormat f2 = new SimpleDateFormat("h:mma");
+                            if (d != null) {
+                                notificationList.add(new Notification("", "" + formattedTime + ", "+ f2.format(d).toLowerCase(), "" + msg));
+                            }
 
                         }
 
                         NotificationAdapter adapter = new NotificationAdapter(getContext(), notificationList);
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
 
+
+                        wait.setVisibility(View.GONE);
+                        animationView.pauseAnimation();
+                        animationView.setVisibility(View.GONE);
                         recyclerView.setLayoutManager(layoutManager);
                         recyclerView.setAdapter(adapter);
                     } else {
@@ -178,6 +209,7 @@ public class FifthFragment extends Fragment {
             throw new RuntimeException(context.toString() + "must implement OnFragmentInteractionListener");
         }
     }
+
 
     @Override
     public void onDetach() {

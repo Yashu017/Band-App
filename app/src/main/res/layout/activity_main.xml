@@ -54,6 +54,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="40dp"
         android:theme="@style/AppTheme"
+        android:background="@color/colorPrimaryDark"
         android:visibility="gone" />
 
     <ImageView

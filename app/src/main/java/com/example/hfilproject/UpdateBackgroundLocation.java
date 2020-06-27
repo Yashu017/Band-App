@@ -365,6 +365,11 @@ public class UpdateBackgroundLocation extends Service {
                 @Override
                 public void run() {
 
+                    if (sharedPrefs.getBoolean("firstTimeMap", false) == true)
+                    {
+                        sendLocation();
+                    }
+
                     // display toast
                  if(sharedPrefs.getInt("geoStatus",0)==1)
                  {

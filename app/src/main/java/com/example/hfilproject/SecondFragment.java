@@ -37,14 +37,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 
 import retrofit2.Retrofit;
 
@@ -114,33 +109,24 @@ public class SecondFragment extends Fragment implements SharedPreferences.OnShar
             public void onClick(View v) {
 
                 //sendLocation();
-                Intent intent = new Intent(getActivity(), MapsActivity.class);
-                startActivity(intent);
+                if (!address.getText().equals("N/A")) {
+                    Intent intent = new Intent(getActivity(), MapsActivity.class);
+                    startActivity(intent);
+                }
+                else
+                {
+                    Toast.makeText(getContext(),"Please click on Update My Location,then click on Open Geofence",Toast.LENGTH_LONG).show();
+                }
 
 
             }
         });
 
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+5:30"));
-        Date time = cal.getTime();
-        DateFormat date = new SimpleDateFormat("HH:mm:ss");
-//
-        date.setTimeZone(TimeZone.getTimeZone("GMT+5:30"));
-        String localTime = date.format(time);
         fence = view.findViewById(R.id.geofence);
-
-
-
-
 
 
         Dexter.withActivity(getActivity())
                 .withPermissions
-//                        (Arrays.asList(
-//                        Manifest.permission.ACCESS_FINE_LOCATION,
-//                        Manifest.permission.ACCESS_COARSE_LOCATION,
-//                        Manifest.permission.ACCESS_BACKGROUND_LOCATION
-//                ))
         (callPermission())
                 .withListener(new MultiplePermissionsListener() {
             @Override

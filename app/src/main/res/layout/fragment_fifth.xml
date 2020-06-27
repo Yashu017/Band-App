@@ -43,4 +43,34 @@
       android:id="@+id/notificationRecycler"
       android:layout_marginBottom="60dp"/>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_height="390dp"
+        android:layout_width="320dp"
+        android:id="@+id/animation_view"
+        android:scaleType="fitCenter"
+        app:lottie_rawRes="@raw/home"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true"
+        android:layout_centerInParent="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/wait"
+            android:layout_below="@+id/animation_view"
+            android:text="Loading,Please Wait...."
+            android:layout_centerInParent="true"
+            android:textSize="15sp"/>
+
+
+
+
+    </RelativeLayout>
+
+
+
 </FrameLayout>
