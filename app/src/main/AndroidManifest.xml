@@ -112,7 +112,8 @@
         <service
             android:name="com.example.hfilproject.HTService"
             android:enabled="true"
-            android:label="HTM" />
+            android:label="HTM"
+            android:exported="true"/>
         <service
             android:name="com.example.hfilproject.GeofenceTransitionService"
             android:enabled="true" />

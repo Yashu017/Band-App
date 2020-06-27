@@ -36,7 +36,7 @@ public class NotificationHelper extends ContextWrapper {
                 NotificationManager.IMPORTANCE_HIGH);
         notificationChannel.enableLights(true);
         notificationChannel.enableVibration(true);
-        notificationChannel.setDescription("You have breached your geo fence.");
+        notificationChannel.setDescription("Bluetooth disconnect notification");
         notificationChannel.setLightColor(Color.RED);
         notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
 
@@ -53,7 +53,7 @@ public class NotificationHelper extends ContextWrapper {
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(body)
-                .setSmallIcon(R.drawable.ic_action_location)
+                .setSmallIcon(R.drawable.ic_stat_notify_hts)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
