@@ -51,6 +51,7 @@ public abstract class BleProfileServiceReadyActivity<E extends BleProfileService
     private String deviceName;
     private TextView deviceId;
 
+
     private final BroadcastReceiver commonBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, final Intent intent) {
@@ -208,6 +209,7 @@ public abstract class BleProfileServiceReadyActivity<E extends BleProfileService
         onViewCreated(savedInstanceState);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(commonBroadcastReceiver, makeIntentFilter());
+
     }
 
     @Override
@@ -456,6 +458,8 @@ public abstract class BleProfileServiceReadyActivity<E extends BleProfileService
     public void onDeviceConnecting(@NonNull final BluetoothDevice device) {
         deviceNameView.setText(deviceName != null ? deviceName : getString(R.string.not_available));
         connectButton.setText(R.string.action_connecting);
+
+
     }
 
     @Override
