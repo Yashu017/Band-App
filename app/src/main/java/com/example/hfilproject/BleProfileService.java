@@ -69,6 +69,8 @@ public abstract class BleProfileService extends Service implements BleManagerCal
     private BluetoothDevice bluetoothDevice;
     private String deviceName;
     private ILogSession logSession;
+    private NotificationHelper notificationHelper;
+
 
     private final BroadcastReceiver bluetoothStateBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -281,6 +283,9 @@ public abstract class BleProfileService extends Service implements BleManagerCal
         if (bluetoothAdapter.isEnabled()) {
             onBluetoothEnabled();
         }
+
+       notificationHelper = new NotificationHelper(this);
+
     }
 
     /**
@@ -393,6 +398,7 @@ public abstract class BleProfileService extends Service implements BleManagerCal
         broadcast.putExtra(EXTRA_DEVICE, bluetoothDevice);
         broadcast.putExtra(EXTRA_CONNECTION_STATE, STATE_CONNECTING);
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcast);
+
     }
 
     @Override
@@ -453,6 +459,7 @@ public abstract class BleProfileService extends Service implements BleManagerCal
         broadcast.putExtra(EXTRA_DEVICE, bluetoothDevice);
         broadcast.putExtra(EXTRA_CONNECTION_STATE, STATE_LINK_LOSS);
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcast);
+        notificationHelper.SendNotification("Alert","Bluetooth is disconnected.",HTActivity.class);
     }
 
     @Override

@@ -105,6 +105,7 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
         registerReceiver(disconnectActionBroadcastReceiver, filter);
 
         notificationHelper = new NotificationHelper(this);
+        sharedPrefs = getSharedPreferences("app", Context.MODE_PRIVATE);
     }
 
     @Override
@@ -112,6 +113,7 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
         // when user has disconnected from the sensor, we have to cancel the notification that we've created some milliseconds before using unbindService
         cancelNotification();
         unregisterReceiver(disconnectActionBroadcastReceiver);
+        notificationHelper.SendNotification("Alert", "Device is disconnected.", HTActivity.class);
 
         super.onDestroy();
     }
@@ -133,7 +135,6 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
         super.onDeviceDisconnected(device);
         temp = null;
         SendNotification();
-        notificationHelper.SendNotification("Alert", "Device is disconnected.", HTActivity.class);
 
     }
 
@@ -213,6 +214,18 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
         if (!bound) {
             // Here we may update the notification to display the current temperature.
             // TODO modify the notification here
+        }
+
+        editor = sharedPrefs.edit();
+        editor.putBoolean("TempReceived",true);
+        editor.commit();
+        notifyUser();
+    }
+
+    private void notifyUser() {
+        boolean TempReceived = sharedPrefs.getBoolean("TempReceived",false);
+        if (!TempReceived){
+            notificationHelper.SendNotification("Notification","CWatch band is in sleep mode.",HTActivity.class);
         }
     }
 
