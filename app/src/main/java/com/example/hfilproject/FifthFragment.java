@@ -156,6 +156,9 @@ animationView.playAnimation();
                         NotificationAdapter adapter = new NotificationAdapter(getContext(), notificationList);
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
 
+                        wait.setVisibility(View.GONE);
+                        animationView.pauseAnimation();
+                        animationView.setVisibility(View.GONE);
                         recyclerView.setLayoutManager(layoutManager);
                         recyclerView.setAdapter(adapter);
                     }

@@ -137,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         scan = findViewById(R.id.btnScan);
 
 
@@ -202,25 +203,24 @@ public class MainActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.login_progress);
         sharedPref = getSharedPreferences("app", MODE_PRIVATE);
         editor = sharedPref.edit();
+        editor.putBoolean("autoStart",false);
+        editor.commit();
         providers = Arrays.asList(new AuthUI.IdpConfig.PhoneBuilder().build());
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                    startActivityForResult(AuthUI.getInstance()
+                            .createSignInIntentBuilder()
+                            .setAvailableProviders(providers)
+                            .setLogo(R.drawable.tlk)
+                            .build(), RC_SIGN_IN);
+                    progressBar.setVisibility(View.VISIBLE);
+                    loginButton.setVisibility(View.GONE);
 
-
-
-                startActivityForResult(AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(providers)
-                        .setLogo(R.drawable.tlk)
-                        .build(), RC_SIGN_IN);
-                progressBar.setVisibility(View.VISIBLE);
-                loginButton.setVisibility(View.GONE);
-
-
+                }
                 //  Intent intent = new Intent(MainActivity.this, Bottt)
 
-            }
+
         });
 
         scan.setText(getResources().getString(R.string.scanBluetooth));
@@ -334,6 +334,7 @@ public class MainActivity extends AppCompatActivity {
                 editor.commit();
                 Log.d("phoneNumber", user.getPhoneNumber());
                 Log.d("UserId", user.getUid());
+
 
                 getUser(user.getPhoneNumber());
             } else {

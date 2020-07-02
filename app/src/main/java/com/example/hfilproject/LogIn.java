@@ -56,6 +56,7 @@ public class LogIn extends AppCompatActivity {
     private SharedPreferences.Editor editor;
     private EditText name, age, phoneNumber, address, time;
 
+
     private EditText bluetoothId;
     private Button submitProfile;
     private ProgressBar progressBar;

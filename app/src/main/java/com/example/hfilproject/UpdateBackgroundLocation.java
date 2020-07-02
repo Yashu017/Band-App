@@ -1,6 +1,7 @@
 package com.example.hfilproject;
 
 import android.app.ActivityManager;
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -36,6 +37,7 @@ import com.google.android.gms.tasks.Task;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -351,10 +353,51 @@ public class UpdateBackgroundLocation extends Service {
 
     @Override
     public void onDestroy() {
-        mServiceHandler.removeCallbacks(null);
+        //mServiceHandler.removeCallbacks(null);
         super.onDestroy();
+
+        Toast.makeText(getApplicationContext(), "Service Task destroyed", Toast.LENGTH_LONG).show();
+
+
+        Intent myIntent = new Intent(getApplicationContext(), UpdateBackgroundLocation.class);
+
+        PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 0, myIntent, 0);
+
+        AlarmManager alarmManager1 = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTimeInMillis(System.currentTimeMillis());
+
+        calendar.add(Calendar.SECOND, 10);
+
+        alarmManager1.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
+        Toast.makeText(getApplicationContext(), "Start Alarm", Toast.LENGTH_SHORT).show();
+
     }
 
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
+
+        Intent myIntent = new Intent(getApplicationContext(), UpdateBackgroundLocation.class);
+
+        PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 0, myIntent, 0);
+
+        AlarmManager alarmManager1 = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTimeInMillis(System.currentTimeMillis());
+
+        calendar.add(Calendar.SECOND, 10);
+
+        alarmManager1.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
+        Toast.makeText(getApplicationContext(), "Start Alarm", Toast.LENGTH_SHORT).show();
+
+    }
 
     private class TimeDisplayTimerTask extends TimerTask {
         @Override
