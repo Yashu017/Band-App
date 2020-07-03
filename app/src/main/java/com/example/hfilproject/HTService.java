@@ -114,7 +114,7 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
         cancelNotification();
         unregisterReceiver(disconnectActionBroadcastReceiver);
         notificationHelper.SendNotification("Alert", "Device is disconnected.", HTActivity.class);
-
+        SendNotification("Device is disconnected.");
         super.onDestroy();
     }
 
@@ -134,17 +134,16 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
     public void onDeviceDisconnected(@NonNull final BluetoothDevice device) {
         super.onDeviceDisconnected(device);
         temp = null;
-        SendNotification();
+        SendNotification("Device is disconnected.");
 
     }
 
-    private void SendNotification() {
+    private void SendNotification(String connectionStatus) {
         sharedPrefs = getSharedPreferences("app", Context.MODE_PRIVATE);
         editor = sharedPrefs.edit();
 
         token1 = sharedPrefs.getString("token", "");
 
-        String connectionStatus = "Bluetooth Disconnected";
         OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -226,6 +225,7 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
         boolean TempReceived = sharedPrefs.getBoolean("TempReceived",false);
         if (!TempReceived){
             notificationHelper.SendNotification("Notification","CWatch band is in sleep mode.",HTActivity.class);
+            SendNotification("CWatch band is in sleep mode.");
         }
     }
 

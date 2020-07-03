@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Handler;
@@ -19,10 +20,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import no.nordicsemi.android.ble.BleManagerCallbacks;
 import no.nordicsemi.android.ble.utils.ILogger;
 import no.nordicsemi.android.log.ILogSession;
 import no.nordicsemi.android.log.Logger;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public abstract class BleProfileService extends Service implements BleManagerCallbacks {
     @SuppressWarnings("unused")
@@ -71,6 +82,13 @@ public abstract class BleProfileService extends Service implements BleManagerCal
     private ILogSession logSession;
     private NotificationHelper notificationHelper;
 
+    SharedPreferences sharedPrefs;
+    SharedPreferences.Editor editor;
+    String sendToken;
+    String token1;
+    Retrofit retrofit;
+    String sendTokenBle;
+    int categoryType = 0;
 
     private final BroadcastReceiver bluetoothStateBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -459,7 +477,8 @@ public abstract class BleProfileService extends Service implements BleManagerCal
         broadcast.putExtra(EXTRA_DEVICE, bluetoothDevice);
         broadcast.putExtra(EXTRA_CONNECTION_STATE, STATE_LINK_LOSS);
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcast);
-        notificationHelper.SendNotification("Alert","Bluetooth is disconnected.",HTActivity.class);
+        notificationHelper.SendNotification("Alert","Your device has gone out of range.",HTActivity.class);
+        SendNotification("Your device has gone out of range.");
     }
 
     @Override
@@ -598,6 +617,53 @@ public abstract class BleProfileService extends Service implements BleManagerCal
      */
     protected boolean isConnected() {
         return bleManager != null && bleManager.isConnected();
+    }
+
+    private void SendNotification(String connectionStatus) {
+        sharedPrefs = getSharedPreferences("app", Context.MODE_PRIVATE);
+        editor = sharedPrefs.edit();
+
+        token1 = sharedPrefs.getString("token", "");
+
+        OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        okhttpbuilder.addInterceptor(logging);
+
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
+                .addConverterFactory(GsonConverterFactory.create());
+
+        retrofit = builder.build();
+        for_login login = retrofit.create(for_login.class);
+        Map<String, Object> params = new HashMap<>();
+        params.put("notification", connectionStatus);
+        params.put("category", categoryType);
+        Call<UserNotification> call = login.userNotify(token1, params);
+        call.enqueue(new Callback<UserNotification>() {
+            @Override
+            public void onResponse(Call<UserNotification> call, Response<UserNotification> response) {
+                String error;
+                if (response.isSuccessful() && response.code() == 200) {
+                    if (response.body().getErrorCode() != null) {
+                        error = response.body().getErrorCode();
+                        if (error.equals("2")) {
+                            Toast.makeText(BleProfileService.this, "User not found.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    sendTokenBle = response.body().getToken();
+                  //  Toast.makeText(BleProfileService.this, " Bluetooth disconnected", Toast.LENGTH_SHORT).show();
+                    Log.e("Disconnected", "Bluetooth Service");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserNotification> call, Throwable t) {
+                Toast.makeText(BleProfileService.this, "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("error in HT Service", "" + t.getMessage());
+            }
+        });
+
     }
 }
 
