@@ -301,9 +301,16 @@ public class BLETemperatureService extends Service {
             return;
         }
         Log.w(TAG, "mBluetoothGatt closed");
+     /*
         mBluetoothDeviceAddress = null;
         mBluetoothGatt.close();
         mBluetoothGatt = null;
+
+      */
+        final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(mBluetoothDeviceAddress);
+     mBluetoothGatt = device.connectGatt(this,true,mGattCallback);
+     mConnectionState = ConnectState.Connecting;
+
     }
 
     /**
