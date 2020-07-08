@@ -148,7 +148,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="28dp"
-                            android:buttonTint="#B0302F2F"
+                            android:buttonTint="#3F51B5"
                             android:textColor="@color/md_grey_700" />
 
 
@@ -176,7 +176,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:buttonTint="#B0302F2F"
+                            android:buttonTint="#3F51B5"
                             android:textColor="@color/md_grey_700" />
 
 
@@ -275,32 +275,61 @@
                     </RelativeLayout>
 
 
-                    <Button
-                        android:id="@+id/submit_profile"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:id="@+id/cardL"
+                        android:clickable="true"
+                        android:layout_height="45dp"
+                        android:layout_marginEnd="25dp"
+                        android:layout_marginStart="25dp"
                         android:layout_gravity="center"
-                        android:layout_marginStart="24dp"
                         android:layout_marginTop="10dp"
-                        android:layout_marginEnd="24dp"
                         android:background="@drawable/buttob"
                         android:foreground="?android:attr/selectableItemBackground"
-                        android:text="@string/submit"
-                        android:textColor="#fff" />
+
+                        >
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="8dp"
+                            android:id="@+id/consL">
+                            <ProgressBar
+                                android:id="@+id/progressBar"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:indeterminate="true"
+                                android:indeterminateTint="@color/white"
+                                android:indeterminateTintMode="src_atop"
+                                android:layout_marginEnd="16dp"
+                                android:visibility="gone"
+                                android:elevation="2dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/txtL"
+                                app:layout_constraintTop_toTopOf="parent"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/txtL"
+                                android:text="@string/submit"
+                                android:textColor="#fff"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                app:layout_constraintVertical_bias="0.512"/>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </RelativeLayout>
+
                 </LinearLayout>
 
             </ScrollView>
 
         </RelativeLayout>
 
-        <ProgressBar
-            android:id="@+id/profile_progress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="20dp"
-            android:elevation="2dp"
-            android:visibility="gone" />
+
 
 
     </RelativeLayout>

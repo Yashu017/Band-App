@@ -11,21 +11,25 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.os.ResultReceiver;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -58,8 +62,6 @@ public class LogIn extends AppCompatActivity {
 
 
     private EditText bluetoothId;
-    private Button submitProfile;
-    private ProgressBar progressBar;
     private RadioButton hq, iw;
     private LinearLayout hq_l, iw_l;
     String token;
@@ -79,7 +81,7 @@ public class LogIn extends AppCompatActivity {
 
     Boolean ok;
     RelativeLayout timeRl;
-    int temp = 0;
+    int temp = 2;
 
 
     private static final String TAG = "LogIn";
@@ -91,11 +93,17 @@ public class LogIn extends AppCompatActivity {
     FusedLocationProviderClient fusedLocationProviderClient;
 
 
+   RelativeLayout cd;
+    TextView tx;
+    ConstraintLayout cl;
+    ProgressBar pg;
+    Animation fadeIn;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
-        submitProfile = findViewById(R.id.submit_profile);
         sharedPrefs = getSharedPreferences("app", MODE_PRIVATE);
         editor = sharedPrefs.edit();
 
@@ -105,6 +113,10 @@ public class LogIn extends AppCompatActivity {
         phoneNumber.setText(sharedPrefs.getString("phoneNumber", ""));
         phoneNumber.setEnabled(false);
         address.setEnabled(false);
+
+
+        fadeIn= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fade_in);
+
 
 
         if (Build.VERSION.SDK_INT >= 21) {
@@ -148,7 +160,7 @@ public class LogIn extends AppCompatActivity {
                 quarnType = "Government Place";
               //  Toast.makeText(LogIn.this, quarnType, Toast.LENGTH_SHORT).show();
                 timeRl.setVisibility(View.GONE);
-                address.setText(address1 + ".");
+                address.setText(fulladdress);
                 temp=0;
                 status="1";
 
@@ -157,10 +169,10 @@ public class LogIn extends AppCompatActivity {
 
 
 
-        submitProfile.setOnClickListener(new View.OnClickListener() {
+        cd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressBar.setVisibility(View.VISIBLE);
+
                 if (temp == 1) {
                     editor.putString("time", (time.getText().toString()));
                     Log.e("time", time.getText().toString());
@@ -174,7 +186,8 @@ public class LogIn extends AppCompatActivity {
 
 
                 if (!name.getText().toString().isEmpty() && !address.getText().toString().isEmpty() && !phoneNumber.getText().toString().isEmpty()
-                        && !age.getText().toString().isEmpty() && !time.getText().toString().isEmpty() && !bluetoothId.getText().toString().isEmpty()) {
+                        && !age.getText().toString().isEmpty() && !time.getText().toString().isEmpty() && !bluetoothId.getText().toString().isEmpty() && (temp<=1)) {
+                    buttonActivated();
                     Intent intent = new Intent();
                     editProfile = false;
                     if (intent.hasExtra("editProfile")) {
@@ -194,7 +207,6 @@ public class LogIn extends AppCompatActivity {
 
                 } else {
                     Toast.makeText(LogIn.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.GONE);
                 }
 
 
@@ -267,7 +279,7 @@ public class LogIn extends AppCompatActivity {
             country = addressList.get(0).getCountryName();
             postalCode = addressList.get(0).getPostalCode();
             fulladdress = address1 + ".";
-            address.setText(fulladdress);
+
             editor.putString("Updated Location", fulladdress);
             editor.commit();
             Log.e("location", "" + fulladdress);
@@ -318,11 +330,11 @@ public class LogIn extends AppCompatActivity {
 
                             if (error1.equals("0")) {
                                 Toast.makeText(LogIn.this, "User already exist.Please try with another credentials", Toast.LENGTH_SHORT).show();
-                                progressBar.setVisibility(View.GONE);
+                                failedButton();
 
                             } else if (error1.equals("1")) {
                                 Toast.makeText(LogIn.this, "Your Bluetooth Device is already registered.", Toast.LENGTH_SHORT).show();
-                                progressBar.setVisibility(View.GONE);
+                                failedButton();
                             }
                         } else {
                             ok = true;
@@ -343,23 +355,26 @@ public class LogIn extends AppCompatActivity {
                                 editor.putString("quarantineType", qt);
                                 editor.putBoolean("profileStatus", true);
                                 editor.commit();
-                                progressBar.setVisibility(View.GONE);
-                             //   Toast.makeText(LogIn.this, "ok_pref", Toast.LENGTH_SHORT).show();
                                 if (editProfile) {
                                     finish();
                                 } else {
-                                    Intent i = new Intent(LogIn.this, BottomNavActivity.class);
-                                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(i);
-                                    progressBar.setVisibility(View.GONE);
-                                  //  Toast.makeText(LogIn.this, "activity passed", Toast.LENGTH_SHORT).show();
-                                    finish();
+                                    buttonFinished();
+                                    Handler handler=new Handler();
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Intent i = new Intent(LogIn.this, BottomNavActivity.class);
+                                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            startActivity(i);
+                                            finish();
+                                        }
+                                    },3000);
+//
                                 }
                             }
                         }
                     } else {
                         res = response.errorBody().string();
-                     //   Toast.makeText(LogIn.this, res, Toast.LENGTH_LONG).show();
                         Log.e("res", res);
                     }
                 } catch (IOException e) {
@@ -384,8 +399,6 @@ public class LogIn extends AppCompatActivity {
         phoneNumber = findViewById(R.id.mobileL);
         age = findViewById(R.id.ageL);
         address = findViewById(R.id.addressL);
-        submitProfile = findViewById(R.id.submit_profile);
-        progressBar = findViewById(R.id.profile_progress);
         hq = findViewById(R.id.hq_yes);
         iw = findViewById(R.id.ic_yes);
         bluetoothId = findViewById(R.id.bluetoothId);
@@ -393,9 +406,50 @@ public class LogIn extends AppCompatActivity {
         hq_l = findViewById(R.id.hq);
         time = findViewById(R.id.startTime);
         timeRl = findViewById(R.id.timeRL);
-
+        cd=findViewById(R.id.cardL);
+        cl=findViewById(R.id.consL);
+        tx=findViewById(R.id.txtL);
+        pg=findViewById(R.id.progressBar);
 
     }
+    void buttonActivated()
+    {
+        pg.setVisibility(View.VISIBLE);
+        pg.setAnimation(fadeIn);
+        tx.setText("Please Wait...");
+        tx.setAnimation(fadeIn);
+    }
+    void buttonFinished()
+    {
+        pg.setVisibility(View.GONE);
+        pg.setAnimation(fadeIn);
+       cd.setBackgroundResource(R.drawable.buttobgreen);
+        tx.setText("DONE");
+        tx.setAnimation(fadeIn);
+    }
+    void failedButton()
+    {
+        pg.setVisibility(View.GONE);
+        pg.setAnimation(fadeIn);
+        cd.setBackgroundResource(R.drawable.buttobred);
+
+        tx.setText("Failed");
+        tx.setAnimation(fadeIn);
+
+        Handler handler=new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                cd.setBackgroundResource(R.drawable.buttob);
+                tx.setText("Submit");
+                tx.setAnimation(fadeIn);
+            }
+        },3000);
+
+    }
+
+
+
 
 
 }

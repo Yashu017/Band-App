@@ -162,17 +162,15 @@ try{
             originalAddress.setText(sharedPrefs.getString("hqAddress", ""));
 
         }
-        if (sharedPrefs.getBoolean("pressed", false)==true) {
-            addresesHead.setVisibility(View.GONE);
-        }
+
 
         if (!sharedPrefs.getString("time", "").equals("0")) {
             addresesHead.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    editor.putBoolean("pressed",true);
-                    editor.commit();
                     startTimer();
+                    Toast.makeText(getContext(),"Please go through the app after you reach home otherwise you might get " +
+                            "yourself geofenced at wrong location and once you see your residential location here",Toast.LENGTH_LONG).show();
                 }
             });
         } else {

@@ -124,11 +124,11 @@ animationView.playAnimation();
                     GetNotification notification = response.body();
 
                     arrayList = notification.getNotification();
-                    Collections.reverse(arrayList);
+
 
 
                     if (arrayList != null) {
-
+                        Collections.reverse(arrayList);
                         int length = arrayList.size();
                         Log.e("Length", "" + length);
                         for (NotificationItem item : arrayList) {

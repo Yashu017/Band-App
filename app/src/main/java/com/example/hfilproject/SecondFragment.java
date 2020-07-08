@@ -241,7 +241,6 @@ public class SecondFragment extends Fragment implements SharedPreferences.OnShar
                     .append("/")
                     .append(event.getLocation().getLongitude()).toString();
 
-            Toast.makeText(getContext(), data, Toast.LENGTH_LONG).show();
 
             Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
             try {
@@ -253,14 +252,14 @@ public class SecondFragment extends Fragment implements SharedPreferences.OnShar
                 String postalCode = addressList.get(0).getPostalCode();
                 fullAddress = address1 + ", " + area + ", " + city + ", " + country + ", " + postalCode;
 
-                address.setText(fullAddress);
+
 
                 editor.putString("updated Location", fullAddress);
                 editor.commit();
+                address.setText(sharedPrefs.getString("updated Location ",""));
                 locUpdates.setVisibility(View.GONE);
             } catch (Exception e) {
                 e.printStackTrace();
-
             }
 
 
