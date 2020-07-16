@@ -220,6 +220,8 @@ public class SecondFragment extends Fragment implements SharedPreferences.OnShar
         }
     }
 
+
+
     private void startService(boolean aBoolean) {
 
         if (aBoolean) {
@@ -256,7 +258,8 @@ public class SecondFragment extends Fragment implements SharedPreferences.OnShar
 
                 editor.putString("updated Location", fullAddress);
                 editor.commit();
-                address.setText(sharedPrefs.getString("updated Location ",""));
+              //  address.setText(sharedPrefs.getString("updated Location ",""));
+                address.setText(fullAddress);
                 locUpdates.setVisibility(View.GONE);
             } catch (Exception e) {
                 e.printStackTrace();

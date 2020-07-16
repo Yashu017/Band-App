@@ -1,6 +1,5 @@
 package com.example.hfilproject;
 
-import android.animation.ArgbEvaluator;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -14,10 +13,15 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,8 +30,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.hfilproject.Adapter.AdapterBegin;
-import com.example.hfilproject.Model.ModelBegin;
 import com.example.hfilproject.Model.User;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
@@ -41,6 +43,7 @@ import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -73,11 +76,14 @@ public class MainActivity extends AppCompatActivity {
     private GoogleApiClient googleApiClient;
 
     //start screen
-    private ViewPager viewPager;
-    AdapterBegin adapter;
-    List<ModelBegin> modelBegin;
-    Integer[] color = null;
-    ArgbEvaluator argbEvaluator = new ArgbEvaluator();
+    private ViewPager screenPager;
+    IntroViewPagerAdapter introViewPagerAdapter ;
+    TabLayout tabIndicator;
+    Button btnNext;
+    int position = 0 ;
+    Button btnGetStarted;
+    Animation btnAnim ;
+    TextView tvSkip;
 
 
     //bluetooth scan
@@ -100,6 +106,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         loadLocale();
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
         ActionBar actionBar = getSupportActionBar();
@@ -138,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        scan = findViewById(R.id.btnScan);
+        scan = findViewById(R.id.scanBT);
 
 
         scan.setOnClickListener(new View.OnClickListener() {
@@ -153,53 +162,126 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-//startScreen
-        modelBegin = new ArrayList<>();
-        modelBegin.add(new ModelBegin(R.drawable.tlk, getResources().getString(R.string.begin), getResources().getString(R.string.begin_title) + getResources().getString(R.string.begin_content)));
-        modelBegin.add(new ModelBegin(R.drawable.bt1, getResources().getString(R.string.connect_heading), getResources().getString(R.string.connect_title) +
-                getResources().getString(R.string.connect_content)));
-        modelBegin.add(new ModelBegin(R.drawable.phonr, getResources().getString(R.string.mobile), getResources().getString(R.string.mobile_title)));
-        modelBegin.add(new ModelBegin(R.drawable.ph1, getResources().getString(R.string.signup), getResources().getString(R.string.sign_content)));
 
-        adapter = new AdapterBegin(modelBegin, this);
-        viewPager = findViewById(R.id.Pager);
-        viewPager.setAdapter(adapter);
-        viewPager.setPadding(130, 0, 130, 0);
 
-        Integer[] colorTemp = {getResources().getColor(R.color.color4),
-                getResources().getColor(R.color.color2),
-                getResources().getColor(R.color.color3),
-                getResources().getColor(R.color.color4)};
-        color = colorTemp;
 
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        // when this activity is about to be launch we need to check if its openened before or not
+
+        if (restorePrefData()) {
+
+            Intent mainActivity = new Intent(getApplicationContext(),MainActivity.class );
+            startActivity(mainActivity);
+            finish();
+
+
+        }
+
+
+
+        // ini views
+        btnNext = findViewById(R.id.btn_next);
+        loginButton = findViewById(R.id.btn_get_started);
+        tabIndicator = findViewById(R.id.tab_indicator);
+        btnAnim = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.button_anim);
+        tvSkip = findViewById(R.id.tv_skip);
+
+        // fill list screen
+
+        final List<ScreenItem> mList = new ArrayList<>();
+        mList.add(new ScreenItem(  getResources().getString(R.string.begin),getResources().getString(R.string.begin_title) + getResources().getString(R.string.begin_content),
+               R.drawable.tlk));
+        mList.add(new ScreenItem("User Registration", "All new users will have to regist" +
+                "er at time of logging in. Basic details regarding  " +
+                "your quarantine will be collected .",R.drawable.phonr));
+        mList.add(new ScreenItem("Temperature Monitoring","C-Watch will continuously record" +
+                " your body temperature to monitor your health " +
+                "and you will be provided with records in real time .",R.drawable.temphome));
+        mList.add(new ScreenItem("Geofencing & Monitoring","To ensure proper quar" +
+                "antine rules are followed you will be geofenced and your location " +
+                "will be monitored in real time to ensure you do not cross your quarantine location . ",R.drawable.locationhome));
+        mList.add(new ScreenItem("Social Distancing Alert","To maintain socia" +
+                "l distancing , we will constantly monitor and alert you in real time . ",R.drawable.sd));
+
+        // setup viewpager
+        screenPager =findViewById(R.id.screen_viewpager);
+        introViewPagerAdapter = new IntroViewPagerAdapter(this,mList);
+        screenPager.setAdapter(introViewPagerAdapter);
+
+        // setup tablayout with viewpager
+
+        tabIndicator.setupWithViewPager(screenPager);
+
+        // next button click Listner
+
+        btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            public void onClick(View v) {
 
-                if (position < (adapter.getCount() - 1) && position < color.length - 1) {
-                    viewPager.setBackgroundColor(
-                            (Integer) argbEvaluator.evaluate(
-                                    positionOffset, color[position], color[position + 1]
-                            )
-                    );
-                } else {
-                    viewPager.setBackgroundColor(color[color.length - 1]);
+                position = screenPager.getCurrentItem();
+                if (position < mList.size()) {
+
+                    position++;
+                    screenPager.setCurrentItem(position);
+
+
                 }
+
+                if (position == mList.size()-1) { // when we rech to the last screen
+
+                    // TODO : show the GETSTARTED Button and hide the indicator and the next button
+
+                    loaddLastScreen();
+
+
+                }
+
+
+
+            }
+        });
+
+        // tablayout add change listener
+
+
+        tabIndicator.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+
+                if (tab.getPosition() == mList.size()-1) {
+
+                    loaddLastScreen();
+
+                }
+
+
             }
 
             @Override
-            public void onPageSelected(int position) {
+            public void onTabUnselected(TabLayout.Tab tab) {
 
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {
+            public void onTabReselected(TabLayout.Tab tab) {
 
             }
         });
 
 
-        loginButton = findViewById(R.id.logInButton);
+
+        // Get Started button click listener
+
+
+
+        // skip button click listener
+
+        tvSkip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                screenPager.setCurrentItem(mList.size());
+            }
+        });
+
         progressBar = findViewById(R.id.login_progress);
         sharedPref = getSharedPreferences("app", MODE_PRIVATE);
         editor = sharedPref.edit();
@@ -415,6 +497,45 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+
+    private boolean restorePrefData() {
+
+
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("myPrefs",MODE_PRIVATE);
+        Boolean isIntroActivityOpnendBefore = pref.getBoolean("isIntroOpnend",false);
+        return  isIntroActivityOpnendBefore;
+
+
+
+    }
+
+    private void savePrefsData() {
+
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("myPrefs",MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putBoolean("isIntroOpnend",true);
+        editor.commit();
+
+
+    }
+
+    // show the GETSTARTED Button and hide the indicator and the next button
+    private void loaddLastScreen() {
+
+        btnNext.setVisibility(View.INVISIBLE);
+        loginButton.setVisibility(View.VISIBLE);
+        scan.setVisibility(View.VISIBLE);
+        tvSkip.setVisibility(View.INVISIBLE);
+        tabIndicator.setVisibility(View.INVISIBLE);
+        // TODO : ADD an animation the getstarted button
+        // setup animation
+        loginButton.setAnimation(btnAnim);
+        scan.setAnimation(btnAnim);
+
+
 
     }
 

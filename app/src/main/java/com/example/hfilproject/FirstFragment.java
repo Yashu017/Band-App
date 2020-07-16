@@ -86,11 +86,12 @@ public class FirstFragment extends Fragment {
     private boolean mTimerRunning;
     private long mTimeLeftInMillis;
     private long mEndTime;
-
+    long START_TIME_IN_MILLIS;
     private ImageView translate;
     private RadioButton hindi, english;
     private Button cancel;
     private Locale locale;
+
 
 
     public FirstFragment() {
@@ -122,7 +123,7 @@ try{
         timeToFetchAddress = Integer.parseInt(sharedPrefs.getString("time", " "));
         Log.e("tt", timeToFetchAddress + "");
     } catch (NumberFormatException e) {
-        Toast.makeText(getContext(),"error in f1",Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(),"error in time fetching",Toast.LENGTH_LONG).show();
     }
         hours = sharedPrefs.getInt("hours", 0);
         minutes = sharedPrefs.getInt("minutes", 0);
@@ -148,7 +149,7 @@ try{
         int hours = Integer.parseInt(units[0]);
         int duration = (3600 * hours + 60 * minutes + seconds) * 1000; //add up our values
 
-
+         START_TIME_IN_MILLIS  =duration;
         mTimeLeftInMillis = duration;
         Log.e("Time1", "" + duration);
         if (sharedPrefs.getBoolean("firstTime", false) == true) {
@@ -169,8 +170,7 @@ try{
                 @Override
                 public void onClick(View v) {
                     startTimer();
-                    Toast.makeText(getContext(),"Please go through the app after you reach home otherwise you might get " +
-                            "yourself geofenced at wrong location and once you see your residential location here",Toast.LENGTH_LONG).show();
+
                 }
             });
         } else {
@@ -304,32 +304,50 @@ try{
     }
 
     private void startTimer() {
-        Toast.makeText(getContext(), "Your location will be fetched in "+out+"hr", Toast.LENGTH_LONG).show();
 
         mEndTime = System.currentTimeMillis() + mTimeLeftInMillis;
         mCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 mTimeLeftInMillis = millisUntilFinished;
-                int minutes = (int) (mTimeLeftInMillis / 1000) / 60;
-                int seconds = (int) (mTimeLeftInMillis / 1000) % 60;
-                String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
-                addresesHead.setVisibility(View.GONE);
-
-
+               updateCountdownTime();
             }
 
             @Override
             public void onFinish() {
                 mTimerRunning = false;
-                addresesHead.setVisibility(View.GONE);
-                getGoogleApiClient();
+                updateButtons();
             }
         }.start();
         mTimerRunning = true;
-        addresesHead.setClickable(false);
+        updateButtons();
 
 
+    }
+
+    private void updateButtons() {
+        if (mTimerRunning) {
+            addresesHead.setText("Location will be fetched");
+            addresesHead.setClickable(false);
+        } else {
+            addresesHead.setText("Fetch Location");
+            if (mTimeLeftInMillis < 1000) {
+                addresesHead.setVisibility(View.INVISIBLE);
+            }
+            if (mTimeLeftInMillis < START_TIME_IN_MILLIS) {
+                getGoogleApiClient();
+            }
+        }
+
+    }
+
+    private void updateCountdownTime() {
+        int minutes = (int) (mTimeLeftInMillis / 1000) / 60;
+        int seconds = (int) (mTimeLeftInMillis / 1000) % 60;
+        String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
+        if(originalAddress.equals("N/A")) {
+            Toast.makeText(getContext(), "Your location will be fetched in " + timeLeftFormatted, Toast.LENGTH_LONG).show();
+        }
     }
 
     GoogleApiClient mGoogleApiClient;
@@ -456,6 +474,30 @@ try{
         }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!sharedPrefs.getString("hqAddress", "").equals("N/A")) {
+            addresesHead.setVisibility(View.GONE);
+            originalAddress.setText(sharedPrefs.getString("hqAddress", ""));
+        }
+        mTimeLeftInMillis = sharedPrefs.getLong("millisLeft", START_TIME_IN_MILLIS);
+        mTimerRunning = sharedPrefs.getBoolean("timerRunning", false);
+        updateCountdownTime();
+        updateButtons();
+        if (mTimerRunning) {
+            mEndTime = sharedPrefs.getLong("endTime", 0);
+            mTimeLeftInMillis = mEndTime - System.currentTimeMillis();
+            if (mTimeLeftInMillis < 0) {
+                mTimeLeftInMillis = 0;
+                mTimerRunning = false;
+                updateCountdownTime();
+                updateButtons();
+            } else {
+                startTimer();
+            }
+        }
+    }
+    }
 
-}
 

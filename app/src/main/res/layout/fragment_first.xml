@@ -78,7 +78,7 @@
                     android:layout_height="30dp"
                     android:layout_marginTop="18dp"
                     android:layout_marginEnd="15dp"
-                    android:src="@drawable/ic_language_change"
+                    android:src="@drawable/lang"
                     app:layout_constraintEnd_toStartOf="@+id/notificationBell"
                     app:layout_constraintTop_toTopOf="parent" />
 

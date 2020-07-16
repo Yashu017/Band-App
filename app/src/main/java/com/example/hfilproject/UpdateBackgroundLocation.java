@@ -146,7 +146,7 @@ public class UpdateBackgroundLocation extends Service {
             stopSelf();
 
         }
-
+        startBoot.completeWakefulIntent(intent);
         sendNotification();
         return START_NOT_STICKY;
     }
@@ -154,6 +154,7 @@ public class UpdateBackgroundLocation extends Service {
     private void sendNotification() {
 
     }
+
 
 
     @Override
@@ -249,7 +250,7 @@ public class UpdateBackgroundLocation extends Service {
 
                 @Override
                 public void onFailure(Call<UserLocation> call, Throwable t) {
-                    Toast.makeText(UpdateBackgroundLocation.this, "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UpdateBackgroundLocation.this, "Failed to push location. Please check internet connection" , Toast.LENGTH_SHORT).show();
                     Log.e("error", "" + t.getMessage());
                 }
             });
