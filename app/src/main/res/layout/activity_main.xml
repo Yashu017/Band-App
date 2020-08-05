@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
     android:background="#ffffff"
-    >
+    tools:context=".MainActivity">
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/screen_viewpager"
@@ -51,7 +50,6 @@
     </com.google.android.material.tabs.TabLayout>
 
     <Button
-        android:visibility="invisible"
         android:id="@+id/btn_get_started"
         android:layout_width="132dp"
         android:layout_height="wrap_content"
@@ -63,12 +61,12 @@
         android:background="@drawable/btn_gradient_style"
         android:text="@string/login"
         android:textColor="#fff"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:visibility="invisible"
         android:id="@+id/scanBT"
         android:layout_width="132dp"
         android:layout_height="wrap_content"
@@ -80,14 +78,12 @@
         android:background="@drawable/btn_gradient_style"
         android:text="@string/scanBluetooth"
         android:textColor="#fff"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="#2d2d2d"
         android:id="@+id/tv_skip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -95,26 +91,29 @@
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
         android:text="Skip"
+        android:textColor="#2d2d2d"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/languageChange"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:layout_marginTop="24dp"
         android:layout_marginStart="18dp"
+        android:layout_marginTop="24dp"
         android:src="@drawable/ic_language_change"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ProgressBar
         android:id="@+id/login_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme"
         android:visibility="gone"
-       app:layout_constraintTop_toBottomOf="@id/scanBT"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintTop_toBottomOf="@id/scanBT" />
 </androidx.constraintlayout.widget.ConstraintLayout>
