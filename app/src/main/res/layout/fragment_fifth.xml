@@ -63,7 +63,9 @@
             android:id="@+id/wait"
             android:layout_marginTop="-33dp"
             android:layout_below="@+id/animation_view"
-            android:text="Loading,Please Wait...."
+            android:gravity="center"
+            android:textColor="#003663"
+            android:text="Loading. Please Wait...."
             android:layout_centerInParent="true"
             android:textSize="15sp"/>
 

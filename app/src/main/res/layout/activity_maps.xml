@@ -48,14 +48,18 @@
         android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="40dp" />
+        android:layout_marginBottom="45dp" />
 
     <Button
         android:id="@+id/createG"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_height="40dp"
         android:layout_marginTop="-40dp"
+        android:background="@drawable/buttob"
         android:text="Create Geofence"
+        android:textColor="#ffffff"
         android:padding="4dp" />
 
 

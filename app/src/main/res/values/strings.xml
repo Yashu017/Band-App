@@ -106,12 +106,13 @@
     <string name="name">Name</string>
     <string name="age">Age</string>
     <string name="quarantine_type">Type of Quarantine</string>
-    <string name="home_quar">Home Quarantine/Self Isolation</string>
-    <string name="isolation_quar">Isolation centres /Govt. Quarantine</string>
+    <string name="home_quar">Home/Self Quarantine</string>
+    <string name="isolation_quar">Government Quarantine</string>
     <string name="address">Address</string>
     <string name="enter_bluetooth">Enter bluetooth id</string>
     <string name="submit">Submit</string>
     <string name="recent_temp">Recent Temperature (F)</string>
+    <string name="recent_tempC">Recent Temperature (C)</string>
     <string name="Start_Timer">Start timer to fetch my location</string>
     <string name="current_location">Current Location</string>
     <string name="geofence">Geofence</string>

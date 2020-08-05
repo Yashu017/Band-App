@@ -80,7 +80,7 @@ public class FirstFragment extends Fragment {
     String date;
 
     float tempReceived;
-    TextView setTemp;
+    TextView setTemp,tempDeg;
 
     private CountDownTimer mCountDownTimer;
     private boolean mTimerRunning;
@@ -113,6 +113,7 @@ public class FirstFragment extends Fragment {
         originalAddress = rootView.findViewById(R.id.originalAddress);
         addresesHead = rootView.findViewById(R.id.addressHead);
         usernanme = rootView.findViewById(R.id.userNameFF);
+        tempDeg=rootView.findViewById(R.id.tempDeg);
 
         setTemp = rootView.findViewById(R.id.tempOriginal);
         tp = rootView.findViewById(R.id.tp);
@@ -332,7 +333,7 @@ try{
         } else {
             addresesHead.setText("Fetch Location");
             if (mTimeLeftInMillis < 1000) {
-                addresesHead.setVisibility(View.INVISIBLE);
+                addresesHead.setVisibility(View.GONE);
             }
             if (mTimeLeftInMillis < START_TIME_IN_MILLIS) {
                 getGoogleApiClient();
@@ -345,7 +346,7 @@ try{
         int minutes = (int) (mTimeLeftInMillis / 1000) / 60;
         int seconds = (int) (mTimeLeftInMillis / 1000) % 60;
         String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
-        if(originalAddress.equals("N/A")) {
+        if(originalAddress.getText().equals("N/A")) {
             Toast.makeText(getContext(), "Your location will be fetched in " + timeLeftFormatted, Toast.LENGTH_LONG).show();
         }
     }
@@ -443,17 +444,29 @@ try{
             public void onResponse(Call<GetTemp> call, Response<GetTemp> response) {
                 if (response.isSuccessful() && response.code() == 200) {
                     GetTemp getTemp = response.body();
-                    tempReceived = getTemp.getTemperature();
+                    if (getTemp != null) {
+                        tempReceived = getTemp.getTemperature();
+                        if(tempReceived<45&&tempReceived!=0)
+                        {
+                            tempDeg.setText(getString(R.string.recent_tempC));
+                        }
+                        else if(tempReceived>45 && tempReceived!=0)
+                        {
+                            tempDeg.setText(getString(R.string.recent_temp));
+                        }
+                    }
                     Log.e("Success", "" + response.code());
 
                     //    Toast.makeText(getContext(), "Temperature received from server.", Toast.LENGTH_SHORT).show();
                     setTemp.setText(String.format("%.2f", tempReceived));
+
+
                 }
             }
 
             @Override
             public void onFailure(Call<GetTemp> call, Throwable t) {
-                Toast.makeText(getContext(), "Failed" + t.getMessage()+"", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Failed" + " : Weak or No Internet", Toast.LENGTH_SHORT).show();
                 Log.e("error", "" + t.getMessage());
             }
         });

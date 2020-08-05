@@ -135,7 +135,7 @@ public class TempActivity extends AppCompatActivity {
                 } else {
                     // User did not enable Bluetooth or an error occurred
                     Log.d(TAG, "BT not enabled");
-                    Toast.makeText(this, "Problem in BT Turning ON ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Problem in BlueTooth Turning ON ", Toast.LENGTH_SHORT).show();
                     finish();
                 }
                 break;

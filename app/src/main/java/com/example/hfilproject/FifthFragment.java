@@ -167,7 +167,7 @@ animationView.playAnimation();
 
             @Override
             public void onFailure(Call<GetNotification> call, Throwable t) {
-                Toast.makeText(getContext(), "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Weak or No Internet", Toast.LENGTH_SHORT).show();
                 Log.e("error", "" + t.getMessage());
             }
         });

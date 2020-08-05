@@ -284,7 +284,8 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
 
             @Override
             public void onFailure(Call<UserTemp> call, Throwable t) {
-                Toast.makeText(HTService.this, "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(HTService.this, "Alert"  +
+                        " : Please check your internet connection.", Toast.LENGTH_SHORT).show();
                 Log.e("error", "" + t.getMessage());
             }
         });

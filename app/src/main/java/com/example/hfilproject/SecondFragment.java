@@ -104,6 +104,10 @@ public class SecondFragment extends Fragment implements SharedPreferences.OnShar
 
         address = view.findViewById(R.id.originalAddressFrag);
         pass = view.findViewById(R.id.openMAp);
+        if (!sharedPrefs.getBoolean("firstTimeMap", false)&& address.getText().equals("N/A")) {
+            address.setText(sharedPrefs.getString("lastAdd ",""));
+        }
+
         pass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -162,7 +166,7 @@ public class SecondFragment extends Fragment implements SharedPreferences.OnShar
         }).withErrorListener(new PermissionRequestErrorListener() {
             @Override
             public void onError(DexterError dexterError) {
-                Toast.makeText(getContext(),dexterError.toString()+"",Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(),"Permission error"+"",Toast.LENGTH_LONG).show();
             }
         }).
                 onSameThread()
@@ -233,6 +237,13 @@ public class SecondFragment extends Fragment implements SharedPreferences.OnShar
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        startService(Common.requestLoctionUpdates(getContext()));
+        requireActivity().bindService(new Intent(getContext(), UpdateBackgroundLocation.class), mServiceConnection, Context.BIND_AUTO_CREATE);
+    }
+
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onListenLocation(SendLocation event) {
         if (event != null) {
@@ -258,7 +269,8 @@ public class SecondFragment extends Fragment implements SharedPreferences.OnShar
 
                 editor.putString("updated Location", fullAddress);
                 editor.commit();
-              //  address.setText(sharedPrefs.getString("updated Location ",""));
+
+
                 address.setText(fullAddress);
                 locUpdates.setVisibility(View.GONE);
             } catch (Exception e) {

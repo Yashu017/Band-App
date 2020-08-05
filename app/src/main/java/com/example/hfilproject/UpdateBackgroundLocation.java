@@ -77,6 +77,7 @@ public class UpdateBackgroundLocation extends Service {
     NotificationHelper notificationHelper;
 
     private SharedPreferences sharedPrefs;
+    SharedPreferences.Editor editor;
 
 
     String token;
@@ -98,6 +99,7 @@ public class UpdateBackgroundLocation extends Service {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         sharedPrefs = getSharedPreferences("app", Context.MODE_PRIVATE);
+        editor=sharedPrefs.edit();
 
         token = sharedPrefs.getString("token", "");
         geoStatus = sharedPrefs.getInt("geoStatus", 0);
@@ -196,6 +198,8 @@ public class UpdateBackgroundLocation extends Service {
                                     String country = addressList.get(0).getCountryName();
                                     String postalCode = addressList.get(0).getPostalCode();
                                     fullAddress = address1 + ", " + area + ", " + city + ", " + country + ", " + postalCode;
+                                    editor.putString("lastAdd",fullAddress);
+                                    editor.commit();
 
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -250,7 +254,7 @@ public class UpdateBackgroundLocation extends Service {
 
                 @Override
                 public void onFailure(Call<UserLocation> call, Throwable t) {
-                    Toast.makeText(UpdateBackgroundLocation.this, "Failed to push location. Please check internet connection" , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UpdateBackgroundLocation.this, "Please check your internet connection. \n Or please click on location update" , Toast.LENGTH_SHORT).show();
                     Log.e("error", "" + t.getMessage());
                 }
             });
@@ -358,7 +362,7 @@ public class UpdateBackgroundLocation extends Service {
         //mServiceHandler.removeCallbacks(null);
         super.onDestroy();
 
-        Toast.makeText(getApplicationContext(), "Service Task destroyed", Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), "Service Task destroyed", Toast.LENGTH_LONG).show();
 
 
         Intent myIntent = new Intent(getApplicationContext(), UpdateBackgroundLocation.class);
@@ -375,7 +379,7 @@ public class UpdateBackgroundLocation extends Service {
 
         alarmManager1.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 
-        Toast.makeText(getApplicationContext(), "Start Alarm", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "Start Alarm", Toast.LENGTH_SHORT).show();
 
     }
 

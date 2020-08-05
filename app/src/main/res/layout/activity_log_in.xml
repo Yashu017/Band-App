@@ -128,8 +128,9 @@
 
                     <LinearLayout
                         android:id="@+id/hq"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.5"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:orientation="horizontal">
@@ -147,7 +148,7 @@
                             android:id="@+id/hq_yes"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="28dp"
+                            android:layout_marginLeft="16dp"
                             android:buttonTint="#3F51B5"
                             android:textColor="@color/md_grey_700" />
 
@@ -157,7 +158,8 @@
                     <LinearLayout
                         android:id="@+id/ic"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.5"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:orientation="horizontal">
@@ -182,11 +184,7 @@
 
                     </LinearLayout>
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:orientation="horizontal">
+
 
                         <EditText
                             android:id="@+id/addressL"
@@ -197,7 +195,7 @@
                             android:ellipsize="start"
                             android:hint="@string/address"
                             android:inputType="textMultiLine"
-                            android:maxLines="10"
+                            android:maxLines="15"
                             android:minHeight="?actionBarSize"
                             android:maxHeight="?actionBarSize"
                             android:scrollbars="vertical"
@@ -205,7 +203,7 @@
                             android:textColor="#B0302F2F"
                             android:textColorHint="#B0302F2F"
                             android:textSize="18sp" />
-                    </RelativeLayout>
+
 
 
                     <RelativeLayout

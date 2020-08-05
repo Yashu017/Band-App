@@ -61,7 +61,10 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="20dp"
+               android:layout_toRightOf="@id/textView1"
+                android:layout_marginLeft="30dp"
                 android:text="00:00"
+                android:gravity="center"
                 android:textSize="17sp" />
         </RelativeLayout>
 

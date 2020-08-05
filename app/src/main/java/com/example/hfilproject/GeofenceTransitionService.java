@@ -55,15 +55,17 @@ public class GeofenceTransitionService extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
         // Handling errors
-        if (geofencingEvent.hasError()) {
+        if (geofencingEvent != null && geofencingEvent.hasError()) {
             String errorMsg = getErrorString(geofencingEvent.getErrorCode());
             Log.e(TAG, errorMsg);
             return;
         }
 
 
-
-        int geoFenceTransition = geofencingEvent.getGeofenceTransition();
+        int geoFenceTransition = 0;
+        if (geofencingEvent != null) {
+            geoFenceTransition = geofencingEvent.getGeofenceTransition();
+        }
         // Check if the transition type is of interest
         if (geoFenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
                 geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
@@ -249,7 +251,7 @@ public class GeofenceTransitionService extends IntentService {
 
             @Override
             public void onFailure(Call<UserNotification> call, Throwable t) {
-                Toast.makeText(GeofenceTransitionService.this, "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(GeofenceTransitionService.this, "Failed" + " : Weak or No Internet", Toast.LENGTH_SHORT).show();
                 Log.e("GeofenceTransition", "" + t.getMessage());
             }
         });

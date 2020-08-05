@@ -110,12 +110,13 @@
     <string name="name">नाम</string>
     <string name="age">आयु</string>
     <string name="quarantine_type">संगरोध का प्रकार</string>
-    <string name="home_quar">होम संगरोध / स्व अलगाव</string>
-    <string name="isolation_quar">अलगाव केंद्र / सरकारी संगरोध</string>
+    <string name="home_quar">होम/स्व संगरोध  </string>
+    <string name="isolation_quar"> सरकारी संगरोध</string>
     <string name="address">पता</string>
     <string name="enter_bluetooth">ब्लूटूथ आईडी दर्ज करें</string>
     <string name="submit">प्रस्तुत</string>
     <string name="recent_temp">हाल के तापमान (एफ)</string>
+    <string name="recent_tempC">हाल के तापमान (सी)</string>
     <string name="Start_Timer">टाइमर शुरू</string>
     <string name="current_location">वर्तमान स्थान:</string>
     <string name="geofence">Geofence</string>
