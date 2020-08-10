@@ -1,13 +1,13 @@
 package com.example.hfilproject;
 
 public class TempLog {
-    private String Celsius;
-    private String Farenheit;
+    private float Celsius;
+    private float Farenheit;
     private  String Status;
     private String Day;
     private String Time;
 
-    TempLog(String Celsius,String Farenheit,String Status,String Day,String Time){
+    TempLog(float Celsius,float Farenheit,String Status,String Day,String Time){
         this.Celsius = Celsius;
         this.Farenheit = Farenheit;
         this.Status = Status;
@@ -15,19 +15,19 @@ public class TempLog {
         this.Time = Time;
     }
 
-    public String getCelsius() {
+    public float getCelsius() {
         return Celsius;
     }
 
-    public void setCelsius(String celsius) {
+    public void setCelsius(float celsius) {
         Celsius = celsius;
     }
 
-    public String getFarenheit() {
+    public float getFarenheit() {
         return Farenheit;
     }
 
-    public void setFarenheit(String farenheit) {
+    public void setFarenheit(float farenheit) {
         Farenheit = farenheit;
     }
 
