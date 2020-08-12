@@ -136,12 +136,15 @@ animationView.playAnimation();
                             String msg = item.getNotification();
                             long time = item.getTime();
                             time=time+(5*60*60*1000)+(30*60*1000);
-                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE, MMMM d, hh:mma");
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE, MMMM d");
+                            SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("hh:mma");
                             Date date = new Date(time);
                             simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+                            simpleDateFormat1.setTimeZone(TimeZone.getTimeZone("UTC"));
                             String formattedTime = simpleDateFormat.format(date);
+                            String formattedTime1 = simpleDateFormat1.format(date);
                             Log.e("Msg", "" + msg);
-                                notificationList.add(new Notification("", "" + formattedTime , "" + msg));
+                                notificationList.add(new Notification("", "" + formattedTime+"." , "" +formattedTime1,""+ msg));
                         }
 
                         NotificationAdapter adapter = new NotificationAdapter(getContext(), notificationList);
@@ -152,7 +155,7 @@ animationView.playAnimation();
                         recyclerView.setLayoutManager(layoutManager);
                         recyclerView.setAdapter(adapter);
                     } else {
-                        notificationList.add(new Notification("Info", "00::00", "" + "No new Notification"));
+                        notificationList.add(new Notification("Info", "00::00", "N/A","" + "No new Notification"));
                         NotificationAdapter adapter = new NotificationAdapter(getContext(), notificationList);
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
 

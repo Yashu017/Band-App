@@ -36,6 +36,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public void onBindViewHolder(@NonNull NotificationAdapter.ViewHolder holder, int position) {
         holder.message.setText(data.get(position).getMessage());
         holder.time.setText(""+data.get(position).getTime());
+        holder.time1.setText(""+data.get(position).getTime1());
     }
 
     @Override
@@ -45,7 +46,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private TextView message;
-        private TextView time;
+        private TextView time,time1;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -53,6 +54,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
             message = (TextView) itemView.findViewById(R.id.textView2);
             time = (TextView) itemView.findViewById(R.id.getTime);
+            time1=itemView.findViewById(R.id.textView4);
         }
     }
 }
