@@ -9,15 +9,21 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.ResultReceiver;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -39,6 +45,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.material.checkbox.MaterialCheckBox;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -59,6 +66,8 @@ public class LogIn extends AppCompatActivity {
     public static Retrofit retrofit;
     private SharedPreferences.Editor editor;
     private EditText name, age, phoneNumber, address, time;
+    MaterialCheckBox agree;
+    TextView agreed;
 
 
     private EditText bluetoothId;
@@ -132,6 +141,31 @@ public class LogIn extends AppCompatActivity {
         }
 
 
+        String text="By clicking, I agree to terms of use and privacy policy.";
+        SpannableString s=new SpannableString(text);
+        ClickableSpan clickableSpan1=new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View widget) {
+
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                browserIntent.setData(Uri.parse("http://api-c19.ap-south-1.elasticbeanstalk.com/policy"));
+                startActivity(browserIntent);
+
+            }
+        };
+        ClickableSpan clickableSpan2=new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View widget) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                browserIntent.setData(Uri.parse("http://api-c19.ap-south-1.elasticbeanstalk.com/terms-and-conditions"));
+                startActivity(browserIntent);
+            }
+        };
+        s.setSpan(clickableSpan1,24,36, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        s.setSpan(clickableSpan2,41,55, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        agreed.setText(s);
+        agreed.setMovementMethod(LinkMovementMethod.getInstance());
+
         hq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,6 +201,15 @@ public class LogIn extends AppCompatActivity {
             }
         });
 
+        agree.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                agree.setChecked(true);
+                editor.putInt("agreed",1);
+                editor.apply();
+            }
+        });
+
 
 
         cd.setOnClickListener(new View.OnClickListener() {
@@ -186,7 +229,7 @@ public class LogIn extends AppCompatActivity {
 
 
                 if (!name.getText().toString().isEmpty() && !address.getText().toString().isEmpty() && !phoneNumber.getText().toString().isEmpty()
-                        && !age.getText().toString().isEmpty() && !time.getText().toString().isEmpty() && !bluetoothId.getText().toString().isEmpty() && (temp<=1)) {
+                        && !age.getText().toString().isEmpty() && !time.getText().toString().isEmpty() && !bluetoothId.getText().toString().isEmpty() && (temp<=1) && agree.isChecked()){
                     buttonActivated();
                     Intent intent = new Intent();
                     editProfile = false;
@@ -410,6 +453,8 @@ public class LogIn extends AppCompatActivity {
         cl=findViewById(R.id.consL);
         tx=findViewById(R.id.txtL);
         pg=findViewById(R.id.progressBar);
+        agree=findViewById(R.id.checkbox);
+        agreed=findViewById(R.id.PrivacyTitle);
 
     }
     void buttonActivated()

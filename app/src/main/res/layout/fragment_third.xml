@@ -29,6 +29,7 @@
 
     </RelativeLayout>
 
+
     <!-- TODO: Update blank fragment layout -->
 
     <androidx.core.widget.NestedScrollView
@@ -45,6 +46,42 @@
 
 
             <include layout="@layout/temp_log_recycler" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:layout_height="250dp"
+                    android:layout_width="240dp"
+                    android:id="@+id/animation_view3"
+                    android:scaleType="fitCenter"
+                    app:lottie_rawRes="@raw/home"
+                    app:lottie_loop="true"
+                    app:lottie_autoPlay="true"
+                    android:layout_centerInParent="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/wait3"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@+id/animation_view3"
+                    android:gravity="center"
+                    android:textColor="#003663"
+                    android:text="Loading. Please Wait...."
+                   android:layout_centerHorizontal="true"
+                    android:textSize="15sp"/>
+
+
+
+
+            </RelativeLayout>
         </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
+
+
+
 </LinearLayout>

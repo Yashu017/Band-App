@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,10 +17,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -38,12 +39,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * A simple {@link Fragment} subclass.
  */
 public class ThirdFragment extends Fragment {
-
+    private LottieAnimationView animationView;
     private RecyclerView recyclerView;
     private   List<TempLog> tempLogs;
     View rootView;
     private OnFragmentInteractionListener listener;
-
+    TextView wait;
     ArrayList<String> dates;
 
     SharedPreferences sharedPrefs;
@@ -68,6 +69,9 @@ public class ThirdFragment extends Fragment {
         //  TempAdapter tempAdapter = new TempAdapter(getContext(), tempLogs);
         // recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         // recyclerView.setAdapter(tempAdapter);
+        animationView = (LottieAnimationView) rootView.findViewById(R.id.animation_view3);
+        wait=rootView.findViewById(R.id.wait3);
+
         sharedPrefs = getContext().getSharedPreferences("app", Context.MODE_PRIVATE);
         editor = sharedPrefs.edit();
         TempAdapter tempAdapter = new TempAdapter(getContext(), tempLogs);
@@ -80,6 +84,7 @@ public class ThirdFragment extends Fragment {
     }
 
     private void GetTemperature() {
+        animationView.playAnimation();
         sharedPrefs = getActivity().getSharedPreferences("app", Context.MODE_PRIVATE);
         editor = sharedPrefs.edit();
         token = sharedPrefs.getString("token", "");
@@ -117,6 +122,9 @@ public class ThirdFragment extends Fragment {
                         }
                         TempAdapter tempAdapter = new TempAdapter(getContext(),tempLogs);
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                        wait.setVisibility(View.GONE);
+                        animationView.pauseAnimation();
+                        animationView.setVisibility(View.GONE);
                         recyclerView.setLayoutManager(layoutManager);
                         recyclerView.setAdapter(tempAdapter);
 
@@ -124,6 +132,9 @@ public class ThirdFragment extends Fragment {
                         tempLogs.add(new TempLog(0,32,"No log Recorded","--","--"));
                         TempAdapter tempAdapter = new TempAdapter(getContext(),tempLogs);
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                        wait.setVisibility(View.GONE);
+                        animationView.pauseAnimation();
+                        animationView.setVisibility(View.GONE);
                         recyclerView.setLayoutManager(layoutManager);
                         recyclerView.setAdapter(tempAdapter);
 
@@ -134,7 +145,7 @@ public class ThirdFragment extends Fragment {
 
             @Override
             public void onFailure(Call<GetTemp> call, Throwable t) {
-                Toast.makeText(getContext(), "Failed" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Failed" + "No or weak internet connection", Toast.LENGTH_SHORT).show();
                 Log.e("error", "" + t.getMessage());
             }
         });

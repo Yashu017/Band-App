@@ -43,17 +43,12 @@ import com.google.android.gms.tasks.Task;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 
 /**
@@ -79,7 +74,7 @@ public class FirstFragment extends Fragment {
     int hours, minutes;
     String date;
 
-    float tempReceived;
+    ArrayList<TempItem> tempReceived;
     TextView setTemp,tempDeg;
 
     private CountDownTimer mCountDownTimer;
@@ -426,50 +421,52 @@ try{
 
 
     private void GetTemperature() {
-        token = sharedPrefs.getString("token", "");
 
-        OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-        okhttpbuilder.addInterceptor(logging);
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
-                .addConverterFactory(GsonConverterFactory.create());
-
-        retrofit = builder.build();
-        for_login login = retrofit.create(for_login.class);
-        Call<GetTemp> call = login.getTemp(token);
-        call.enqueue(new Callback<GetTemp>() {
-            @Override
-            public void onResponse(Call<GetTemp> call, Response<GetTemp> response) {
-                if (response.isSuccessful() && response.code() == 200) {
-                    GetTemp getTemp = response.body();
-                    if (getTemp != null) {
-                        tempReceived = getTemp.getTemperature();
-                        if(tempReceived<45&&tempReceived!=0)
-                        {
-                            tempDeg.setText(getString(R.string.recent_tempC));
-                        }
-                        else if(tempReceived>45 && tempReceived!=0)
-                        {
-                            tempDeg.setText(getString(R.string.recent_temp));
-                        }
-                    }
-                    Log.e("Success", "" + response.code());
-
-                    //    Toast.makeText(getContext(), "Temperature received from server.", Toast.LENGTH_SHORT).show();
-                    setTemp.setText(String.format("%.2f", tempReceived));
-
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<GetTemp> call, Throwable t) {
-                Toast.makeText(getContext(), "Failed" + " : Weak or No Internet", Toast.LENGTH_SHORT).show();
-                Log.e("error", "" + t.getMessage());
-            }
-        });
+        setTemp.setText(String.format("%.2f",(sharedPrefs.getFloat("temp1",0f))));
+//        token = sharedPrefs.getString("token", "");
+//
+//        OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
+//        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+//        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+//        okhttpbuilder.addInterceptor(logging);
+//        Retrofit.Builder builder = new Retrofit.Builder()
+//                .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
+//                .addConverterFactory(GsonConverterFactory.create());
+//
+//        retrofit = builder.build();
+//        for_login login = retrofit.create(for_login.class);
+//        Call<GetTemp> call = login.getTemp(token);
+//        call.enqueue(new Callback<GetTemp>() {
+//            @Override
+//            public void onResponse(Call<GetTemp> call, Response<GetTemp> response) {
+//                if (response.isSuccessful() && response.code() == 200) {
+//                    GetTemp getTemp = response.body();
+//                    if (getTemp != null) {
+//                        tempReceived = getTemp.getTemperature();
+//                        if(tempReceived<45&&tempReceived!=0)
+//                        {
+//                            tempDeg.setText(getString(R.string.recent_tempC));
+//                        }
+//                        else if(tempReceived>45 && tempReceived!=0)
+//                        {
+//                            tempDeg.setText(getString(R.string.recent_temp));
+//                        }
+//                    }
+//                    Log.e("Success", "" + response.code());
+//
+//                    //    Toast.makeText(getContext(), "Temperature received from server.", Toast.LENGTH_SHORT).show();
+//                    setTemp.setText(String.format("%.2f", tempReceived));
+//
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<GetTemp> call, Throwable t) {
+//                Toast.makeText(getContext(), "Failed" + " : Weak or No Internet", Toast.LENGTH_SHORT).show();
+//                Log.e("error", "" + t.getMessage());
+//            }
+//        });
     }
 
 

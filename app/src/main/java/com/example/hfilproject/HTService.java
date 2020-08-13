@@ -238,6 +238,17 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
         sharedPrefs = getSharedPreferences("app", Context.MODE_PRIVATE);
         editor = sharedPrefs.edit();
 
+        if(tempData>99)
+        {
+           PostNotification();
+        }
+
+        float sum=0f;
+        sum=sum+tempData;
+        editor.putFloat("temp1",sum);
+        editor.apply();
+
+
 
         token1 = sharedPrefs.getString("token", "");
         Log.d("TAG", "" + token1);
@@ -379,5 +390,54 @@ public class HTService extends BleProfileService implements HTManagerCallbacks {
                 stopSelf();
         }
     };
+
+    private void PostNotification() {
+        int categoryType = 2;
+        sharedPrefs = getSharedPreferences("app", Context.MODE_PRIVATE);
+        editor = sharedPrefs.edit();
+
+        token1 = sharedPrefs.getString("token", "");
+
+
+        String highTemp = "High Temperature found.";
+        OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        okhttpbuilder.addInterceptor(logging);
+
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl("http://api-c19.ap-south-1.elasticbeanstalk.com/")
+                .addConverterFactory(GsonConverterFactory.create());
+
+        retrofit = builder.build();
+        for_login login = retrofit.create(for_login.class);
+        Map<String, Object> params = new HashMap<>();
+        params.put("notification", highTemp);
+        params.put("category", categoryType);
+        Call<UserNotification> call = login.userNotify(token1, params);
+        call.enqueue(new Callback<UserNotification>() {
+            @Override
+            public void onResponse(Call<UserNotification> call, Response<UserNotification> response) {
+                String error;
+                if (response.isSuccessful() && response.code() == 200) {
+                    if (response.body().getErrorCode() != null) {
+                        error = response.body().getErrorCode();
+                        if (error.equals("2")) {
+                            Toast.makeText(HTService.this, "User not found.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    sendTokenBle = response.body().getToken();
+                    Toast.makeText(HTService.this, "Success", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserNotification> call, Throwable t) {
+                Toast.makeText(HTService.this, "Failed" + " : Weak or No Internet", Toast.LENGTH_SHORT).show();
+                Log.e("GeofenceTransition", "" + t.getMessage());
+            }
+        });
+    }
+
 }
 

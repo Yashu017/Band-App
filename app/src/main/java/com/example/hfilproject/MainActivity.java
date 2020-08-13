@@ -291,6 +291,10 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+
+
                     startActivityForResult(AuthUI.getInstance()
                             .createSignInIntentBuilder()
                             .setAvailableProviders(providers)

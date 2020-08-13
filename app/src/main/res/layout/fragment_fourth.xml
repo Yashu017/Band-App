@@ -253,6 +253,8 @@ android:background="#f5f5f5"
 
                     <ImageView
                         android:layout_width="30dp"
+                        android:id="@+id/toc"
+                        android:clickable="true"
                         android:layout_height="30dp"
                         android:layout_alignParentRight="true"
                         android:src="@drawable/ic_arrow_forward_black_24dp" />
@@ -293,7 +295,9 @@ android:background="#f5f5f5"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_alignParentRight="true"
-                        android:src="@drawable/ic_arrow_forward_black_24dp" />
+                        android:id="@+id/pp"
+                        android:src="@drawable/ic_arrow_forward_black_24dp"
+                        android:clickable="true"/>
                 </RelativeLayout>
 
 

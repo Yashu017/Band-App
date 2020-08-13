@@ -32,8 +32,8 @@ public class TempAdapter extends RecyclerView.Adapter<TempAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(TempAdapter.ViewHolder holder, int position) {
-        holder.tempCelsius.setText(data.get(position).getCelsius());
-        holder.tempFaren.setText(data.get(position).getFarenheit());
+        holder.tempCelsius.setText(""+data.get(position).getCelsius());
+        holder.tempFaren.setText(""+data.get(position).getFarenheit());
         holder.UserStatus.setText(data.get(position).getStatus());
         holder.LogDay.setText(data.get(position).getDay());
         holder.LogTime.setText(data.get(position).getTime());
