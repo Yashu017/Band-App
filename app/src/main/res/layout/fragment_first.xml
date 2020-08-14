@@ -139,15 +139,15 @@
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="35dp"
-                app:layout_constraintVertical_weight="1"
                 android:background="@drawable/white_rectangle_backgrounf"
                 android:clickable="true"
                 android:gravity="center"
                 android:padding="8dp"
 
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/typeTemp"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintVertical_weight="1">
 
                 <ImageView
                     android:id="@+id/adr"
@@ -165,8 +165,8 @@
                     android:layout_below="@+id/adr"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="2dp"
-                    android:gravity="center"
                     android:background="@drawable/dat"
+                    android:gravity="center"
                     android:padding="5dp"
                     android:text="@string/Start_Timer"
                     android:textSize="10sp" />
@@ -184,38 +184,19 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
-                android:id="@+id/msgCard"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
-                android:background="@drawable/white_rectangle_backgrounf"
-                 android:layout_marginStart="35dp"
-                android:layout_marginEnd="35dp"
-                android:layout_marginBottom="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@color/color4"
+                android:textColor="@color/white"
+                app:cornerRadius="16dp"
+                android:padding="5dp"
+                android:text="Click here to see message from CWatch"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/layoutAddress">
-
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="80dp"
-                    android:src="@drawable/ic_baseline_message_24"
-                    android:layout_marginTop="8dp"
-                    android:layout_centerHorizontal="true"
-                    android:id="@+id/msgImage"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:fontFamily="sans-serif"
-                    android:layout_below="@id/msgImage"
-                    android:layout_marginTop="8dp"
-                    android:text=" Click on the card to see message from \n C Watch."
-                    android:layout_marginStart="12dp"/>
-            </RelativeLayout>
+                app:layout_constraintTop_toBottomOf="@+id/layoutAddress" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

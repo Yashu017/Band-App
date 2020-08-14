@@ -5,11 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include
+        android:id="@+id/toolbar_actionbar"
+        layout="@layout/toolbar" />
+
     <androidx.appcompat.widget.AppCompatTextView
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_actionbar"
         android:id="@+id/device_name_uart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
         android:layout_toRightOf="@+id/battery"
         android:ellipsize="end"
         android:freezesText="true"
@@ -19,7 +24,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteY="32dp" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="0dp"
