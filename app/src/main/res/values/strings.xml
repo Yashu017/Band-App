@@ -135,6 +135,7 @@
     <string name="btn_enter">Enter</string>
     <string name="verify_code_content">Enter the six digit verification code sent to your mobile.</string>
     <string name="verify_code">Verification Code</string>
+    <string name="uart_notification_action_disconnect">Disconnected</string>
 
 
 </resources>

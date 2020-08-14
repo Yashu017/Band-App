@@ -78,6 +78,8 @@
         <activity
             android:name=".SettingsActivity"
             android:theme="@style/AppThemeBase" />
+        <activity android:name=".UartActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

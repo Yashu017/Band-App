@@ -184,6 +184,40 @@
 
             </RelativeLayout>
 
+            <RelativeLayout
+                android:id="@+id/msgCard"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/white_rectangle_backgrounf"
+                 android:layout_marginStart="35dp"
+                android:layout_marginEnd="35dp"
+                android:layout_marginBottom="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layoutAddress">
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/ic_baseline_message_24"
+                    android:layout_marginTop="8dp"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/msgImage"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif"
+                    android:layout_below="@id/msgImage"
+                    android:layout_marginTop="8dp"
+                    android:text=" Click on the card to see message from \n C Watch."
+                    android:layout_marginStart="12dp"/>
+            </RelativeLayout>
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>

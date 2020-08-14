@@ -31,13 +31,13 @@ public class HTActivity extends BleProfileServiceReadyActivity<HTService.HTSBind
     private TextView unitView;
     private TextView batteryLevelView;
     static float postValue;
-    private UartService mService = null;
+
 
     @Override
     protected void onCreateView(final Bundle savedInstanceState) {
         setContentView(R.layout.activity_feature_hts);
         setGUI();
-        service_init();
+
     }
 
     @Override
@@ -202,79 +202,14 @@ public class HTActivity extends BleProfileServiceReadyActivity<HTService.HTSBind
         return intentFilter;
     }
 
-    private ServiceConnection mServiceConnection = new ServiceConnection() {
-        public void onServiceConnected(ComponentName className, IBinder rawBinder) {
-            mService = ((UartService.LocalBinder) rawBinder).getService();
-            Log.d(TAG, "onServiceConnected mService= " + mService);
-            if (!mService.initialize()) {
-                Log.e(TAG, "Unable to initialize Bluetooth");
-                finish();
-            }
-
-        }
-
-        public void onServiceDisconnected(ComponentName classname) {
-            ////     mService.disconnect(mDevice);
-            mService = null;
-        }
-    };
-
-    private Handler mHandler = new Handler() {
-        @Override
-
-        //Handler events that received from UART service
-        public void handleMessage(Message msg) {
-
-        }
-    };
 
 
-    private final BroadcastReceiver UARTStatusChangeReceiver = new BroadcastReceiver() {
-
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-
-            final Intent mIntent = intent;
 
 
-            //*********************//
-            if (action.equals(UartService.ACTION_GATT_SERVICES_DISCOVERED)) {
-                mService.enableTXNotification();
-            }
-            //*********************//
-            if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
 
-                final byte[] txValue = intent.getByteArrayExtra(UartService.EXTRA_DATA);
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        try {
-                            String text = new String(txValue, "UTF-8");
-                            Toast.makeText(HTActivity.this, "Message Received from Band:"+text, Toast.LENGTH_SHORT).show();
 
-                        } catch (Exception e) {
-                            Log.e(TAG, e.toString());
-                        }
-                    }
-                });
-            }
 
-        }
-    };
 
-    private void service_init() {
-        Intent bindIntent = new Intent(this, UartService.class);
-        bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(UARTStatusChangeReceiver, makeGattUpdateIntentFilter());
-    }
-    private static IntentFilter makeGattUpdateIntentFilter() {
-        final IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(UartService.ACTION_GATT_CONNECTED);
-        intentFilter.addAction(UartService.ACTION_GATT_DISCONNECTED);
-        intentFilter.addAction(UartService.ACTION_GATT_SERVICES_DISCOVERED);
-        intentFilter.addAction(UartService.ACTION_DATA_AVAILABLE);
-        intentFilter.addAction(UartService.DEVICE_DOES_NOT_SUPPORT_UART);
-        return intentFilter;
-    }
 }
 

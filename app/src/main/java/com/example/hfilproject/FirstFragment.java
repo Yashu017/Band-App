@@ -86,7 +86,7 @@ public class FirstFragment extends Fragment {
     private RadioButton hindi, english;
     private Button cancel;
     private Locale locale;
-
+    RelativeLayout msgCard;
 
 
     public FirstFragment() {
@@ -112,6 +112,14 @@ public class FirstFragment extends Fragment {
 
         setTemp = rootView.findViewById(R.id.tempOriginal);
         tp = rootView.findViewById(R.id.tp);
+        msgCard = rootView.findViewById(R.id.msgCard);
+        msgCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),UartActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         token = sharedPrefs.getString("token", "");

@@ -1,6 +1,7 @@
 package com.example.hfilproject;
 
-import android.app.Service;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
@@ -10,18 +11,26 @@ import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
+import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.util.List;
 import java.util.UUID;
 
-public class UartService  extends Service {
+import no.nordicsemi.android.log.Logger;
+
+public class UartService  extends BleProfileService  {
     private final static String TAG = UartService.class.getSimpleName();
 
     private BluetoothManager mBluetoothManager;
@@ -110,7 +119,7 @@ public class UartService  extends Service {
 
     private void broadcastUpdate(final String action) {
         final Intent intent = new Intent(action);
-        boolean b = LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
     private void broadcastUpdate(final String action,
@@ -128,7 +137,7 @@ public class UartService  extends Service {
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
-    public class LocalBinder extends Binder {
+    public class UartBinder extends LocalBinder {
         UartService getService() {
             return UartService.this;
         }
@@ -140,15 +149,12 @@ public class UartService  extends Service {
     }
 
     @Override
-    public boolean onUnbind(Intent intent) {
-        // After using a given device, you should make sure that BluetoothGatt.close() is called
-        // such that resources are cleaned up properly.  In this particular example, close() is
-        // invoked when the UI is disconnected from the Service.
-        close();
-        return super.onUnbind(intent);
+    protected LoggableBleManager initializeManager() {
+        return null;
     }
 
-    private final IBinder mBinder = new LocalBinder();
+
+    private final IBinder mBinder = new UartBinder();
 
     /**
      * Initializes a reference to the local Bluetooth adapter.
