@@ -46,10 +46,7 @@
             android:name=".ScanActivity"
             android:label="Connect Device"
             android:theme="@style/AppThemeBase" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity
             android:name=".TempActivity"
@@ -66,7 +63,10 @@
             android:name=".BottomNavActivity"
             android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity"
