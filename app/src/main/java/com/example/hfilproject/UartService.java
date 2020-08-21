@@ -38,6 +38,7 @@ public class UartService  extends BleProfileService  {
     private String mBluetoothDeviceAddress;
     private BluetoothGatt mBluetoothGatt;
     private int mConnectionState = STATE_DISCONNECTED;
+    private UARTManager manager;
 
     private static final int STATE_DISCONNECTED = 0;
     private static final int STATE_CONNECTING = 1;
@@ -148,11 +149,12 @@ public class UartService  extends BleProfileService  {
         return mBinder;
     }
 
-    @Override
-    protected LoggableBleManager initializeManager() {
-        return null;
-    }
 
+
+    @Override
+    protected LoggableBleManager<UARTManagerCallbacks> initializeManager() {
+        return manager = new UARTManager(this);
+    }
 
     private final IBinder mBinder = new UartBinder();
 
