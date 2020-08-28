@@ -303,6 +303,8 @@ public abstract class BleProfileService extends Service implements BleManagerCal
         }
 
        notificationHelper = new NotificationHelper(this);
+        sharedPrefs = getSharedPreferences("app", MODE_PRIVATE);
+        editor = sharedPrefs.edit();
 
     }
 
@@ -426,6 +428,8 @@ public abstract class BleProfileService extends Service implements BleManagerCal
         broadcast.putExtra(EXTRA_DEVICE, bluetoothDevice);
         broadcast.putExtra(EXTRA_DEVICE_NAME, deviceName);
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcast);
+        editor.putBoolean("DeviceConnected",true);
+        editor.commit();
     }
 
     @Override

@@ -79,11 +79,7 @@
         <activity
             android:name=".SettingsActivity"
             android:theme="@style/AppThemeBase" />
-        <activity android:name=".UartActivity"
-            android:label="Connect Device"
-            android:theme="@style/AppThemeBase">
 
-        </activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

@@ -90,14 +90,14 @@ public class BottomNavActivity extends AppCompatActivity implements BottomNaviga
         // Checking whether user has logged in or not
         if (sharedPref.getBoolean("loginStatus", false) == false) {
             Intent i = new Intent(this, MainActivity.class);
-            startActivity(i);
+           startActivity(i);
             finish();
 
         }
 
         //Checking whether user has created profile or not
         else if (sharedPref.getBoolean("profileStatus", false) == false) {
-            Intent i = new Intent(this, LogIn.class);
+           Intent i = new Intent(this, LogIn.class);
             editor.putBoolean("firstTime",true);
             editor.putBoolean("firstTimeMap",true);
             editor.commit();

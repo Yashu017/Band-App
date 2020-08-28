@@ -2,6 +2,7 @@ package com.example.hfilproject;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
@@ -30,7 +31,7 @@ import java.util.UUID;
 
 import no.nordicsemi.android.log.Logger;
 
-public class UartService  extends BleProfileService  {
+public class UartService  extends Service {
     private final static String TAG = UartService.class.getSimpleName();
 
     private BluetoothManager mBluetoothManager;
@@ -38,7 +39,7 @@ public class UartService  extends BleProfileService  {
     private String mBluetoothDeviceAddress;
     private BluetoothGatt mBluetoothGatt;
     private int mConnectionState = STATE_DISCONNECTED;
-    private UARTManager manager;
+
 
     private static final int STATE_DISCONNECTED = 0;
     private static final int STATE_CONNECTING = 1;
@@ -138,7 +139,8 @@ public class UartService  extends BleProfileService  {
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
-    public class UartBinder extends LocalBinder {
+
+    public class LocalBinder extends Binder {
         UartService getService() {
             return UartService.this;
         }
@@ -149,14 +151,7 @@ public class UartService  extends BleProfileService  {
         return mBinder;
     }
 
-
-
-    @Override
-    protected LoggableBleManager<UARTManagerCallbacks> initializeManager() {
-        return manager = new UARTManager(this);
-    }
-
-    private final IBinder mBinder = new UartBinder();
+    private final IBinder mBinder = new LocalBinder();
 
     /**
      * Initializes a reference to the local Bluetooth adapter.

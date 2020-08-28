@@ -2,8 +2,12 @@ package com.example.hfilproject;
 
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -15,6 +19,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.IBinder;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,6 +38,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -75,7 +81,7 @@ public class FirstFragment extends Fragment {
     String date;
 
     ArrayList<TempItem> tempReceived;
-    TextView setTemp,tempDeg;
+    TextView setTemp, tempDeg;
 
     private CountDownTimer mCountDownTimer;
     private boolean mTimerRunning;
@@ -86,14 +92,14 @@ public class FirstFragment extends Fragment {
     private RadioButton hindi, english;
     private Button cancel;
     private Locale locale;
-   Button msgButton;
-
+    Button msgButton;
+    private UartService mService = null;
+    private NotificationHelper notificationHelper;
 
     public FirstFragment() {
         // Required empty public constructor
 
     }
-
 
 
     @Override
@@ -108,27 +114,21 @@ public class FirstFragment extends Fragment {
         originalAddress = rootView.findViewById(R.id.originalAddress);
         addresesHead = rootView.findViewById(R.id.addressHead);
         usernanme = rootView.findViewById(R.id.userNameFF);
-        tempDeg=rootView.findViewById(R.id.tempDeg);
+        tempDeg = rootView.findViewById(R.id.tempDeg);
 
         setTemp = rootView.findViewById(R.id.tempOriginal);
         tp = rootView.findViewById(R.id.tp);
-        msgButton = rootView.findViewById(R.id.button);
-        msgButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(),UartActivity.class);
-                startActivity(intent);
-            }
-        });
+
+
 
 
         token = sharedPrefs.getString("token", "");
-try{
-        timeToFetchAddress = Integer.parseInt(sharedPrefs.getString("time", " "));
-        Log.e("tt", timeToFetchAddress + "");
-    } catch (NumberFormatException e) {
-        Toast.makeText(getContext(),"error in time fetching",Toast.LENGTH_LONG).show();
-    }
+        try {
+            timeToFetchAddress = Integer.parseInt(sharedPrefs.getString("time", " "));
+            Log.e("tt", timeToFetchAddress + "");
+        } catch (NumberFormatException e) {
+            Toast.makeText(getContext(), "error in time fetching", Toast.LENGTH_LONG).show();
+        }
         hours = sharedPrefs.getInt("hours", 0);
         minutes = sharedPrefs.getInt("minutes", 0);
         date = sharedPrefs.getString("dateSelected", "");
@@ -138,7 +138,7 @@ try{
         SimpleDateFormat dt = new SimpleDateFormat("hh:mm:ss");
         try {
             Date date1 = dateFormat.parse(sharedPrefs.getString("time", " "));
-            if(date1!=null) {
+            if (date1 != null) {
                 out = dt.format(date1);
                 Log.e("Time", "" + out);
             }
@@ -147,15 +147,21 @@ try{
             Log.e("Error", "" + e);
         }
 
+
         String[] units = out.split(":"); //will break the string up into an array
         int minutes = Integer.parseInt(units[1]); //first element
         int seconds = Integer.parseInt(units[2]); //second element
         int hours = Integer.parseInt(units[0]);
         int duration = (3600 * hours + 60 * minutes + seconds) * 1000; //add up our values
 
-         START_TIME_IN_MILLIS  =duration;
+
+
+        START_TIME_IN_MILLIS = duration;
         mTimeLeftInMillis = duration;
         Log.e("Time1", "" + duration);
+
+
+
         if (sharedPrefs.getBoolean("firstTime", false) == true) {
             editor.putString("hqAddress", "N/A");
             editor.putBoolean("firstTime", false);
@@ -198,7 +204,6 @@ try{
         });
 
 
-
         typeTemp = rootView.findViewById(R.id.typeTemp);
         typeTemp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,9 +225,26 @@ try{
             }
         });
 
+        if (sharedPrefs.getBoolean("DeviceConnected", false)) {
+            UartFeature();
+        }
+
+        serviceInitialize();
+
+        notificationHelper = new NotificationHelper(getContext());
         return rootView;
 
 
+    }
+
+    private void serviceInitialize() {
+        Intent bindIntent = new Intent(getContext(), UartService.class);
+        getActivity().bindService(bindIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(UARTStatusChangeReceiver, makeGattUpdateIntentFilter());
+    }
+
+    private void UartFeature() {
     }
 
 
@@ -314,7 +336,7 @@ try{
             @Override
             public void onTick(long millisUntilFinished) {
                 mTimeLeftInMillis = millisUntilFinished;
-               updateCountdownTime();
+                updateCountdownTime();
             }
 
             @Override
@@ -349,7 +371,7 @@ try{
         int minutes = (int) (mTimeLeftInMillis / 1000) / 60;
         int seconds = (int) (mTimeLeftInMillis / 1000) % 60;
         String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
-        if(originalAddress.getText().equals("N/A")) {
+        if (originalAddress.getText().equals("N/A")) {
             Toast.makeText(getContext(), "Your location will be fetched in " + timeLeftFormatted, Toast.LENGTH_LONG).show();
         }
     }
@@ -430,7 +452,7 @@ try{
 
     private void GetTemperature() {
 
-        setTemp.setText(String.format("%.2f",(sharedPrefs.getFloat("temp1",0f))));
+        setTemp.setText(String.format("%.2f", (sharedPrefs.getFloat("temp1", 0f))));
 //        token = sharedPrefs.getString("token", "");
 //
 //        OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
@@ -478,7 +500,6 @@ try{
     }
 
 
-
     @Override
     public void onStop() {
         super.onStop();
@@ -516,6 +537,72 @@ try{
             }
         }
     }
+
+
+    private static IntentFilter makeGattUpdateIntentFilter() {
+        final IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(UartService.ACTION_GATT_CONNECTED);
+        intentFilter.addAction(UartService.ACTION_GATT_DISCONNECTED);
+        intentFilter.addAction(UartService.ACTION_GATT_SERVICES_DISCOVERED);
+        intentFilter.addAction(UartService.ACTION_DATA_AVAILABLE);
+        intentFilter.addAction(UartService.DEVICE_DOES_NOT_SUPPORT_UART);
+        return intentFilter;
     }
+
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder rawBinder) {
+            mService = ((UartService.LocalBinder) rawBinder).getService();
+            Log.d("firstfragment", "onServiceConnected mService= " + mService);
+            if (!mService.initialize()) {
+                Log.e("firstfragment", "Unable to initialize Bluetooth");
+
+            }
+
+        }
+
+        public void onServiceDisconnected(ComponentName classname) {
+            ////     mService.disconnect(mDevice);
+            mService = null;
+        }
+    };
+
+
+    private final BroadcastReceiver UARTStatusChangeReceiver = new BroadcastReceiver() {
+
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+
+            final Intent mIntent = intent;
+
+            if (action.equals(UartService.ACTION_GATT_SERVICES_DISCOVERED)) {
+                mService.enableTXNotification();
+            }
+            if (action.equals(UartService.ACTION_DATA_AVAILABLE)) {
+                final byte[] txValue = intent.getByteArrayExtra(UartService.EXTRA_DATA);
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        try {
+                            String text = new String(txValue, "UTF-8");
+                            notificationHelper.SendNotification("New Message",text,HTActivity.class);
+                        } catch (Exception e) {
+                            Log.e("FirstFragment", e.toString());
+                        }
+                    }
+                });
+            }
+
+        }
+    };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(UARTStatusChangeReceiver);
+        } catch (Exception ignore) {
+            Log.e("FirstFragment", ignore.toString());
+        }
+    }
+}
 
 
